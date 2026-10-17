@@ -304,6 +304,48 @@ go build -o segnox-agent.exe ./cmd/segnox-agent
         <b>UYKU MODUNU KAPAT.</b> Bilgisayarın uykuya girerse ekran yakalama
         durur ve "kare gelmiyor" sanırsın. Bu hata değil, Windows'un davranışı.
       </div>
+      <div class="note warn" style="font-size:14px">
+        <b>İmleç görünmeyecek.</b> Bilinen hata — aşağıda yazılı.
+        Fare tıklamaları ve klavye çalışır, sadece imleç çizilmiyor.
+      </div>
+    </div>
+
+    <!-- NE DEMEK / NASIL ANLAŞILIR -->
+    <div style="margin-top:34px">
+      <h3>Sistem kafanda karışmasın diye</h3>
+      <p style="font-size:14.5px;color:var(--fg2)">
+        Bağlanınca iki ayrı taraf var. Karışmasın diye:
+      </p>
+      <div class="grid g2" style="margin-top:14px">
+        <div class="card tight">
+          <h4>🖥️ Uzaktaki bilgisayar = ajan</h4>
+          <p style="font-size:14px">
+            <b>Bilgisayarında çalışan program.</b> Ekranı <i>gönderen</i> taraf.
+            Fare/klavye komutlarını <i>alıcı</i> taraf.
+          </p>
+          <p style="font-size:13.5px;color:var(--fg2);margin-top:8px">
+            Bu program <b>pencereyi açan tarafta</b> kalır. Kodu
+            <span class="mono">segnox-agent.exe run</span> ile başlattığın
+            pencere budur.
+          </p>
+        </div>
+        <div class="card tight">
+          <h4>🌐 Kontrol ettiğin bilgisayar = tarayıcı</h4>
+          <p style="font-size:14px">
+            <b>Hiçbir şey kurmuyorsun.</b> Siteye gir, cihaz listesinden
+            tıkla, kodu gir. Karşı tarafın ekranı <i>burada</i> açılıyor.
+          </p>
+          <p style="font-size:13.5px;color:var(--fg2);margin-top:8px">
+            <code class="inl">http://127.0.0.1:8080</code> — kod yazdığın adres.
+            Kontrol <b>oradan</b> yapılıyor.
+          </p>
+        </div>
+      </div>
+      <div class="note" style="font-size:14px">
+        <b>Kısaca:</b> Pencere 1 (devdb) → veri. Pencere 2 (server) → düzen.
+        Pencere 3 (agent) → <b>gönderen</b> taraf, buraya bakma sadece açık
+        dursun. <b>Sen 4. yerde</b> tarayıcıdan kontrol ediyorsun.
+      </div>
     </div>
 
     <!-- ADIM 6 -->
@@ -312,6 +354,31 @@ go build -o segnox-agent.exe ./cmd/segnox-agent
       <div class="why"><b>Neden:</b> Otomatik testler <b>sentetik ekranla</b>
         çalıştı. Gerçek masaüstünün nasıl davrandığını kimse bilmiyor.
         Bu listeyi ancak sen yapabilirsin.</div>
+
+      <div class="note ok">
+        <b>✓ 2026-10-18'de ilk gerçek donanım denemesi yapıldı.</b>
+        Ajan gerçek masaüstünde çalıştı ve şunu doğruladı:
+        <ul class="chk" style="margin-top:8px">
+          <li><span class="mono">capture backend selected: dxgi</span> —
+              donanım yakalama sürücüsü gerçekten çalışıyor, GDI'ye düşmemiş</li>
+          <li><span class="mono">webview ui ready, webview2 155</span> —
+              onay penceresi açılıyor</li>
+          <li><span class="mono">registered with signaling server</span> —
+              bağlantı kuruldu</li>
+          <li>9 haneli kod üretildi, bağlantı kuruldu, uzaktan yönetim çalıştı</li>
+        </ul>
+      </div>
+
+      <div class="note bad">
+        <b>🐛 Bulunan hata — fare imleci görünmüyor</b><br><br>
+        Uzak tarafta fare imleci hiç çizilmiyor. Sebep: DXGI ekranı
+        kopyalarken Windows imleci <b>donanımda</b> birleştiriyor, yani
+        piksellere işlenmiyor. Program imlecin konumunu
+        (<span class="mono">PointerX/PointerY/PointerVisible</span>) okumuyor
+        ve kareye çizmiyor.<br><br>
+        <b>Etki:</b> Uzaktaki ekranda imleç görünmez. Fare hâlâ çalışıyor,
+        sadece görsel eksik — önemli ama düzeltilebilir bir hata.
+      </div>
 
       <div class="card" style="margin-top:14px">
         <h4>Görüntü ve girdi</h4>
