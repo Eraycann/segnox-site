@@ -272,6 +272,13 @@ go run ./cmd/segnox-server
 .\segnox-agent.exe run -server ws://127.0.0.1:8080/ws/agent
         <span class="c">↵ bu pencereyi de AÇIK TUT</span>
       </div>
+      <div class="note bad" style="font-size:13.5px">
+        <b>Buradaki <code>ws://</code> sadece aynı bilgisayar içindir.</b>
+        İnternetten (telefondan, başka bilgisayardan) bağlanacaksan
+        <code>wss://</code> yazmalısın ve sunucu
+        <code>https://</code> adresiyle çalışmalı. Bu ayrım kodda
+        zorunlu — bkz. adım 7.
+      </div>
       <p style="font-size:14.5px;color:var(--fg2)">
         <b class="got">✓ Göreceğin:</b> Bir <b>onay penceresi</b> açılır
         ("Segnox bilgisayarınıza bağlanmak istiyor"). Kabul et.
@@ -426,16 +433,33 @@ go run ./cmd/segnox-devturn -allow-loopback-peers
         <span class="c">↵ ayrı bir pencerede, çalışır durumda kalsın</span>
       </div>
       <p style="font-size:14.5px;color:var(--fg2)">
-        Sonra 3. adımdaki sunucuya ekle:
+        Çıkan satır şuna benzeyecek:
+      </p>
+      <pre style="font-size:11.5px"><code>{"url":"turn:127.0.0.1:64309?transport=udp","controlUrl":"http://127.0.0.1:50820"}</code></pre>
+      <p style="font-size:14.5px;color:var(--fg2)">
+        <b>Sonra sunucuya ekle</b> — <code class="inl">url</code> alanındaki
+        adresi <b>harfi harfine</b> kopyala:
       </p>
       <div class="cmd">
-$env:SEGNOX_TURN_URLS='&lt;devturn'ün yazdığı adres&gt;'
-$env:SEGNOX_TURN_SECRET='&lt;devturn'ün yazdığı secret&gt;'
+$env:SEGNOX_TURN_URLS='turn:127.0.0.1:64309?transport=udp'
+$env:SEGNOX_TURN_SECRET='segnox-gelistirme-anahtari-1234567890'
+      </div>
+      <div class="note bad" style="font-size:13.5px">
+        <b>Yaygın hata:</b> Buradaki port numarası <b>her seferinde değişir</b>.
+        Örnekteki <code>64309</code> yerine kendi ekranındakini yaz.
+        Yer tutucu bırakırsan (<code>PORT</code>, <code>xxx</code> gibi) sunucu
+        bunu <b>kabul eder</b> ve hata oturum başlarken çıkar:
+        <code>InvalidAccessError: invalid port</code>.
+        <br><br>
+        <b>Doğru yaptığını anla:</b> Sunucu çıktısında
+        <code>"turnServers":1</code> yazmalı. <code>0</code> ise TURN
+        tanınmamış demektir.
       </div>
       <p style="font-size:13.5px;color:var(--fg2)">
         <span class="mono">-allow-loopback-peers</span> bayrağı şart: her şey
         127.0.0.1'de çalıştığı için sunucu normalde kendi adresine relay
-        vermeyi reddeder. Bu bayrak sadece yerel testte açılır.
+        vermeyi reddeder. Bu bayrak <b>sadece yerel testte</b> açılır —
+        gerçek sunucuda asla.
       </p>
     </div>
 
