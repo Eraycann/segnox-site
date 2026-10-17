@@ -187,11 +187,24 @@ go run ./cmd/segnox-devdb -seed
         için ortalarda bir buluşma noktası olmalı. Bu sunucu o nokta.
         Hesapları, cihaz listesini ve oturumları da tutar.</div>
       <p style="font-size:14.5px;color:var(--fg2)">
-        <b>Önce anahtarı üret</b> (yeni PowerShell penceresinde çalıştır,
-        çıkan satırı kopyala):
+        <b>Önce şifreleme anahtarını üret.</b> Program 32 bayt ister —
+        kullanıcı parolalarını şifrelemek için lazım. Aşağıdaki 4 satırı
+        çalıştır, çıkan değeri bir yere not et:
       </p>
       <div class="cmd">
-openssl rand -base64 32
+$rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
+$b = New-Object byte[] 32
+$rng.GetBytes($b)
+$key = [Convert]::ToBase64String($b)
+$key
+      </div>
+      <div class="note bad" style="font-size:13.5px;margin:10px 0">
+        <b>Dikkat — bu adımı atlama.</b> Anahtarı atarsan
+        <code>must be standard base64 of 32 bytes</code> hatası alırsın.
+        <br><br>
+        <code>openssl rand -base64 32</code> da aynı işi görür ama Windows'ta
+        <b>openssl genellikle kurulu değildir</b> — yukarıdaki PowerShell
+        sürümü her makinede çalışır.
       </div>
       <div class="note bad" style="font-size:13.5px;margin:10px 0">
         <b>Dikkat:</b> Aşağıdaki komutlarda <code>&lt;...&gt;</code> işaretleri
@@ -205,7 +218,7 @@ openssl rand -base64 32
       </p>
       <div class="cmd">
 $env:SEGNOX_DB_URL='postgres://segnox_app:PAROLA@127.0.0.1:PORTA/segnox?sslmode=disable'
-$env:SEGNOX_DATA_KEY='OPENSSL_CIKTISI_BURAYA'
+$env:SEGNOX_DATA_KEY='YUKARIDA_URETILEN_44_KARAKTERLIK_DEGER'
 $env:SEGNOX_PUBLIC_URL='http://127.0.0.1:8080'
 $env:SEGNOX_COOKIE_SECURE='false'
 $env:SEGNOX_MAIL='file:./data/mail'
@@ -221,6 +234,15 @@ go run ./cmd/segnox-server
         yazmamalı. <span class="mono">SEGNOX_DATA_KEY must be standard base64 of
         32 bytes</span> hatası çıkarsa → anahtarı tırnak içine yapıştırmamışsın
         demektir.
+      </div>
+      <div class="note ok" style="font-size:13.5px">
+        <b>✓ Bu adım 2026-10-18'de doğrulandı.</b> Doğru çıktı şöyle:
+        <pre style="margin:8px 0 0;font-size:11.5px"><code>{"level":"INFO","msg":"database connected","db":"postgres://segnox_app:xxxxx@127.0.0.1:52772/..."}
+{"level":"INFO","msg":"listening","addr":"127.0.0.1:8080","publicHost":"127.0.0.1",
+ "stunServers":0,"turnServers":0,"turnCredentialTTL":"6h0m0s","origins":0,
+ "trustedProxies":0,"cookieSecure":false,"smtp":false}</code></pre>
+        <b>"listening" görüyorsan doğru.</b> Port numarası her seferinde
+        değişebilir — ekrandakini kullan.
       </div>
       <p style="font-size:14.5px;color:var(--fg2)">
         <b class="got">✓ Göreceğin:</b> <span class="mono">http://127.0.0.1:8080</span>
@@ -243,21 +265,24 @@ go run ./cmd/segnox-server
         ettiğin bilgisayarda <b>bir şey kurmuyorsun</b> — tarayıcı kullanıyorsun.
         Ama buraya kurmak zorundayız, çünkü bu bağlanacağın bilgisayar.</div>
       <p style="font-size:14.5px;color:var(--fg2)">
-        <b>Üçüncü bir PowerShell penceresi.</b> EXE zaten derlenmiş (18 MB):
+        <b>Üçüncü bir PowerShell penceresi.</b> EXE zaten derlenmiş (18 MB),
+        <b>derlemeye gerek yok</b> — doğrudan çalıştır:
       </p>
       <div class="cmd">
 .\segnox-agent.exe run -server ws://127.0.0.1:8080/ws/agent
         <span class="c">↵ bu pencereyi de AÇIK TUT</span>
       </div>
       <p style="font-size:14.5px;color:var(--fg2)">
-        Kod değiştirdiysen yeniden derle:
-        <span class="mono">go build -o segnox-agent.exe ./cmd/segnox-agent</span>
+        <b class="got">✓ Göreceğin:</b> Bir <b>onay penceresi</b> açılır
+        ("Segnox bilgisayarınıza bağlanmak istiyor"). Kabul et.
+        Sonra konsolda <b>9 haneli sayı</b> — senin bağlantı kodun.
       </p>
       <p style="font-size:14.5px;color:var(--fg2)">
-        <b class="got">✓ Göreceğin:</b> Konsolda <b>9 haneli sayı</b> —
-        senin bağlantı kodun. Ardından <b>onay penceresi açılır</b>
-        (kabul et → devam).
+        <b class="wait">Gerekirse yeniden derleme:</b>
       </p>
+      <div class="cmd">
+go build -o segnox-agent.exe ./cmd/segnox-agent
+      </div>
     </div>
 
     <!-- ADIM 5 -->
