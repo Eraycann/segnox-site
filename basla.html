@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Başla — Segnox</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+.why {
+  background:rgba(163,113,247,.07); border-left:3px solid var(--pur);
+  border-radius:0 8px 8px 0; padding:12px 15px; margin:12px 0;
+  font-size:14.5px; color:var(--fg2);
+}
+.why b { color:var(--pur); }
+.cmd {
+  display:block; background:#0a0e14; border:1px solid var(--line2);
+  border-left:3px solid var(--ok); border-radius:0 8px 8px 0;
+  padding:13px 16px; margin:12px 0;
+  font-family:var(--mono); font-size:13.5px; color:#c9d5e3;
+  overflow-x:auto; line-height:1.75;
+}
+.cmd .c { color:var(--fg3); }
+.cmd .v { color:var(--ok); }
+.step-n {
+  display:inline-grid; place-items:center; width:26px; height:26px;
+  border-radius:50%; background:var(--acc2); color:#fff;
+  font-weight:700; font-size:13px; margin-right:9px; flex-shrink:0;
+}
+.step-h { display:flex; align-items:center; margin:0 0 4px; font-size:17px; }
+.got { color:var(--ok); } .wait { color:var(--warn); }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html">SEG<span>NOX</span></a>
+    <div class="links">
+      <a href="index.html">Genel Bakış</a>
+      <a href="nasil.html">Nasıl Çalışır</a>
+      <a href="basla.html" class="on">Başla</a>
+      <a href="simulator.html">UX Simülatörü</a>
+      <a href="musteri.html">Müşteri</a>
+      <a href="bayi.html">Bayi / Teknisyen</a>
+      <a href="mimari.html">Mimari</a>
+      <a href="gelistirici.html">Geliştirici</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Sıfırdan, komut komut</div>
+    <h1>Başla</h1>
+    <p>
+      Kod yazıldı ve testlerden geçti — ama <b>kimse gerçek masaüstünde
+      çalıştırmadı</b>. Bu sayfa seni oraya götürür. Her adımda ne yapacağını,
+      neden yaptığını ve ne görmen gerektiğini yazıyor.
+    </p>
+    <div class="note ok" style="max-width:780px">
+      <b>Ne kuracaksın:</b> Sadece Go (zaten kurulu). Başka hiçbir şey —
+      PostgreSQL kurulum, Docker kurulum, veritabanı yönetimi yok.
+      İlk seferde bir şey indirilir, sonra bir daha indirilmez.
+    </div>
+  </div>
+</header>
+
+<!-- ======= NEDEN DOLAYI AYRI AYRI ======= -->
+<section>
+  <div class="wrap">
+    <h2><span class="n">01</span>Neden bu yol? (Docker varken)</h2>
+    <p class="sub">
+      Kafanı karıştıran yer burası. İki ayrı şey var, karıştırma.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th></th><th>Ne zaman</th><th>Ne yapıyor</th><th>Neden</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>Yerel deneme</b><br><span style="color:var(--fg3)">bu sayfa</span></td>
+            <td>Şimdi, kendi bilgisayarında</td>
+            <td>Programın kendi içinde geçici bir PostgreSQL başlatır.
+                İki tane Go programı çalışır: sunucu + ajan.</td>
+            <td><b>Hızlı.</b> Kod değiştirdiğinde yeniden derleyip
+                çalıştırırsın. Docker'da 4 container her seferinde
+                ayağa kalkardı — yavaş ve gereksiz.</td>
+          </tr>
+          <tr>
+            <td><b>Gerçek sunucu</b><br><span style="color:var(--fg3)">deploy/ klasörü</span></td>
+            <td>Ürünü internete koyduğunda</td>
+            <td>Docker ile dört servis birlikte: sunucu, PostgreSQL,
+                aktarım sunucusu, TLS.</td>
+            <td><b>Gereklidir çünkü</b> 7/24 açık olmalı, yeniden başladığında
+                hepsi birlikte kalkmalı, güncelleme kolay olmalı.
+                Docker tam olarak bunun için.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="why">
+      <b>Yani "PostgreSQL indiriyoruz" demek şu:</b> Bilgisayarına kalıcı
+      PostgreSQL <b>kurmuyoruz</b>. Program, geçici bir klasöre açılıp
+      çalışan bir kopyasını indiriyor (önbelleğe alıyor, bir daha indirmiyor),
+        veriyi oraya yazıyor, program kapanınca veri duruyor — sonraki açılışta
+        aynı veriyi kullanıyor. Silersen silinir. <b>Sisteminin bir parçası olmuyor.</b>
+    </div>
+
+    <h3>Docker'ı neden şimdi açmıyoruz?</h3>
+    <ul class="chk">
+      <li>Docker Desktop Windows'ta ağır (WSL2, GB'larca RAM)</li>
+      <li>Sen sadece ekran aktarımını denemek istiyorsun, sunucu kurulumu değil</li>
+      <li>Yerelde 4 container ayakta beklerken bilgisayarın yavaşlar</li>
+      <li>Zaten Docker klasörü hazır — sırası gelince tek komutla çalışır</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ======= ADIMLAR ======= -->
+<section>
+  <div class="wrap">
+    <h2><span class="n">02</span>Yedi adım</h2>
+    <p class="sub">
+      Toplam yaklaşık 1 saat. İlk seferde 3-4 dakika ek süre (indirme).
+    </p>
+
+    <!-- ADIM 1 -->
+    <div style="margin-top:26px">
+      <div class="step-h"><span class="step-n">1</span>GitHub'a gönder</div>
+      <p style="color:var(--fg2);font-size:14.5px">
+        Kod sadece bu bilgisayarda duruyor. Hiçbir iş Linux'ta çalışmadı.
+      </p>
+      <div class="why"><b>Neden:</b> Windows'ta geçen bir şey Linux'ta
+        kırılabilir. GitHub Actions ilk kez gerçekten Linux'ta çalıştıracak.
+        Ayrıca gerçek aktarım sunucusuna karşı güvenlik testi de orada.</div>
+      <p style="font-size:14.5px;color:var(--fg2)">
+        <b>Bunu Claude Code'a ver:</b> "GitHub'da private repo aç, push et,
+        Actions'ta <span class="mono">coturn-probe</span> ve
+        <span class="mono">e2e</span> işlerinin yeşil olduğunu kontrol et.
+        Yeşil değilse sebebini raporla, düzeltme yapma."
+      </p>
+    </div>
+
+    <!-- ADIM 2 -->
+    <div style="margin-top:30px">
+      <div class="step-h"><span class="step-n">2</span>Veritabanını başlat</div>
+      <div class="cmd">
+go run ./cmd/segnox-devdb -seed
+        <span class="c">↵ ilk seferde PostgreSQL indirir, 3-4 dk bekleyeceksin</span>
+      </div>
+      <div class="why"><b>Neden:</b> Programın çalışması için bir veritabanı
+        lazım. Normalde PostgreSQL kurman gerekirdi. Bu komut onu geçici bir
+        klasöre indirip çalıştırır, örnek veri yükler ve sana bağlantı
+        adresini yazar.</div>
+      <p style="font-size:14.5px;color:var(--fg2)">
+        <b class="got">✓ Göreceğin:</b> Ekranda birkaç satır —
+        <span class="mono">SEGNOX_DB_URL</span>,
+        <span class="mono">SEGNOX_DATA_KEY</span>,
+        <span class="mono">SEGNOX_DB_OWNER_URL</span>.
+        <b>Bunları kopyalayıp yapıştır</b>, 3. adımda lazım.
+      </p>
+    </div>
+
+    <!-- ADIM 3 -->
+    <div style="margin-top:30px">
+      <div class="step-h"><span class="step-n">3</span>Sunucuyu başlat</div>
+      <div class="why"><b>Neden:</b> İki bilgisayarın birbirini bulabilmesi
+        için ortalarda bir buluşma noktası olmalı. Bu sunucu o nokta.
+        Hesapları, cihaz listesini ve oturumları da tutar.</div>
+      <p style="font-size:14.5px;color:var(--fg2)">Yeni bir terminal, aynı klasör:</p>
+      <div class="cmd">
+set SEGNOX_ADDR=127.0.0.1:8080
+set SEGNOX_DB_URL=&lt;2. adımdaki değer&gt;
+set SEGNOX_DATA_KEY=&lt;2. adımdaki değer&gt;
+set SEGNOX_COOKIE_SECURE=false
+set SEGNOX_MAIL=file:C:\Temp\segnox-mail
+go run ./cmd/segnox-server
+        <span class="c">↵ bu pencereyi AÇIK TUT</span>
+      </div>
+      <p style="font-size:14.5px;color:var(--fg2)">
+        <b class="got">✓ Göreceğin:</b> Bir adres yazar
+        (<span class="mono">http://127.0.0.1:8080</span> gibi).
+        Tarayıcıda aç. <span class="mono">COOKIE_SECURE=false</span> şart —
+        yerelde HTTPS yok.
+      </p>
+    </div>
+
+    <!-- ADIM 4 -->
+    <div style="margin-top:30px">
+      <div class="step-h"><span class="step-n">4</span>Ajanı çalıştır</div>
+      <div class="why"><b>Neden:</b> Ajan = bağlanacağın bilgisayarda çalışan
+        küçük program. Ekranını gösterir, tuş komutlarını alır. Kontrol
+        ettiğin bilgisayarda <b>bir şey kurmuyorsun</b> — tarayıcı kullanıyorsun.
+        Ama buraya kurmak zorundayız, çünkü bu bağlanacağın bilgisayar.</div>
+      <p style="font-size:14.5px;color:var(--fg2)">Üçüncü bir terminal:</p>
+      <div class="cmd">
+go build -o segnox-agent.exe ./cmd/segnox-agent
+segnox-agent.exe run -server ws://127.0.0.1:8080/ws/agent
+        <span class="c">↵ bu pencereyi de AÇIK TUT</span>
+      </div>
+      <p style="font-size:14.5px;color:var(--fg2)">
+        <b class="got">✓ Göreceğin:</b> Konsolda <b>9 haneli sayı</b>.
+        Bu senin bağlantı kodun.
+      </p>
+    </div>
+
+    <!-- ADIM 5 -->
+    <div style="margin-top:30px">
+      <div class="step-h"><span class="step-n">5</span>Bağlan</div>
+      <div class="why"><b>Neden:</b> Şimdi iki taraf da hazır. Tarayıcıdan
+        konsola gir, cihazı seç, kodu gir. Görüntü iki bilgisayar arasında
+        akar.</div>
+      <p style="font-size:14.5px;color:var(--fg2)">
+        3. adımdaki adresi aç → giriş yap (seed verisi kullanıcı bilgileri
+        ekrana yazılır) → cihaz listesini aç → 9 haneli kodu gir →
+        <b>bağlan</b>. Listeyi boş görürsen sayfayı yenile.
+      </p>
+      <p style="font-size:14.5px;color:var(--fg2)">
+        <b class="got">✓ Göreceğin:</b> <b>Kendi gerçek masaüstün.</b>
+        Sentetik ekran değil. Beklenen süre: 0,4–0,7 saniye.
+      </p>
+      <div class="note warn" style="font-size:14px">
+        <b>UYKU MODUNU KAPAT.</b> Bilgisayarın uykuya girerse ekran yakalama
+        durur ve "kare gelmiyor" sanırsın. Bu hata değil, Windows'un davranışı.
+      </div>
+    </div>
+
+    <!-- ADIM 6 -->
+    <div style="margin-top:30px">
+      <div class="step-h"><span class="step-n">6</span>Elle test et</div>
+      <div class="why"><b>Neden:</b> Otomatik testler <b>sentetik ekranla</b>
+        çalıştı. Gerçek masaüstünün nasıl davrandığını kimse bilmiyor.
+        Bu listeyi ancak sen yapabilirsin.</div>
+
+      <div class="card" style="margin-top:14px">
+        <h4>Görüntü ve girdi</h4>
+        <ul class="chk">
+          <li>Not Defteri aç, <b>ğüşıöç</b> yaz → Türkçe Q doğru mu</li>
+          <li>Mouse ile tıkla, sürükle, tekerlek çevir</li>
+          <li>Ekranı kaydır — akıcılık nasıl? (JPEG olduğu için biraz kasılabilir, normal)</li>
+        </ul>
+        <h4 style="margin-top:20px">Güvenlik ekranları</h4>
+        <ul class="chk">
+          <li><b>Onay penceresi</b> çıktı mı? Kapatılabiliyor mu?</li>
+          <li><b>Bilgi çubuğu</b> gerçekten kapatılamıyor mu? Süre sayıyor mu?</li>
+          <li>Reddettiğinde bağlantı gerçekten kurulmuyor mu?</li>
+        </ul>
+        <h4 style="margin-top:20px">Dosya ve pano</h4>
+        <ul class="chk">
+          <li>Sohbet yaz → ajanda mesaj geliyor mu?</li>
+          <li>Bir şey kopyala → yapıştır → pano eşitleniyor mu?</li>
+          <li>Küçük bir dosya gönder</li>
+        </ul>
+        <h4 style="margin-top:20px">Dayanıklılık</h4>
+        <ul class="chk">
+          <li>İnterneti kes, 5 sn sonra aç → <b>otomatik geri geliyor mu?</b></li>
+          <li>Ajan penceresini kapat, tekrar başlat → sunucu yeniden bağlanıyor mu?</li>
+        </ul>
+        <h4 style="margin-top:20px">Beklenmedik</h4>
+        <ul class="chk">
+          <li>Bir işlem yönetici parolası isterse → ekran kararır, bağlantı kesilir.
+              <b>Bu bilinen eksiklik</b>, 5. adımda çözülecek. Panik yapma.</li>
+          <li>Antivirüs "tanımayan yayımcı" derse → imzasız, beklenen.
+              "Daha fazla bilgi → Yine de çalıştır".</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ADIM 7 -->
+    <div style="margin-top:30px">
+      <div class="step-h"><span class="step-n">7</span>İkinci bilgisayardan dene</div>
+      <div class="why"><b>Neden:</b> Tüm testler aynı bilgisayarda, kabloyla
+        bağlıydı. Gerçek hayatta iki bilgisayar farklı ağlarda — ev, ofis,
+        mobil veri. Gecikme ve bağlantı yolu orada anlaşılıyor.</div>
+      <p style="font-size:14.5px;color:var(--fg2)">
+        2-5. adımları <b>başka bir bilgisayarda</b> tekrarla, sonra o
+        bilgisayardan bağlan. Mobil veri (hotspot) dene — en zor senaryo.
+      </p>
+      <div class="card" style="margin-top:14px">
+        <h4>Şunları not et</h4>
+        <ul class="chk">
+          <li>Bağlantı ne kadar sürdü? (kablo: 0,4 sn beklenir)</li>
+          <li>Konsolda "bağlantı: P2P" mi yazıyor, "relay" mi?</li>
+          <li>Gecikme kaç ms görünüyor?</li>
+          <li>Görüntü donuyor mu, akıcı mı?</li>
+        </ul>
+        <p style="font-size:14px;color:var(--fg2);margin-top:12px">
+          Bu dört bilgi, ürünün fiyatını belirleyecek. Sunucu maliyeti doğrudan
+          buna bağlı.
+        </p>
+      </div>
+    </div>
+
+    <!-- EK: PERFORMANS -->
+    <div style="margin-top:34px">
+      <h3>Referans — bu makinede ölçülenler</h3>
+      <p style="font-size:14.5px;color:var(--fg2)">
+        Kendi bilgisayarında benzer sonuçlar bekleyebilirsin. Ekran kartı ve
+        işlemciye göre değişir.
+      </p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>İşlem</th><th>Sonuç</th></tr></thead>
+          <tbody>
+            <tr><td>İlk kare (ekran yakalama)</td><td class="mono">15–19 ms</td></tr>
+            <tr><td>Sıkıştırma — 1080p tam kare</td><td class="mono">11–14 ms · 91–280 KB</td></tr>
+            <tr><td>Sıkıştırma — ekranın %10'u değişince</td><td class="mono">3 ms · ~26 KB</td></tr>
+            <tr><td>Bant — durağan masaüstü</td><td class="mono">~0,3 Mbps</td></tr>
+            <tr><td>Bant — sürekli hareketli 1080p</td><td class="mono">~4 Mbps</td></tr>
+            <tr><td>Bağlan → ilk kare</td><td class="mono">0,4–0,7 sn</td></tr>
+            <tr><td>6 sn kesinti sonrası geri dönüş</td><td class="mono">0,3 sn</td></tr>
+            <tr><td>15 sn kesinti sonrası geri dönüş</td><td class="mono">3,3 sn</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note" style="font-size:14px">
+        <b>Beklenmedik bir şey:</b> Durağan masaüstünde saniyede sadece ~5 kare
+        gönderiliyor — çünkü sadece <b>değişen yerler</b> gider. Yani normal
+        kullanımda bant neredeyse sıfır. Sorun sadece video oynatırken ya da
+        sayfa kaydırırken çıkar (o zaman ~4 Mbps, kalite düşer).
+      </div>
+    </div>
+
+    <!-- EK: DEPLOY -->
+    <div style="margin-top:34px">
+      <h3>Referans — gerçek sunucu paketi hazır</h3>
+      <p style="font-size:14.5px;color:var(--fg2)">
+        <code class="inl">deploy/</code> klasörü yazıldı ve doğrulandı
+        (Docker tanımı geçerli, betikler hatasız). Ama <b>Docker kapalı
+        olduğu için hiç çalıştırılmadı</b>. İlk gerçek sunucuyu kurduğunda
+        burada bir sorun çıkabilir.
+      </p>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Dosya</th><th>Ne işe yarar</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">compose/compose.yml</td><td>Dört servisin tanımı</td></tr>
+            <tr><td class="mono">coturn/turnserver.conf</td><td>Aktarım sunucusu ayarı, özel ağ reddi</td></tr>
+            <tr><td class="mono">caddy/Caddyfile</td><td>TLS ve yönlendirme</td></tr>
+            <tr><td class="mono">backup/*.sh</td><td>Yedekleme, geri yükleme, geri yükleme testi</td></tr>
+            <tr><td class="mono">systemd/*.timer</td><td>Zamanlanmış görevler</td></tr>
+            <tr><td class="mono">.env.example</td><td>Ayarların şablonu</td></tr>
+            <tr><td class="mono">README.md</td><td>Adım adım kurulum</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <pre><code>cp deploy/.env.example deploy/.env
+<span class="c-cm"># sırları ve alan adını yaz</span>
+docker compose -f deploy/compose/compose.yml config
+docker compose -f deploy/compose/compose.yml up -d
+
+<span class="c-cm"># kurulumdan sonra MUTLAKA:</span>
+docker compose exec coturn /usr/local/bin/turnprobe-check
+        <span class="c"># sonuç 0 olmalı — 10 tehlikeli adres reddedildi demek</span></code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ======= SONRA ======= -->
+<section>
+  <div class="wrap">
+    <h2><span class="n">03</span>Şu an yapma</h2>
+    <div class="note warn">
+      <b>Bu adımlar bitmeden hiçbir para harcama:</b><br><br>
+      ⛔ Fiyat belirleme &nbsp;·&nbsp; ⛔ Kod imzalama sertifikası &nbsp;·&nbsp;
+      ⛔ Sunucu kirala &nbsp;·&nbsp; ⛔ Alan adı DNS &nbsp;·&nbsp;
+      ⛔ SMTP sağlayıcısı<br><br>
+      Hepsi boşa. Önce gerçek masaüstünde çalıştığını görmen lazım.
+      Çalışmıyorsa 6. adımda öğreneceğin bir hata, 6. adımda alınan
+      sertifikadan daha değerli.
+    </div>
+
+    <div class="note ok">
+      <b>Sonuç ne olursa olsun yaz.</b> "Çalıştı, güzel" demek yetmez.
+      Neyin tuhaf geldiğini, nerede yavaşladığını, hangi adımda kafanın
+      karıştığını yaz. Siteyi de ona göre düzenleyeyim — şu an anlattıklarım
+      test raporlarından geliyor, senin gözleminden değil.
+    </div>
+
+    <h3>Takılırsan</h3>
+    <ul class="chk">
+      <li>Takıldığın adımın numarasını söyle</li>
+      <li>Ekranda gördüğün hata mesajını aynen yaz</li>
+      <li>Terminale bakmadan önce <span class="mono">go vet ./...</span>
+          çalıştırıp hata var mı kontrol et</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="grid g2">
+      <div><b>Segnox</b> — başlama rehberi<br>
+        <span style="color:var(--fg3)">Teknik pilot tamamlandı. Satılabilir ürün değil.</span></div>
+      <div><a href="nasil.html">← Nasıl çalışır</a> ·
+           <a href="simulator.html">UX simülatörü →</a></div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
