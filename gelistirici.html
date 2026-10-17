@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Geliştirici — Segnox</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html">SEG<span>NOX</span></a>
+    <div class="links">
+      <a href="index.html">Genel Bakış</a>
+      <a href="musteri.html">Müşteri</a>
+      <a href="bayi.html">Bayi / Teknisyen</a>
+      <a href="dene.html">Kendin Dene</a>
+      <a href="mimari.html">Mimari &amp; Sunucu</a>
+      <a href="gelistirici.html" class="on">Geliştirici</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Geliştirici için</div>
+    <h1>Teknik kararlar ve gerekçeleri</h1>
+    <p>
+      Her seçimin neden öyle yapıldığı <code class="inl">docs/KARARLAR.md</code>
+      dosyasında kayıtlı (şu an 21 karar). Burada özet.
+    </p>
+    <p>
+      Modül: <span class="mono">segnox.com/uzakdestek</span> ·
+      <span class="mono">31.721</span> satır Go (167 dosya) ·
+      <span class="mono">5.746</span> satır TypeScript ·
+      <span class="mono">0</span> cgo
+    </p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">01</span>Teknoloji seçimleri</h2>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Katman</th><th>Seçim</th><th>Lisans</th><th>Alternatiften neden vazgeçildi</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>Dil</b></td>
+            <td>Go 1.27</td>
+            <td class="mono">BSD</td>
+            <td>
+              Cgo'suz derlenebilen tek modern dil bu. Windows API'ye syscall/COM
+              ile doğrudan erişilir, ara katman yok.
+            </td>
+          </tr>
+          <tr>
+            <td><b>Bağlantı</b></td>
+            <td>Pion WebRTC</td>
+            <td class="mono">MIT</td>
+            <td>RustDesk <b>okunmadı</b> (AGPL bulaşması). Protokol el yazımı.</td>
+          </tr>
+          <tr>
+            <td><b>Aktarım</b></td>
+            <td>coturn</td>
+            <td class="mono">BSD</td>
+            <td>
+              K-01'de kendi TURN sunucusu yazmayı denemişler, <b>K-10'da geri alındı</b>:
+              ağa açık kod elle yazmak en riskli yer. Testte pion/turn fixture kullanılıyor.
+            </td>
+          </tr>
+          <tr>
+            <td><b>Ekran</b></td>
+            <td>DXGI Desktop Duplication</td>
+            <td class="mono">Windows</td>
+            <td>GDI'ye düşüyor (RDP, eski sürücü). Her monitör ayrı thread.</td>
+          </tr>
+          <tr>
+            <td><b>Video</b></td>
+            <td>Media Foundation H.264 MFT</td>
+            <td class="mono">Windows</td>
+            <td>
+              OpenH264 <b>reddedildi</b> (K-03): Cisco patent kapsamı ücretli ürünü
+              kapsamıyor. MF ücretsiz ve donanım kodlayıcıyı otomatik kullanıyor.
+            </td>
+          </tr>
+          <tr>
+            <td><b>Veritabanı</b></td>
+            <td>PostgreSQL + RLS</td>
+            <td class="mono">PostgreSQL</td>
+            <td>Firma izolasyonu veritabanı seviyesinde zorlanabiliyor.</td>
+          </tr>
+          <tr>
+            <td><b>Sorgu</b></td>
+            <td>sqlc + goose</td>
+            <td class="mono">MIT/BSD</td>
+            <td>Sorgular Go kodu — derleme zamanı kontrolü.</td>
+          </tr>
+          <tr>
+            <td><b>Arayüz</b></td>
+            <td>TypeScript + esbuild</td>
+            <td class="mono">MIT</td>
+            <td>
+              <b>HTMX'den vazgeçildi</b> (K-20): ikinci şablon katmanı istendiği için.
+              <code class="inl">dist/</code> commit edilir, <span class="mono">go build</span> Node istemez.
+            </td>
+          </tr>
+          <tr>
+            <td><b>Ajan arayüzü</b></td>
+            <td>go-webview2</td>
+            <td class="mono">MIT</td>
+            <td>cgo'suz WebView2 sarmalayıcı. HTML/CSS ile marka özelleştirmesi.</td>
+          </tr>
+          <tr>
+            <td><b>Yedekleme</b></td>
+            <td>pgBackRest</td>
+            <td class="mono">MIT</td>
+            <td>WAL sürekli arşiv → RPO 5 dk.</td>
+          </tr>
+          <tr>
+            <td><b>Test</b></td>
+            <td>go test, Playwright (Edge), embedded-postgres</td>
+            <td class="mono">MIT/Apache</td>
+            <td>Testler internetsiz çalışır — dış bağımlılık yok.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <b>Lisans kuralı sert:</b> projeye yalnızca MIT/BSD/Apache-2.0/ISC/MPL-2.0
+      kütüphaneler girebilir. GPL/AGPL yasak. Bu kural hem <code class="inl">CLAUDE.md</code>'-de
+      hem de ajan görev tanımında yazılı — yani ajan da bu kurala tabi.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">02</span>Protokol</h2>
+    <p class="sub">İki bileşen arasında ne konuşuyor ve neden böyle.</p>
+
+    <h3>Mesajlar</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Yön</th><th>Mesaj</th><th>Ne taşır</th></tr></thead>
+        <tbody>
+          <tr><td>ajan → sunucu</td><td class="mono">agent.hello</td><td>Cihaz kimliği, sürüm</td></tr>
+          <tr><td>sunucu → ajan</td><td class="mono">session.pending</td><td>Oturum isteği (oturum kimliğiyle)</td></tr>
+          <tr><td>teknisyen ↔ ajan</td><td class="mono">viewer.connect</td><td>Oturum açma isteği</td></tr>
+          <tr><td>teknisyen → ajan</td><td class="mono">input.text</td><td>Unicode metin (yapıştırma, IME, mobil)</td></tr>
+          <tr><td>ajan → teknisyen</td><td class="mono">video.*</td><td>Kare verisi</td></tr>
+          <tr><td>her ikisi</td><td class="mono">session.end</td><td>Oturumu kapat</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Video kanalı biçimi</h3>
+    <p>
+      Pilot sürümünde görüntü bir <b>veri kanalından</b> ikili mesajlar olarak
+      gider (sıralı ve güvenilir — WebRTC video yolundan farklı olarak).
+    </p>
+    <pre><code><span class="c-cm">// 16 bayt başlık</span>
+┌──────────┬─────────┬─────────┬──────────┐
+│ genişlik │ yüksek. │ biçim   │ karo sa. │
+│  u16 le  │ u16 le  │  u8     │   var    │
+└──────────┴─────────┴─────────┴──────────┘
+   sonra karolar (her biri JPEG)
+
+<span class="c-cm">// sınırlar</span>
+mesaj ≤ 64 KiB    <span class="c-cm">// WebRTC yığının parçalamadan taşıdığı boyut</span>
+karo boyutu 64 px
+satırda en çok 8 bitişik karo tek JPEG'de birleşir
+sığmayan → önce kalite düşür, sonra böl</code></pre>
+
+    <h3>Akış kontrolü — kare atlama</h3>
+    <p>
+      Gönderim kuyruğu dolduğunda yeni kare <b>atlanır</b>. Kayıp olmaz, çünkü
+      bir sonraki karede yine hangi bölgelerin değiştiği hesaplanır — değişmeyen
+      yerler yeniden gönderilmez.
+    </p>
+    <pre><code><span class="c-cm">// 1. her yakalamada değişen dikdörtgenleri bul</span>
+dirty = <span class="c-key">capture</span>.Dirty()   <span class="c-cm">// DXGI dirty + hareket hedefi</span>
+
+<span class="c-cm">// 2. yalnızca onları karola böl ve JPEG'le</span>
+tiles = <span class="c-key">encoder</span>.Encode(frame, dirty)
+
+<span class="c-cm">// 3. kanal doluysa atla, sonraki kare farkı kapatacak</span>
+<span class="c-key">if</span> channel.BufferedAmount() &gt; limit {
+    <span class="c-key">return</span>   <span class="c-cm">// kare atlandı</span>
+}</code></pre>
+
+    <h3>Klavye — fiziksel tuş mı karakter mi</h3>
+    <p>Bu ayrım kritik ve çoğu uzaktan destek yazılımında yanlış yapılır.</p>
+    <div class="grid g2">
+      <div class="card tight">
+        <h4>Fiziksel tuş (scan code)</h4>
+        <p>Tarayıcı <span class="mono">KeyboardEvent.code</span> gönderir
+        (<span class="mono">KeyG</span>, <span class="mono">Semicolon</span>).</p>
+        <p><b>Sonuç:</b> karakteri <b>uzak makinenin</b> klavye düzeni belirler.
+        Karşı taraf Türkçe Q ise sen "ğ" yazarsın, Amerikan F ise "g".</p>
+        <p style="color:var(--ok)">✓ Shift'in hangi harfi etkilediği doğru çözülür.</p>
+      </div>
+      <div class="card tight">
+        <h4>Karakter (Unicode)</h4>
+        <p>Fiziksel karşılığı olmayan girdi: yapıştırma, mobil klavye,
+        Türkçe yazma yöntemi (IME), emoji.</p>
+        <p>Bu durumda <span class="mono">input.text</span> ile doğrudan karakter
+        gönderilir (<span class="mono">KEYEVENTF_UNICODE</span>).</p>
+        <p style="color:var(--ok)">✓ Yapıştırınca bile Türkçe metin doğru gelir.</p>
+      </div>
+    </div>
+    <div class="note ok">
+      <b>Güvenlik önlemi:</b> Oturum bitince veya odak kaybında basılı kalan
+      tüm tuş ve fare düğmeleri bırakılır — takılı Ctrl/Alt durumuna karşı.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">03</span>Güvenlik modeli</h2>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>Bağlantı katmanı (K-09)</h3>
+        <p>Güçlü olan burası. İki ayrı bağımsız doğrulama var:</p>
+        <ul class="chk">
+          <li><b>Cihaz kimliği:</b> Ed25519, her bağlantıda sunucu tarafından
+              yeniden doğrulanır</li>
+          <li><b>Cihaz parolası:</b> <b>sunucuya hiç gönderilmez</b>. Ajan doğrular</li>
+          <li><b>Parola kanıtı:</b> iki tarafın DTLS parmak izine bağlı</li>
+        </ul>
+        <div class="note ok" style="margin:12px 0 0">
+          Üçüncü madde neden önemli: sinyal sunucusu ele geçirilse bile
+          araya giremez. Çünkü doğrulama, sunucunun gönderebileceği SDP'deki
+          parmak izine bağlı — sunucu onu değiştirirse parola doğrulaması başarısız olur.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Sunucu katmanı (K-19)</h3>
+        <ul class="chk">
+          <li>Ajan sunucuya <b>sadece wss://</b> ile bağlanır (http'ye yönlendirme reddedilir)</li>
+          <li>IP başına <b>50 eşzamanlı ajan</b> tavanı</li>
+          <li>IP başına <b>eşzamanlı 150 ajan</b> — tek IP kota dolduramaz</li>
+          <li>Ters proxy arkasında <span class="mono">SEGNOX_TRUSTED_PROXIES</span> zorunlu — yoksa tüm istemciler aynı IP görünür</li>
+          <li>9 haneli kod tahminine karşı: IP başına /64 (IPv6) ve /24 (IPv4) kutu sınırı</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Hesap katmanı (K-20)</h3>
+        <ul class="chk">
+          <li><span class="mono">argon2id</span> (m=64 MiB, t=3, p=2)</li>
+          <li>Var olmayan e-postada da sahte hash doğrulanır
+              <span style="color:var(--ok)">→ zamanlama sızıntısı yok</span></li>
+          <li>5 hatalı denemede 15 dakika kilit</li>
+          <li>Çerez: HttpOnly, Secure, SameSite=Strict, 12 saat mutlak / 2 saat boşta</li>
+          <li>CSRF: durum değiştiren isteklerde oturuma bağlı HMAC başlığı</li>
+          <li>TOTP sırrı <span class="mono">AES-256-GCM</span> ile şifreli, ±1 adım tolerans,
+              <b>aynı adım tekrar kullanılamaz</b></li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>Veritabanı katmanı</h3>
+        <ul class="chk">
+          <li>Uygulama <b>sahibi değil</b>, <span class="mono">BYPASSRLS</span> yok</li>
+          <li>Her kiracı tablosunda <span class="mono">tenant_id</span> + RLS <b>FORCE</b></li>
+          <li>Kiracı öncesi aramalar (giriş, çerez, token) yalnız dar
+              <span class="mono">SECURITY DEFINER</span> fonksiyonlarla</li>
+          <li>Bu fonksiyonlar sadece kimlik döndürür, veri okumaz</li>
+          <li>Audit zinciri: <span class="mono">hash = SHA256(prev_hash ‖ satır)</span>,
+              uygulama rolünde yalnız ekleme</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">04</span>İki büyük karar — neden böyle</h2>
+
+    <div class="card">
+      <h3>K-10: TURN sunucusunu kendimiz yazmadık</h3>
+      <p>
+        <b>Önce denendi (K-01):</b> Tek dil, tek ikili olsun diye <span class="mono">pion/turn</span>
+        tabanlı kendi sunucumuzu yazmayı planladık.
+      </p>
+      <p>
+        <b>Sonra değiştirildi:</b> Dış inceleme şunu gösterdi — TURN dışarıya açık
+        bir servistir, <b>açık relay = suistimal = hesap kapatma</b>. Allocation ve
+        peer filtre mantığını elle yazmak, güvenliğin en hassas yerini elle yazmak olurdu.
+        coturn yıllardır saha da, sürekli fuzz testinde (OSS-Fuzz).
+      </p>
+      <p>
+        <b>Sonuç:</b> Canlıda coturn (<span class="mono">use-auth-secret</span> HMAC ile,
+        <span class="mono">denied-peer-ip</span> ile). Testlerde Windows'ta coturn
+        çalışmadığı için aynı HMAC şemasıyla süreç içi pion/turn fixture.
+      </p>
+      <div class="note ok">
+        Öğrenilen: <b>tek dil avantajı, açık relay riskinin yanında önemsiz kalır.</b>
+        Ayrıca istenen HMAC doğrulamasını coturn zaten config'den veriyor —
+        yazılacak kod yoktu.
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:14px">
+      <h3>K-03: H.264'ü Media Foundation'dan aldık</h3>
+      <p>
+        Açık kaynak H.264 kodlayıcı (OpenH264) kolay görünüyor ama Cisco'nun patent
+        kapsamı <b>ücretli ürünleri kapsamıyor</b> — ticari bir ürün kurup satarsan
+        sorun çıkar. Ayrıca ayrı indirme ve arayüz ibaresi şartı var.
+      </p>
+      <p>
+        <b>Seçim:</b> Windows'un kendi Media Foundation MFT kodlayıcısı. Ücretsiz,
+        patent temiz, donanım kodlayıcıyı otomatik seçiyor, yoksa yazılıma düşüyor.
+        Düşük gecikme modu var, B-frame yok, PLI ile keyframe tetiklenebiliyor.
+      </p>
+      <div class="note warn">
+        <b>Bilinen sınır:</b> NV12 (4:2:0) olduğu için küçük metin bulanıklaşabilir.
+        Çözüm düşünüldü: durağan bölgeyi yüksek kaliteli karoyla tazelemek.
+        <b>Ölçülmesi gerekiyor</b> — karara böyle yazıldı.
+      </div>
+    </div>
+
+    <div class="card">
+        <h3>Cihaz parolası — neden argon2 değil</h3>
+        <p>
+          Bu en çok sorgulanacak karar. Hesap parolaları <b>argon2id</b>
+          (m=64 MiB, t=3, p=2) ile saklanıyor — sunucu tarafı, güçlü.
+        </p>
+        <p>
+          Ama <b>cihaz parolası farklı bir algoritma kullanıyor</b>:
+        </p>
+        <pre><code>K = PBKDF2-HMAC-SHA256(parola, tuz, <span class="c-key">600 000</span>, 32)</code></pre>
+        <p>
+          <b>Nedeni:</b> K-09 gereği parolanın özü <b>sunucuya hiç gönderilmiyor</b>.
+          Doğrulamayı ajan yapar ve kanıtı gönderir. Bu kanıtı üretmek için
+          iki tarafın da aynı anahtarı türetebilmesi gerekiyor — biri tarayıcı
+          (teknisyen), biri ajan. Tarayıcı tarafında yalnızca
+          <span class="mono">WebCrypto</span> var ve orada argon2 yok.
+        </p>
+        <p>
+          <b>Kanıtın içeriği de bağlı:</b>
+        </p>
+        <pre><code>kanıt = HMAC(K,
+    <span class="c-in">"segnox-pw-v1"</span>
+  | sessionId
+  | viewer'ın DTLS parmak izi
+  | ajanın   DTLS parmak izi)</code></pre>
+        <p>
+          Yani parola doğrulaması, <b>oturumun iki tarafının da DTLS parmak
+          izine bağlı</b>. Sinyal sunucusu ele geçirilse ve SDP'deki parmak
+          izini değiştirmeye çalışsa, kanıt tutmaz ve bağlantı kurulamaz.
+        </p>
+        <div class="note ok">
+          <b>10 dakikada 3 hatalı kanıt → 10 dakika kilit.</b>
+          Parola tanımlı değilse her oturum onay penceresi ister — yani
+          sistem "bana kim olduğunu söyle" değil, "izin veriyor musun" diye soruyor.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Veritabanı rolü denetimi (K-22)</h3>
+        <p>
+          Satır güvenliği (RLS) yalnız doğru veritabanı rolüyle çalışır.
+          Uygulama yanlış rolle bağlanırsa kurallar <b>sessizce devre dışı
+          kalır</b> ve herkes her şeyi görür.
+        </p>
+        <p>Bu yüzden sunucu <b>açılışta kendini denetliyor</b>:</p>
+        <ul class="chk no">
+          <li>Veritabanı süper kullanıcısı mı? → <b>bağlamaz</b></li>
+          <li><span class="mono">BYPASSRLS</span> yetkisi var mı? → <b>bağlamaz</b></li>
+          <li>Kiracı tablolarının sahibi mi? → <b>bağlamaz</b></li>
+          <li>Çözümleyici rolünün üyesi mi? → <b>bağlamaz</b></li>
+        </ul>
+        <p>
+          Yanlışsa servis açılmaz. Yani "izolasyon yanlışlıkla kapandı ama
+          kimse fark etmedi" durumu mümkün değil.
+        </p>
+        <div class="note">
+          <b>Bilinçli ertelenenler (K-22):</b> Kayıt zincirinin son kaydını
+          dışarı sabitleme (sondan silmeyi yakalamak için) 6. adımdaki yedekleme
+          ve izlemeye bırakıldı. Liste uçlarında sayfalama da 6. adımda.
+        </div>
+      </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">04b</span>Destek akışı kuralları (K-23)</h2>
+    <div class="grid g2">
+      <div class="card tight">
+        <h4>Oturum rolleri</h4>
+        <ul class="chk">
+          <li>Her oturum ya <span class="mono">control</span> ya da <span class="mono">view</span></li>
+          <li>Bir ajan başına <b>tek control</b> oturum</li>
+          <li>Toplam teknisyen sayısı ≤ plan <span class="mono">max_viewers</span></li>
+          <li>Hesap rolü "izleyici" olan yalnızca <span class="mono">view</span> alabilir</li>
+          <li>Dosya aktarımı sadece <span class="mono">control</span> oturumunda</li>
+        </ul>
+      </div>
+      <div class="card tight">
+        <h4>Dosya aktarımı sınırları</h4>
+        <ul class="chk">
+          <li>Üzerine yazma <b>yok</b> — mevcut dosya ezilmez</li>
+          <li>UNC ve aygıt yolları <b>reddedilir</b> (sadece gerçek dosyalar)</li>
+          <li>Başına en fazla <b>2 GiB</b></li>
+          <li>Aynı anda en fazla <b>2 transfer</b></li>
+          <li>Ayrı bir <span class="mono">file</span> kanalında taşınır</li>
+        </ul>
+      </div>
+      <div class="card tight">
+        <h4>TURN kimlik bilgisi</h4>
+        <ul class="chk">
+          <li>Oturum başına ayrı, kullanıcı: <span class="mono">s:&lt;sessionId&gt;</span></li>
+          <li>Varsayılan ömür <b>6 saat</b> (10 dk – 24 saat arası)</li>
+          <li>Ömür, en uzun oturumdan kısa olamaz (yenileme doğrulanır)</li>
+          <li>ICE restart'ta yenileme — 5. adım</li>
+        </ul>
+      </div>
+      <div class="card tight">
+        <h4>Test ortamı farkı</h4>
+        <ul class="chk">
+          <li>Testler yalnızca <span class="mono">127.0.0.1</span> dinler (güvenlik duvarı uyarısı olmasın)</li>
+          <li>Pion testlerde mDNS kapalı</li>
+          <li>Fixture, reddetme listesini <span class="mono">turncred.DeniedPeers</span>'ten alır (coturn ile aynı)</li>
+          <li>Ama yerelde her şey loopback olduğu için fixture ayrıca <span class="mono">127.0.0.0/8</span>'e izin verir — canlıda bu <span class="mono">allow-loopback-peers</span> kapalıdır</li>
+        </ul>
+      </div>
+    </div>
+    <div class="note warn">
+      <b>Bilinen sınır:</b> Matris 8 (açık relay testi) fixture'a karşı koşar —
+      aracın doğru çalıştığını gösterir, coturn'ü değil. Gerçek coturn
+      doğrulaması GitHub CI'da yapılacak (depo henüz açılmadı) ve canlıda
+      her kurulumdan sonra. <b>Kabul edilirse coturn durdurulur.</b>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">05</span>Depo yapısı</h2>
+    <pre><code>cmd/
+  segnox-agent/     ajan: ekran yakalama, kodlama, girdi, rtc
+  segnox-server/    sunucu: sinyal, API, panel, e-posta
+  turnprobe/        TURN açık relay test aracı (K-16)
+
+internal/
+  agent/
+    capture/   DXGI + GDI + sentetik (test)
+    encode/    JPEG karo kodlayıcı, ortak Encoder arayüzü
+    input/     SendInput, Türkçe klavye haritası, kaydedici
+    rtc/       Pion bağlantısı
+    session/   oturum durumu
+    device/    kimlik dosyası
+    signalclient/
+  server/
+    signal/    hub, istemci IP çözümü, sınırlar
+    auth/      parola, TOTP, çerez, CSRF, secretbox
+    ratelimit/ token bucket + IP anahtarı (v4/v6)
+    mail/      arayüz + dosya/SMTP + şablonlar
+    account/   davet, parola sıfırlama
+  proto/       mesaj tanımları + boyut doğrulama + video biçimi
+  store/       sqlc + goose, RLS, izolasyon testleri
+  winapi/      tüm Windows API kodu tek pakette
+  audit/       hash zinciri
+  testutil/    embedded-postgres, pion/turn fixture
+
+web/
+  viewer/      teknisyen arayüzü (TS + esbuild)
+  console/     yönetim paneli (TS + esbuild)
+
+deploy/        compose, caddy, coturn, backup
+installer/     WiX (MSI)
+e2e/           Playwright
+docs/          kararlar, operasyon, API, açık konular</code></pre>
+
+    <h3>Kalite kapısı — her adımda geçmeli</h3>
+    <pre><code><span class="c-key">CGO_ENABLED=0</span> go build ./...   <span class="c-cm"># cgo'suz derlenmeli</span>
+go vet ./...
+golangci-lint run            <span class="c-cm"># gosec, errorlint, bodyclose, noctx</span>
+go test ./...
+<span class="c-cm"># + adım 2'den itibaren Playwright e2e</span>
+<span class="c-cm"># + adım 4'ten itibaren 8 maddelik test matrisi</span>
+<span class="c-cm"># + güvenlik denetimi temiz</span></code></pre>
+    <p>
+      <span class="mono">-race</span> bayrağı Windows'ta cgo gerektirdiği için
+      yalnızca CI'da (Linux) çalışıyor.
+    </p>
+
+    <h3>Test matrisi</h3>
+    <p>4. adımdan itibaren uçtan uca otomatik olarak koşar:</p>
+    <ul class="chk">
+      <li>Tek oturum: bağlan → kare → tık → kes</li>
+      <li>Zorunlu aktarım (relay) üzerinden aynı akış</li>
+      <li>Kopma-geri gelme: ağ kesilir, ICE restart ile 10 sn içinde döner</li>
+      <li>Aynı cihaza iki teknisyen: biri kontrol, biri izleyici; ikinci kontrol reddedilir</li>
+      <li>5 eşzamanlı oturum + 6.'sı plan limitiyle reddedilir</li>
+      <li>Yanlış parola / süresi geçmiş kimlik / başka kiracının cihazı → bağlantı yok</li>
+      <li>Farklı ağdan gerçek deneme → kullanıcı yapar (açık konu)</li>
+      <li>TURN açık relay testi: 10 tehlikeli adres reddedilmeli, genel IP kabul edilmeli</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">06</span>REST API</h2>
+    <p class="sub">
+      Panel de aynı API'yi kullanır — ikinci bir yol yok. Detaylı sözleşme
+      <code class="inl">docs/API.md</code>'de (6.1 KB).
+    </p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Özellik</th><th>Nasıl</th></tr></thead>
+        <tbody>
+          <tr><td>Kimlik doğrulama</td><td><span class="mono">Authorization: Bearer &lt;token&gt;</span></td></tr>
+          <tr><td>Kapsam</td><td>Token sahibi, kapsam listesiyle sınırlı (K-13)</td></tr>
+          <tr><td>Depolama</td><td>Sadece hash saklanır — geri alınamaz</td></tr>
+          <tr><td>Hız sınırı</td><td>Token bucket: hem token hem IP başına</td></tr>
+          <tr><td>Kota</td><td>Plan bazlı günlük kota</td></tr>
+          <tr><td>Yanıt</td><td><span class="mono">429</span> + <span class="mono">Retry-After</span></td></tr>
+          <tr><td>Gövde sınırı</td><td>Her istekte zorunlu</td></tr>
+          <tr><td>CSRF</td><td>Bearer token istekleri muaftır (çerez tabanlı olanlar değil)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <b>Bilinen sınır:</b> Hız sınırı bellek içi tutuluyor. Birden fazla sunucu
+      çıktığında arayüz aynı kalacak ama arkasına Redis/NATS konulacak.
+      Şimdilik tek sunucu olduğu için gereksiz.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">07</span>Bilinen sınırlar</h2>
+    <p class="sub">Açıkça yazılmış, saklanmamış şeyler.</p>
+
+    <div class="grid g2">
+      <div class="card tight">
+        <h4>Yapısal olarak yapılmayacaklar</h4>
+        <ul class="chk no">
+          <li>Wayland desteği</li>
+          <li>iOS kontrolcü (Apple izin vermiyor)</li>
+          <li>Android kontrolcü (Play kuralları)</li>
+          <li>SSO / LDAP</li>
+          <li>e-fatura entegrasyonu</li>
+          <li>Yapay zekâ özeti</li>
+          <li>Çok bölgeli yüksek erişilebilirlik (adım 8)</li>
+        </ul>
+      </div>
+      <div class="card tight">
+        <h4>Bilinen teknik borç</h4>
+        <ul class="chk">
+          <li>Sinyal sunucusu bellek içi — tek düğüm. Çok düğüm için NATS soyutlaması yazıldı ama uygulanmadı</li>
+          <li>Döndürülmüş ekranlarda kare döndürülmeden gönderiliyor (uyarı loglanır) — 5. adım</li>
+          <li>HDR ve 4:4:4 renk yok — 5. adım</li>
+          <li>Küçük metin bulanıklaşabilir (NV12) — ölçüm bekliyor</li>
+          <li>Hız sınırı bellek içi — tek sunucu varsayımı</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note warn">
+      <b>En büyük risk kod değil:</b> Bu kodun tamamı yapay zekâ tarafından yazıldı.
+      Test kültürü iyi kurulmuş (her paket testli, kalite kapısı, güvenlik denetimi),
+      ama ekran yakalama ve girdi enjeksiyonu Windows'un en incelikli API'leri.
+      Bunlar <b>gerçek donanımda elle denenmeden</b> "çalışıyor" sayılmamalı.
+      5. adımda GPU'suz test bilgisayarı zaten planda var — gerekli.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="grid g2">
+      <div><b>Segnox</b> — geliştirici görünümü<br>
+        <span style="color:var(--fg3)">Pilot sürümü · satılabilir ürün değildir.</span></div>
+      <div><a href="mimari.html">← Mimari &amp; sunucu</a></div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

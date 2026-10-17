@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bayi / Teknisyen — Segnox</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html">SEG<span>NOX</span></a>
+    <div class="links">
+      <a href="index.html">Genel Bakış</a>
+      <a href="musteri.html">Müşteri</a>
+      <a href="bayi.html" class="on">Bayi / Teknisyen</a>
+      <a href="dene.html">Kendin Dene</a>
+      <a href="mimari.html">Mimari &amp; Sunucu</a>
+      <a href="gelistirici.html">Geliştirici</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Bayi ve teknisyen için</div>
+    <h1>Müşterilerine kendi markanla<br>uzaktan destek sat</h1>
+    <p>
+      Segnox, tek bir uzaktan destek yazılımı değil — <b>bir platform</b>.
+      Birden fazla firma kendi markasıyla, kendi müşterileriyle, kendi sözleşmesiyle
+      kullanabilir. Birbirlerini göremezler.
+    </p>
+    <p>
+      Bugün bu işi yapıyorsanız büyük ihtimalle Alpemix kullanıyorsunuz.
+      Alpemix'te böyle bir model <b>yok</b>: kendi markanızı kullanamaz, kendi
+      sözleşme metnınızı koyamaz, müşterilerinizi göremezsiniz.
+    </p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">01</span>Sana ne kazandırır</h2>
+    <div class="grid g2">
+      <div class="card">
+        <h3><span class="badge b-ok">ALPEMIX'TE YOK</span></h3>
+        <ul class="chk yes">
+          <li><b>Kendi markan.</b> Logo, renk, açılış ekranı, destek sırasındaki
+              metinler — hepsi senin.</li>
+          <li><b>Kendi sözleşmen.</b> Müşteri programı açılırken senin
+              onay metnini görür. Zorunlu kabul ettirebilirsin.</li>
+          <li><b>Müşteri başına ayrı dünya.</b> Her müşterinin cihazları ve
+              teknisyenleri kendi içinde. Başka müşteriyi göremezsin.</li>
+          <li><b>Açık API.</b> Kendi bilgi sistemine bağlarsın — cihaz listesini,
+              oturum kayıtlarını kendi panelinde gösterirsin.</li>
+          <li><b>Kurumsal dağıtım.</b> Toplu kurulum (6. adım): tek komutla
+              500 bilgisayara dağıtım, GPO/Intune desteği.</li>
+          <li><b>Faturalanabilir kayıt.</b> "Bu müşteriye ayda 4 saat 20 dakika
+              destek verildi" — rapor olarak çıkar.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="badge b-warn">ŞU AN HAZIR DEĞİL</span></h3>
+        <ul class="chk">
+          <li>Gözetimsiz erişim — <b>5. adım</b></li>
+          <li>Toplu kurulum ve kod imzası — <b>6. adım</b></li>
+          <li>Kurumsal yönetim paneli — <b>6. adım</b></li>
+          <li>Fiyat/plan sistemi — <b>6. adım</b></li>
+          <li>Herkes için açık kayıt — <b>6. adım</b>
+              (pilotta sadece yönetici tarafından davetle kullanıcı ekleniyor)</li>
+          <li>Cihaz sağlığı ve alarmlar — <b>7. adım</b></li>
+          <li>Kendini kendine kurabilen API (PSA/ERP) — <b>7. adım</b></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">02</span>Farklı firmalar nasıl ayrılıyor</h2>
+    <p class="sub">
+      Bu, ürünün en kritik parçası. Segnox tek sunucuda birden fazla firmayı
+      barındırıyor. Aynı veritabanında, aynı tablolarda. Yanlışlıkla biri
+      diğerini göremiyor.
+    </p>
+
+    <svg class="diagram" viewBox="0 0 1000 380" role="img" aria-label="Çok kiracı yapı">
+      <rect x="360" y="14" width="280" height="52" rx="10" fill="#131a23" stroke="#3ea6ff"/>
+      <text x="500" y="38" fill="#e6edf3" font-size="13" font-weight="700" text-anchor="middle">segnox.com</text>
+      <text x="500" y="55" fill="#9fb0c3" font-size="10.5" text-anchor="middle">tek sunucu · tek veritabanı</text>
+
+      <path d="M500,66 L180,110" stroke="#6b7d91" stroke-width="1.6" fill="none"/>
+      <path d="M500,66 L820,110" stroke="#6b7d91" stroke-width="1.6" fill="none"/>
+
+      <!-- tenant A -->
+      <rect x="20" y="112" width="320" height="230" rx="10" fill="#0a0e14" stroke="#3fb950" stroke-dasharray="5 4"/>
+      <text x="40" y="136" fill="#3fb950" font-size="12.5" font-weight="700">ABC Bilişim  (kiracı 1)</text>
+      <rect x="40" y="150" width="280" height="38" rx="7" fill="#131a23" stroke="#253141"/>
+      <text x="52" y="166" fill="#e6edf3" font-size="11.5" font-weight="600">Kendine ait müşteriler</text>
+      <text x="52" y="181" fill="#6b7d91" font-size="10">Ofis Yazılım Ltd. · Ege Lojistik · Anadır Makina</text>
+      <rect x="40" y="196" width="280" height="38" rx="7" fill="#131a23" stroke="#253141"/>
+      <text x="52" y="212" fill="#e6edf3" font-size="11.5" font-weight="600">Kendine ait teknisyenler</text>
+      <text x="52" y="227" fill="#6b7d91" font-size="10">Ali (sahip) · Veli · Zeynep</text>
+      <rect x="40" y="242" width="280" height="38" rx="7" fill="#131a23" stroke="#253141"/>
+      <text x="52" y="258" fill="#e6edf3" font-size="11.5" font-weight="600">Kendi cihazları</text>
+      <text x="52" y="273" fill="#6b7d91" font-size="10">18 cihaz · kendi gruplarıyla</text>
+      <rect x="40" y="288" width="280" height="38" rx="7" fill="#131a23" stroke="#253141"/>
+      <text x="52" y="304" fill="#e6edf3" font-size="11.5" font-weight="600">Kendi markası</text>
+      <text x="52" y="319" fill="#6b7d91" font-size="10">logo · renk · KVKK metni · sözleşme</text>
+
+      <!-- tenant B -->
+      <rect x="660" y="112" width="320" height="230" rx="10" fill="#0a0e14" stroke="#d29922" stroke-dasharray="5 4"/>
+      <text x="680" y="136" fill="#d29922" font-size="12.5" font-weight="700">XYZ Bilgi Teknolojileri  (kiracı 2)</text>
+      <rect x="680" y="150" width="280" height="38" rx="7" fill="#131a23" stroke="#253141"/>
+      <text x="692" y="166" fill="#e6edf3" font-size="11.5" font-weight="600">Kendine ait müşteriler</text>
+      <text x="692" y="181" fill="#6b7d91" font-size="10">Marmara İnşaat · Kuzey Medya</text>
+      <rect x="680" y="196" width="280" height="38" rx="7" fill="#131a23" stroke="#253141"/>
+      <text x="692" y="212" fill="#e6edf3" font-size="11.5" font-weight="600">Kendine ait teknisyenler</text>
+      <text x="692" y="227" fill="#6b7d91" font-size="10">Murat (sahip) · Hakan</text>
+      <rect x="680" y="242" width="280" height="38" rx="7" fill="#131a23" stroke="#253141"/>
+      <text x="692" y="258" fill="#e6edf3" font-size="11.5" font-weight="600">Kendi cihazları</text>
+      <text x="692" y="273" fill="#6b7d91" font-size="10">7 cihaz · kendi gruplarıyla</text>
+      <rect x="680" y="288" width="280" height="38" rx="7" fill="#131a23" stroke="#253141"/>
+      <text x="692" y="304" fill="#e6edf3" font-size="11.5" font-weight="600">Kendi markası</text>
+      <text x="692" y="319" fill="#6b7d91" font-size="10">logo · renk · KVKK metni · sözleşme</text>
+
+      <rect x="360" y="352" width="280" height="20" rx="6" fill="#3b1520" stroke="#f85149"/>
+      <text x="500" y="366" fill="#f85149" font-size="10.5" font-weight="700" text-anchor="middle">birbirlerini göremezler — teknik olarak imkânsız</text>
+    </svg>
+
+    <h3>İzolasyon nasıl garanti ediliyor</h3>
+    <p>İki katmanlı bir yapı var. Biri uygulama kodu, diğeri veritabanı.</p>
+
+    <div class="grid g2">
+      <div class="card tight">
+        <h4>1. Katman — veritabanı (asıl koruma)</h4>
+        <ul class="chk">
+          <li>Her tabloda <span class="mono">tenant_id</span> sütunu var</li>
+          <li>Satır güvenliği (RLS) <b>zorla</b> açık — kapatılamaz</li>
+          <li>Her sorgu "şu an hangi firmada çalışıyorum" değişkeniyle kilitlenir</li>
+          <li>Veritabanı kendisi başka firmanın satırını vermeyi reddeder</li>
+          <li>Uygulama bu kuralı atlamaya çalışsa bile veritabanı engeller</li>
+        </ul>
+      </div>
+      <div class="card tight">
+        <h4>2. Katman — uygulama</h4>
+        <ul class="chk">
+          <li>Tüm sorgular tek bir kapıdan geçer</li>
+          <li>Bu kapı firma kimliğini her seferinde yeniden yazar</li>
+          <li>Kapıdan başka sorgu yolu yok</li>
+          <li>Kural ihlali için otomatik test var (<span class="mono">isolation_test.go</span>)</li>
+          <li>Oturum çerezi 12 saatte, boştayken 2 saatte düşer</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Yetkiler — iki katman</h3>
+    <p>
+      Önce hesap rolü (kimin neyi <b>görebileceğini</b>) belirler, sonra oturum
+      yetkisi (oturumda <b>kontrol edip edemeyeceğini</b>). İkisi ayrı ayrı çalışır.
+    </p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Hesap rolü</th><th>Neleri görebilir</th><th>Alabileceği oturum</th></tr></thead>
+        <tbody>
+          <tr><td><b>Sahip</b></td><td>Firmadaki tüm cihazlar</td><td><span class="badge b-ok">kontrol</span> <span class="badge b-mut">veya izleme</span></td></tr>
+          <tr><td><b>Yönetici</b></td><td>Firmadaki tüm cihazlar + kullanıcı yönetimi</td><td><span class="badge b-ok">kontrol</span> <span class="badge b-mut">veya izleme</span></td></tr>
+          <tr><td><b>Teknisyen</b></td><td>Yalnızca <b>üyesi olduğu grupların</b> cihazları + grupsuz cihazlar</td><td><span class="badge b-ok">kontrol</span> <span class="badge b-mut">veya izleme</span></td></tr>
+          <tr><td><b>İzleyici</b></td><td>Firmadaki tüm cihazlar</td><td><span class="badge b-mut">sadece izleme — kontrol alamaz</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="grid g2" style="margin-top:14px">
+      <div class="card tight">
+        <h4>Kritik kural 1 — görüş</h4>
+        <p>
+          <b>Teknisyen tüm cihazları görmez.</b> Yeni teknisyen işe alındığında,
+          kendi grubundaki müşteriler dışındaki cihazlara erişemez. "Yanlış
+          müşteriye bağlandım" kazası yapısal olarak imkânsız.
+        </p>
+      </div>
+      <div class="card tight">
+        <h4>Kritik kural 2 — eşzamanlılık</h4>
+        <p>
+          Her cihazda <b>aynı anda yalnızca bir kişi kontrol edebilir</b>.
+          İzleyici sayısı plan tablosundaki sınıra bağlı. Yani müşterinin
+          ekranına 3 kişi birden fare giremez.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">03</span>Marka nasıl özelleştiriliyor</h2>
+    <p class="sub">
+      Müşterinin bilgisayarına indirdiği dosyanın adında senin kodun var.
+      Ama içeriği sunucudan gelir — yeniden derleme yok, yeni sürüm çıkınca
+      tekrar imzalama gerekmiyor.
+    </p>
+
+    <div class="flow">
+      <div class="step">
+        <div class="k">DAĞITIM</div>
+        <b>ABC123.exe</b>
+        <small>Müşteriye bu dosyayı gönderiyorsun. Kurulum yok, çift tıkla çalışıyor.</small>
+      </div>
+      <div class="step">
+        <div class="k">SUNUCUDAN</div>
+        <b>Marka bilgisi gelir</b>
+        <small>Logo, renk, şirket adı, onay metni ve sözleşme sunucudan indirilir.</small>
+      </div>
+      <div class="step">
+        <div class="k">EKRANDA</div>
+        <b>Senin markan görünür</b>
+        <small>"ABC Bilişim bağlanmak istiyor" + senin logon + senin KVKK metnin.</small>
+      </div>
+      <div class="step">
+        <div class="k">SÜRÜM</div>
+        <b>Tek imza yeter</b>
+        <small>Tüm bayiler aynı imzalı dosyayı kullanır. Sürüm başına tek imzalama.</small>
+      </div>
+    </div>
+
+    <div class="note ok">
+      <b>Neden bu tasarım?</b> Her bayi için ayrı EXE derlenseydi, her sürümde
+      her bayi için ayrı imza alman gerekirdi — 50 bayi × 12 sürüm = 600 imza/yıl.
+      Bunun yerine tek imza, marka bilgisi sunucudan geliyor.
+    </div>
+
+    <h3>Özelleştirebileceğin alanlar</h3>
+    <div class="grid g2">
+      <div class="card tight">
+        <h4>Müşterinin gördüğü</h4>
+        <ul class="chk">
+          <li>Şirket logosu ve adı</li>
+          <li>Açılış ve bağlantı ekranı renkleri</li>
+          <li>Onay penceresi metni</li>
+          <li>KVKK aydınlatma metni</li>
+          <li>Kabul şartı (kabul etmeden bağlanamama)</li>
+          <li>Destek sırası / destek talebi ekranı</li>
+        </ul>
+      </div>
+      <div class="card tight">
+        <h4>Sadece senin gördüğün</h4>
+        <ul class="chk">
+          <li>Destek saati ve maliyet raporları</li>
+          <li>Müşteri bazlı cihaz listesi</li>
+          <li>Teknisyen performansı</li>
+          <li>Oturum geçmişi ve döküm</li>
+          <li>Değiştirilemez kayıt (kendi denetimiz)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">04</span>Nasıl dağıtacaksın?</h2>
+    <p class="sub">Bugünden itibaren iki yol var. Kurumsal dağıtım 6. adımda geliyor.</p>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3><span class="badge b-ok">HEMEN</span> Tek tek gönder</h3>
+        <p>Müşteriye dosyayı e-postayla gönder, kurulumu kendisi yapsın.</p>
+        <ul class="chk yes">
+          <li>Kurulum yok — dosyayı çalıştırması yeterli</li>
+          <li>Program %LOCALAPPDATA% içine kendini kaydeder</li>
+          <li>Müşteri bilgisayarında iz bırakmaz, ayarları değiştirmez</li>
+        </ul>
+        <ul class="chk no">
+          <li>Antivirüs uyarısı verebilir (imza yok)</li>
+          <li>50 cihaz için 50 kez yapman gerekir</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="badge b-mut">6. ADIM</span> Toplu kurulum</h3>
+        <p>Kurumsal müşteriler için tek komutla 500 bilgisayara dağıtım.</p>
+        <ul class="chk">
+          <li>Katılım token'ı ile kendi kendine kurulur</li>
+          <li><span class="mono">/S /TOKEN=xxx</span> sessiz kurulum</li>
+          <li>Grup ilkesi (GPO) / Intune / SCCM desteği</li>
+          <li>Windows servisi olarak arka planda çalışır</li>
+          <li>Yönetici parolası gerektiren durumlar da çözülür</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="note warn">
+      <b>Uyarı:</b> Toplu kurulum ve arka planda çalışan servis (gözetimsiz erişim)
+      <b>5. ve 6. adımda</b> geliyor. Pilotta müşterinin bilgisayarı açık olmalı ve
+      programı çalışıyor olmalı. Yani bugün "kur ve unut" diyemezsin.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">05</span>Kendin sunucuna kurabilir misin?</h2>
+    <p class="sub">Sık sorulan soru. Cevap: pilot sürümünde hayır, ve nedeni önemli.</p>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3><span class="badge b-bad">PİLOTTA HAYIR</span></h3>
+        <p>
+          Sunucu <b>Segnex altyapısında</b> çalışıyor. Bayinin kendi sunucusuna
+          kurulum şu an desteklenmiyor.
+        </p>
+        <p>
+          <b>Neden:</b> Aktarım sunucusu (TURN) için en az iki ayrı internet
+          adresi, sabit IP ve sertifika yönetimi gerekiyor. Her bayinin kendi
+          sunucusunda bunu kurması hem pahalı hem de ürünü bakımı çok zorlaştırır.
+        </p>
+      </div>
+      <div class="card">
+        <h3><span class="badge b-mut">PLANDA YOK</span> Ama yönü belli</h3>
+        <p>
+          Kendi sunucusuna kurulum, banka ve kamu kurumları için önemli bir
+          talep olabilir — KVKK açısından "veri yurt dışına gitmiyor" demek.
+        </p>
+        <p>
+          Plan, ileride tam bir sunucu paketi kurulmasını <b>bilinçli olarak</b>
+          erteliyor. Önce ürün olsun, sonra dağıtım modeli çeşitlensin.
+        </p>
+        <p style="color:var(--fg3);font-size:14px">
+          Bugün için doğru cevap: <b>merkezi sunucu, çok kiracılı</b>. Müşterinin
+          verisi Segnox sunucusunda, ama başka bir müşterinin verisiyle aynı
+          tabloda ve kesinlikle erişilemez.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">06</span>Fiyatlandırma ve limitler</h2>
+    <div class="note warn">
+      <b>Rakamlar henüz belirlenmedi.</b> Fiyat ve plan limitleri 6. adımdan önce
+      verilmesi gereken kararlardan biri. Alpemix'in bedava sürümü (ayda 8 saat)
+      ve rakiplerin fiyatları (AnyDesk Solo $24,90/ay, Splashtop $99/yıl)
+      referans olarak toplandı; rakamlar henüz konmadı.
+    </div>
+    <p>
+      Ama <b>limit mekanizması koda şimdiden gömüldü</b> ve sunucuda uygulanıyor —
+      istemcide değil. Yani bir kullanıcı sınırı atlatmaya çalışsa bile
+      bağlantı kurulamaz.
+    </p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Limit</th><th>Nasıl uygulanır</th></tr></thead>
+        <tbody>
+          <tr><td>Eşzamanlı oturum sayısı</td><td>Sunucu reddeder</td></tr>
+          <tr><td>Aylık toplam destek dakikası</td><td>Sunucu reddeder</td></tr>
+          <tr><td>Oturum başı süre</td><td>Dolunca oturum kapanır</td></tr>
+          <tr><td>İzleyici sayısı</td><td>Plan tablosundaki sınır</td></tr>
+          <tr><td>API günlük kota</td><td>Plan bazlı, <span class="mono">429</span> dönüyor</td></tr>
+          <tr><td>Dosya boyutu</td><td>Başına 2 GiB, aynı anda 2 transfer</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="color:var(--fg3);font-size:14px">
+      Şu anki varsayılan değerler: Ücretsiz — 1 eşzamanlı, oturum başı 45 dk,
+      ayda 8 saat. Pro — 5 eşzamanlı. Değiştirmek için kod değişikliği gerekmiyor,
+      tek tabloda.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="grid g2">
+      <div><b>Segnox</b> — bayi görünümü<br>
+        <span style="color:var(--fg3)">Pilot sürümü · satılabilir ürün değildir.</span></div>
+      <div><a href="musteri.html">← Müşteri</a> · <a href="mimari.html">Mimari →</a></div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

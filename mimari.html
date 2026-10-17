@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mimari ve Sunucu — Segnox</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html">SEG<span>NOX</span></a>
+    <div class="links">
+      <a href="index.html">Genel Bakış</a>
+      <a href="musteri.html">Müşteri</a>
+      <a href="bayi.html">Bayi / Teknisyen</a>
+      <a href="dene.html">Kendin Dene</a>
+      <a href="mimari.html" class="on">Mimari &amp; Sunucu</a>
+      <a href="gelistirici.html">Geliştirici</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Sistem</div>
+    <h1>Sunucuda ne çalışıyor,<br>neden gerekli</h1>
+    <p>
+      Segnox merkezi bir sunucu kullanır. Müşterilerin bilgisayarlarında tek bir
+      EXE, teknisyenlerde bir tarayıcı sekmesi vardır. Sunucu hafiftir — çünkü
+      görüntünün büyük kısmı iki bilgisayar arasında doğrudan akar.
+    </p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">01</span>Bir bağlantının tamamı</h2>
+    <p class="sub">Teknik personelin "bağlan" dediği andan ekranın görünmesine kadar.</p>
+
+    <div class="flow">
+      <div class="step">
+        <div class="k">1</div>
+        <b>Ajan sunucuya bağlanır</b>
+        <small>Kalıcı WebSocket. Cihaz kimliğini sunar, "ben buradayım" der.</small>
+      </div>
+      <div class="step">
+        <div class="k">2</div>
+        <b>Sunucu ajanı listeler</b>
+        <small>Çevrimiçi cihazlar, gruplara göre, teknisyene gösterilir.</small>
+      </div>
+      <div class="step">
+        <div class="k">3</div>
+        <b>Teknisyen tıklar</b>
+        <small>Sunucu ajana "şu oturum istendi" mesajı yollar.</small>
+      </div>
+      <div class="step">
+        <div class="k">4</div>
+        <b>Onay penceresi çıkar</b>
+        <small>Müşterinin ekranında: "ABC Bilişim bağlanmak istiyor".</small>
+      </div>
+      <div class="step">
+        <div class="k">5</div>
+        <b>Buluşma (ICE)</b>
+        <small>İki taraf birbirini doğrudan dener. Aynı ağdaysa anında.</small>
+      </div>
+      <div class="step">
+        <div class="k">6</div>
+        <b>Görüntü akar</b>
+        <small>Doğrudan bağlantı ya da aktarım sunucusu üzerinden.</small>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>Sunucunun rolü 1, 2 ve 3. adımlarda bitiyor.</b> 5. adımda görüntü
+      sunucudan geçmiyorsa sunucu hiç meşgul olmuyor. Bu yüzden küçük bir
+      sunucu yüzlerce eşzamanlı oturumu kaldırıyor.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">02</span>Neden iki yol var</h2>
+    <p class="sub">
+      Aynı ağda iki bilgisayar birbirine doğrudan konuşabilir — aralarında sunucu
+      olmadan. Farklı ağlarda çoğu zaman bu mümkün değildir. Segnox önce doğrudan
+      yolu dener, olmazsa aktarım sunucusuna düşer.
+    </p>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3><span class="badge b-ok">YOL A</span> Doğrudan (P2P)</h3>
+        <p>İki bilgisayar kendi ağ adresleriyle birbirine bağlanır.</p>
+        <table>
+          <tr><td>Hız</td><td>En yüksek — arada sunucu yok</td></tr>
+          <tr><td>Sunucu yükü</td><td>Sıfır</td></tr>
+          <tr><td>Ne zaman</td><td>Aynı ağ, veya karşılıklı port açık (nadir)</td></tr>
+          <tr><td>Sektör oranı</td><td>%75–90 arası</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3><span class="badge b-warn">YOL B</span> Aktarım (TURN)</h3>
+        <p>Görüntü sunucu üzerinden taşınır. Aynı şekillerde çalışır, sadece arada
+        bir sunucu var.</p>
+        <table>
+          <tr><td>Hız</td><td>Daha yavaş, çift yol</td></tr>
+          <tr><td>Sunucu yükü</td><td>Bant genişliği</td></tr>
+          <tr><td>Ne zaman</td><td>Doğrudan yol kurulamadığında</td></tr>
+          <tr><td>Sektör oranı</td><td>%10–25 (kurumsal ağda daha yüksek)</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="note ok">
+      <b>Bilinen bir uyarı:</b> Bazı kurumsal ağlar gereğinden fazla engelleyici
+      olabiliyor — VPN yönlendirmeleri, çift NAT, güvenlik duvarı politikaları.
+      Kurumsal ağda aktarım oranı %50'yi bulabiliyor. Bu yüzden gerçek oran
+      ölçülüyor, tahmin edilmiyor.
+    </div>
+
+    <h3>Neden iki IP adresi</h3>
+    <p>
+      Kurumsal ağlar neredeyse her zaman sadece <b>443 portuna</b> izin verir
+      (web trafiği). Ama 80 ve 443 zaten web sitesi için kullanılıyor.
+      Aktarım sunucusu da 443'e ihtiyaç duyuyor.
+    </p>
+    <div class="grid g3">
+      <div class="card tight">
+        <h4>1. IP adresi</h4>
+        <p>Web sitesi, panel, API, WebSocket</p>
+        <p class="mono" style="color:var(--fg2)">443 · HTTPS</p>
+      </div>
+      <div class="card tight">
+        <h4>2. IP adresi</h4>
+        <p>Aktarım sunucusu (TURN)</p>
+        <p class="mono" style="color:var(--fg2)">443 · TLS</p>
+      </div>
+      <div class="card tight">
+        <h4>Alternatif (denendi)</h4>
+        <p>Aynı IP'de SNI ile ayırma</p>
+        <p class="mono" style="color:var(--fg3)">reddedildi — "deneysel" uyarısı</p>
+      </div>
+    </div>
+    <p>İki IP almanın maliyeti aylık ~€1–2 ve sorunu tamamen ortadan kaldırıyor.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">03</span>Sunucudaki dört servis</h2>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>Caddy</h3>
+        <p style="color:var(--fg2)">TLS sonlandırma · yönlendirme · sertifika yenileme</p>
+        <p>
+          Dışarıya açık olan tek katman. Sertifikayı kendisi alır ve yeniler,
+          gelen istekleri doğru servise yönlendirir, HTTP'yi HTTPS'ye çevirir.
+        </p>
+        <p style="font-size:14px;color:var(--fg3)">
+          Başka hiçbir servis portu dışarıya açık değil.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>segnox-server</h3>
+        <p style="color:var(--fg2)">sinyal · REST API · panel · e-posta</p>
+        <p>
+          Tek bir Go ikilisi. İki bilgisayarı buluşturur, oturum kimliği üretir,
+          REST API'yi sunar, yönetim panelini açar, e-postaları gönderir.
+        </p>
+        <p style="font-size:14px;color:var(--fg3)">
+          Panel de aynı API'yi kullanır — ikinci bir kod yolu yok.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>PostgreSQL</h3>
+        <p style="color:var(--fg2)">hesap · cihaz · oturum · kayıt</p>
+        <p>
+          Hesaplar, cihaz kayıtları, oturum geçmişi, değiştirilemez işlem kaydı.
+          Firma izolasyonu burada zorlanıyor: her satır bir firma etiketi taşıyor
+          ve veritabanı başka firmanın satırını vermeyi reddediyor.
+        </p>
+        <p style="font-size:14px;color:var(--fg3)">
+          Uygulama veritabanının sahibi değil — kuralları atlayamaz.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>coturn</h3>
+        <p style="color:var(--fg2)">aktarım sunucusu (TURN)</p>
+        <p>
+          Doğrudan bağlantı kurulamazsa görüntüyü taşır. Kimlik doğrulama
+          HMAC ile kısa ömürlü — ağda uzun ömürlü parola taşınmaz.
+        </p>
+        <p style="font-size:14px;color:var(--fg3)">
+          Özel ağ adreslerine (192.168.x, 127.0.0.1, 169.254.169.254 vb.)
+          relay vermeyi reddeder — aksi hâlde sunucu "açık relay" olurdu.
+        </p>
+      </div>
+    </div>
+
+    <div class="note">
+      <b>Dördü tek komutla ayağa kalkar:</b>
+      <code class="inl">docker compose up -d</code> — aynı tanım hem senin
+      bilgisayarında hem Hetzner'da kullanılır.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">04</span>Yalınlık ve süreklilik</h2>
+    <p class="sub">
+      Ürün satın alan bir şirketin sorusu: "sunucunuz çökerse ne olur?"
+      Bu sorunun cevabı yazılı, testli.
+    </p>
+
+    <div class="metrics">
+      <div class="metric"><div class="v">5 dk</div><div class="l">en çok veri kaybı<br>(RPO)</div></div>
+      <div class="metric"><div class="v">2 saat</div><div class="l">geri dönüş süresi<br>(RTO)</div></div>
+      <div class="metric"><div class="v">%99,5</div><div class="l">hedef erişilebilirlik</div></div>
+      <div class="metric"><div class="v">aylık</div><div class="l">otomatik geri yükleme testi</div></div>
+    </div>
+
+    <h3>Neler yedekleniyor</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Veri</th><th>Yöntem</th><th>Sıklık</th><th>Nerede</th></tr></thead>
+        <tbody>
+          <tr><td>Veritabanı</td><td>pgBackRest, AES-256 şifreli</td><td>tam haftalık, fark günlük, sürekli günlük</td><td>Farklı lokasyon</td></tr>
+          <tr><td>Oturum kayıtları</td><td>Şifreli nesne deposuna</td><td>oturum sonunda</td><td>Farklı lokasyon</td></tr>
+          <tr><td>Sunucu diski</td><td>Hetzner sunucu yedeği</td><td>günlük</td><td>7 kopya</td></tr>
+          <tr><td>Yapılandırma</td><td>Git deposu</td><td>her değişiklik</td><td>Kodla birlikte</td></tr>
+          <tr><td>Sırlar</td><td>Şirket parola yöneticisi</td><td>değiştikçe</td><td>Sunucuda 600 izniyle</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Sunucu tamamen çökerse</h3>
+    <div class="flow">
+      <div class="step">
+        <div class="k">1</div>
+        <b>Durum sayfası yazılır</b>
+        <small>status.segnox.com — sunucudan bağımsız servis.</small>
+      </div>
+      <div class="step">
+        <div class="k">2</div>
+        <b>Sağlık kontrolü</b>
+        <small><span class="mono">/readyz</span> ve son 30 dakikalık kayıtlar.</small>
+      </div>
+      <div class="step">
+        <div class="k">3</div>
+        <b>Yeni sunucu açılır</b>
+        <small>Aynı kurulum dosyalarıyla, ~15 dakika.</small>
+      </div>
+      <div class="step">
+        <div class="k">4</div>
+        <b>Yedek geri yüklenir</b>
+        <small>Sifreli yedek çözülür, şema doğrulanır.</small>
+      </div>
+      <div class="step">
+        <div class="k">5</div>
+        <b>DNS çevrilir</b>
+        <small>Süre 300 saniye → en geç 5 dakikada bağlanır.</small>
+      </div>
+    </div>
+
+    <h3>Kendini kandırmama</h3>
+    <div class="note warn">
+      <b>Test edilmemiş yedek, yedek sayılmaz.</b> Ayda bir otomatik olarak son
+      yedek geçici bir kapsayıcıya geri yüklenir, şema sürümü ve kayıt sayıları
+      kontrol edilir, sonuç e-posta ile bildirilir. Üç ayda bir elle tam tatbikat:
+      boş sunucuya sıfırdan kurulum yapılır, süre ölçülür ve gerçekten 2 saatin
+      altında tamamlandığı doğrulanır.
+    </div>
+    <div class="note">
+      <b>Durum sayfası neden ayrı?</b> Ana sunucu çöktüğünde kendi durum
+      sayfasına da ulaşılamaz. Bu yüzden bağımsız bir servis kullanılıyor.
+      Biri "sunucumuz çalışıyor" derken aslında kimse bakamıyor durumuna düşmesin diye.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">05</span>KVKK ve veri konumu</h2>
+
+    <div class="note warn">
+      <b>Sunucu Almanya'da.</b> Bu, KVKK açısından "yurt dışı veri aktarımı"
+      anlamına geliyor. K-07 kararı: standart sözleşme + imzadan sonra 5 iş günü
+      içinde KVKK'ya bildirim. <b>Avukat onayı bekleniyor</b> — adım 6'dan önce.
+    </div>
+
+    <dl class="kv">
+      <dt>Veritabanı</dt><dd>Hetzner, Almanya</dd>
+      <dt>Yedekler</dt><dd>Hetzner nesne deposu, farklı lokasyon</dd>
+      <dt>SMTP</dt><dd>Amazon SES / Postmark / Brevo</dd>
+      <dt>Rol</dt><dd>Bayi ve müşteri = veri sorumlusu, Segnox = veri işleyen</dd>
+      <dt>Yerleşiklik zorunluluğu</dt><dd>Türkiye'de veri tutma zorunluluğu bulunamadı</dd>
+    </dl>
+
+    <div class="note ok">
+      <b>Rakip durumu:</b> AnyDesk ve TeamViewer sunucularını AB'de (Almanya)
+      çalıştırıyor, faturalarını dolar/euro ile kesiyor, Türkçe siteye sahip
+      ama yerel mevzuata uyum sağlamıyor. Segnox'un KVKK tarafındaki konumu
+      Türkiye'de benzersiz değil ama açıkça belgelenmiş.
+    </div>
+    <p>
+      <b>Müşterinin kendi sunucusuna kurulum</b> planlanmamış — banka ve kamu
+      kurumlarının isteyebileceği bir model ama bilinçli olarak ertelenmiş.
+      Bugünkü model: merkezi sunucu, çok kiracılı, kesin izolasyon.
+    </p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="grid g2">
+      <div><b>Segnox</b> — mimari ve sunucu<br>
+        <span style="color:var(--fg3)">Pilot sürümü · satılabilir ürün değildir.</span></div>
+      <div><a href="dene.html">← Kendin dene</a> · <a href="gelistirici.html">Geliştirici →</a></div>
+    </div>
+  </div>
+</footer>
+</body>
+</html>

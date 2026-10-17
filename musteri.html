@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Müşteri — Segnox</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html">SEG<span>NOX</span></a>
+    <div class="links">
+      <a href="index.html">Genel Bakış</a>
+      <a href="musteri.html" class="on">Müşteri</a>
+      <a href="bayi.html">Bayi / Teknisyen</a>
+      <a href="dene.html">Kendin Dene</a>
+      <a href="mimari.html">Mimari &amp; Sunucu</a>
+      <a href="gelistirici.html">Geliştirici</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Müşteri için</div>
+    <h1>Uzaktan yardım alırken<br>senin bilgisayarında ne oluyor?</h1>
+    <p>
+      Bir destek firması bilgisayarına bağlanmak istediğinde ekranında belirecek
+      şeyleri, neden güvenli olduğunu ve istediğin an nasıl durduracağını anlatıyoruz.
+      Teknik bilgi gerektirmiyor.
+    </p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">01</span>Adım adım ne olur</h2>
+    <p class="sub">Acil bir sorun olduğunda, destek istediğinde baştan sona.</p>
+
+    <div class="flow">
+      <div class="step">
+        <div class="k">1. ADIM</div>
+        <b>Firmanın sitesinden "Destek İste"</b>
+        <small>Destek veren firmanın web sitesinde bir düğme vardır. Ona basarsın.
+        Program indirmen gerekmez.</small>
+      </div>
+      <div class="step">
+        <div class="k">2. ADIM</div>
+        <b>Ekranda onay penceresi çıkar</b>
+        <small>Üstünde: "ABC Bilişim bilgisayarınıza bağlanmak istiyor" ve
+        teknisyenin adı. Kabul ya da Ret var. Tekniğe senin seçimin.</small>
+      </div>
+      <div class="step">
+        <div class="k">3. ADIM</div>
+        <b>Kabul edersen bağlanır</b>
+        <small>Teknisyen ekranını görmeye başlar, fare ve klavyeyi kullanabilir.
+        Sen de aynı anda izleyebilirsin — ekranın sende de görünür.</small>
+      </div>
+      <div class="step">
+        <div class="k">4. ADIM</div>
+        <b>İş bitince kapanır</b>
+        <small>Ya teknisyen kapatır, ya sen ekrandaki "Bağlantıyı Kes"
+        düğmesine basarsın. Kapanınca bağlantı tamamen biter.</small>
+      </div>
+    </div>
+
+    <div class="note ok">
+      <b>Önemli:</b> Artık Alpemix gibi "9 haneli kodunu oku" diye bir şey yok.
+      Müşterinin telefonla kod okuması tamamen kalkıyor. Bu hem seni yavaşlıktan
+      kurtarır hem de dolandırıcılık ihtimalini ortadan kaldırır.
+    </div>
+
+    <div class="note warn">
+      <b>Bir istisna var, bilmen gerekir:</b> Eğer bilgisayarına bir
+      <b>erişim parolası</b> tanımlanmışsa (ileride "gözetimsiz erişim" ile
+      gelecek), ona bilen teknisyen <b>onay penceresi sormadan</b> bağlanabilir.
+      Çünkü parolayı bilmek zaten yetkilinin kanıtıdır.
+      <br><br>
+      Bu durumda <b>üst çubuk yine görünür</b> ve <b>"Bağlantıyı Kes" yine
+      çalışır</b>. Ayrıca <b>3 hatalı deneme → 10 dakika kilit</b> var.
+      <br><br>
+      Pilotta böyle bir parola tanımlama özelliği henüz yok. Şimdilik her
+      bağlantıda onay penceresi çıkar.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">02</span>Ekranında ne görürsün</h2>
+    <p class="sub">Bağlantı boyunca ekranında sürekli duran iki şey var.</p>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>🔴 Kapatılamayan uyarı çubuğu</h3>
+        <p>Ekranının en üstünde, her zaman görünen bir bant olur:</p>
+        <pre><code><span class="c-cm">┌──────────────────────────────────────────────────┐</span>
+<span class="c-ba">●</span> ABC Bilişim bilgisayarınıza bağlı  ·  12:34  ·  <span class="c-key">[ Bağlantıyı Kes ]</span>
+<span class="c-cm">└──────────────────────────────────────────────────┘</span></code></pre>
+        <ul class="chk">
+          <li>Hangi firma bağlı — açıkça yazar</li>
+          <li>Ne zamandan beri bağlı — saat sayar</li>
+          <li>Sen istediğin an kesebilirsin</li>
+          <li>Bu çubuk kapatılamaz, gizlenemez, arka plana alınamaz</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3>🛑 "Segnox sizi aramaz" uyarısı</h3>
+        <p>Program ilk kez çalıştığında bir uyarı gösterir:</p>
+        <pre><code><span class="c-wa">!</span> Segnox <span class="c-ba">hiçbir zaman sizi telefonla aramaz</span>.
+Destek bağlantısı yalnızca <u>siz</u> istediğinizde başlar.
+
+Bilmediğiniz biri size "programı kurun, kodu okuyun" derse
+<span class="c-ba">derhal reddedin</span>.</code></pre>
+        <p>
+          Bu uyarı, dolandırıcıların en çok kullandığı "kurun, kodu paylaşın"
+          yöntemini etkisiz hale getirmeyi hedefliyor.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">03</span>Güvenlik — ne yapıyoruz</h2>
+    <p class="sub">Kendi bilgisayarını uzaktan kontrol eden bir yazılım olduğu için, bu konuda şeffaf olmak zorundayız.</p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Konu</th><th>Ne yapılıyor</th><th>Neden</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>Şifreleme</b></td>
+            <td class="mono">X25519 + AES-256-GCM<br><span style="color:var(--fg3)">TLS 1.3</span></td>
+            <td>Görüntü ve tuş vuruşları ağda şifreli taşınır. Sunucu operatörü bile açık göremez.</td>
+          </tr>
+          <tr>
+            <td><b>Parola görünmez</b></td>
+            <td>Cihaz parolası sunucuya <b>gönderilmez</b></td>
+            <td>Sunucu ele geçirilse bile cihaz parolası okunamaz.</td>
+          </tr>
+          <tr>
+            <td><b>Sunucu ele geçirilse bile</b></td>
+            <td>Şifre kanıtı iki tarafın <span class="mono">DTLS parmak izine</span> bağlanır</td>
+            <td>Sunucu görüntünün ortasına girmeye çalışsa bile başarısız olur.</td>
+          </tr>
+          <tr>
+            <td><b>Cihaz kimliği</b></td>
+            <td><span class="mono">Ed25519</span> imza, her bağlantıda yeniden doğrulanır</td>
+            <td>Bir cihaz taklit edilemez; sahte cihaz sunucuya bağlanamaz.</td>
+          </tr>
+          <tr>
+            <td><b>Onay</b></td>
+            <td>Her oturumda ekranda onay penceresi çıkar</td>
+            <td>Sen bilmeden bağlantı kurulamaz. <span style="color:var(--warn)">(Erişim parolası tanımlıysa bu adım atlanır — yukarıya bkz.)</span></td>
+          </tr>
+          <tr>
+            <td><b>Hatalı deneme koruması</b></td>
+            <td>10 dakikada 3 hatalı parola denemesi → 10 dakika kilit</td>
+            <td>Parolanın tahmin edilmesini yavaşlatır.</td>
+          </tr>
+          <tr>
+            <td><b>Kayıt</b></td>
+            <td>Kim, ne zaman, kiminle, ne kadar süre bağlandı — değiştirilemez kayıt</td>
+            <td>Bir ihtilaf olursa kanıt elde edersin.</td>
+          </tr>
+          <tr>
+            <td><b>Geri sayımlı giriş</b></td>
+            <td>5 hatalı şifre denemesi → 15 dakika kilit</td>
+            <td>Kaba kuvvet (brute force) denemelerini engeller.</td>
+          </tr>
+          <tr>
+            <td><b>Dosya aktarımı</b></td>
+            <td>En fazla 2 GiB, aynı anda 2 transfer. Ağ yolları (UNC) ve aygıt yolları reddedilir</td>
+            <td>Sadece gerçek dosyalar taşınır; ağ ve aygıt içeriğine sızılamaz.</td>
+          </tr>
+          <tr>
+            <td><b>Sonlandırma</b></td>
+            <td>Tek tıkla bağlantıyı kes, program kapanmadan da oturum düşer</td>
+            <td>Tekniğe senin iznin olmadan devam edemez.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note warn">
+      <b>Dürüst olalım:</b> Güvenliğin sadece bu yazılımın sorumluluğunda değil,
+      senin de dikkat etmen gereken şeyler var. Destek bağlantısı için para,
+      kredi kartı veya şifre soran birine güvenmeyin — teknik destek bunu
+      asla istemez. Şüphelenirsen bağlantıyı reddedip firmayı ara.
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">04</span>Pilotun sınırları</h2>
+    <p class="sub">Şu an deneyebileceğin şeyin gerçek sınırı. Bunları bilerek gir.</p>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3><span class="badge b-bad">HENÜZ YOK</span></h3>
+        <ul class="chk no">
+          <li><b>Gözetimsiz bağlantı.</b> Pilotta bağlanmak için programı açmalısın
+              ve ekranda çıkan 9 haneli kodu teknisyene okumalısın. Bu, 5. adımda
+              geliyor. Gözetimsiz erişim olmadan bu ürün günlük kullanıma hazır değil.</li>
+          <li><b>Yönetici parolası geçişi.</b> Bir işlem yönetici yetkisi isterse
+              ekran kararır ve bağlantı kesilir.</li>
+          <li><b>Kod imzası.</b> Windows "tanımayan yayımcı" uyarısı verebilir.
+              Kurulumda "Yine de çalıştır" demek zorunda kalabilirsin.</li>
+          <li><b>Video akıcılığı.</b> H.264 yerine JPEG karo kullanılıyor.
+              Video oynayan ekranlarda akıcılık düşük olabilir.</li>
+          <li><b>Mac, Linux, telefon</b> — sadece Windows ve tarayıcı.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="badge b-ok">VAR</span> Şimdiden güvenebileceğin</h3>
+        <ul class="chk yes">
+          <li>Görüntü ve tam fare/klavye kontrolü</li>
+          <li>Türkçe Q ve F klavyesi doğru çalışır</li>
+          <li>Çoklu ekran — hangi monitöre bakacağına sen karar verirsin</li>
+          <li>Hesap, iki katmanlı doğrulama (TOTP + 10 kurtarma kodu)</li>
+          <li>Parola sıfırlama — e-posta ile, tek kullanımlık anahtar</li>
+          <li>Cihaz kaydı ve parola koruması</li>
+          <li>Değiştirilemez bağlantı kaydı</li>
+        </ul>
+        <p style="font-size:14px;color:var(--fg2);margin-top:10px">
+          <b>4. adımda ekleniyor:</b> onay penceresi, kapatılamayan çubuk,
+          sohbet, ortak pano (kopyala-yapıştır), dosya gönderimi.
+        </p>
+      </div>
+    </div>
+
+    <h3>Pilotta en çok neye dikkat etmeli</h3>
+    <ul class="chk">
+      <li>Denemeyi <b>önemsiz bir dosya üzerinde</b> yap. Gerçek iş dosyalarını açma.</li>
+      <li>Banka veya ödeme uygulaması açıkken bağlantı kabul etme.</li>
+      <li>Yönetici parolası gereken bir işlem denemek istemezsen kabul etme.</li>
+      <li>Kurulum sırasında antivirüs uyarısı çıkarsa önce ne olduğunu sor.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <h2><span class="n">05</span>Sık sorulanlar</h2>
+    <div class="tabs">
+      <button class="on" onclick="t(this,0)">Antivirüs uyarısı</button>
+      <button onclick="t(this,1)">Yavaş mı?</button>
+      <button onclick="t(this,2)">Kayıt alınıyor mu?</button>
+      <button onclick="t(this,3)">Neden İngilizce?</button>
+    </div>
+
+    <div class="tabpane on">
+      <h3>Antivirüs "tehdit" diyor</h3>
+      <p>
+        Pilot sürümü kod imzalı değil. Windows ve antivirüs programları imzasız
+        programları şüpheli sayabilir. Bu, bilinen ve geçici bir durum — imzalama
+        sertifikası dağıtımdan önce alınacak (6. adım).
+      </p>
+      <p>
+        <b>Pilotta:</b> sadece bu bilgisayarda, bilinen bir kaynaktan indirdiğin
+        dosya için geçici olarak istisna ekle. Kurulum talimatı geldiğinde ne
+        yapman gerektiği yazılı olacak.
+      </p>
+    </div>
+
+    <div class="tabpane">
+      <h3>Bağlantı hızlı mı?</h3>
+      <p>
+        Aynı ağda (aynı ofis, aynı ev) çok hızlı — doğrudan bağlantı kurulur,
+        sunucu devreye hiç girmez. Farklı ağlarda (karşı taraf evde, sen ofiste)
+        hız internet hızına bağlı. Kurumsal ağlarda veri aktarım sunucusundan
+        geçtiği için biraz yavaş olabilir.
+      </p>
+      <p>
+        <b>Pilot ölçümü:</b> bağlantı anında hangi yolun seçildiği kaydediliyor.
+        İlk gerçek testlerden sonra net rakamları göreceğiz.
+      </p>
+    </div>
+
+    <div class="tabpane">
+      <h3>Bağlantılar kayıt altında mı?</h3>
+      <p>
+        Evet. Kim, ne zaman, hangi cihaza, ne kadar süreyle bağlandı bilgisi
+        saklanır. Bu kayıt <b>değiştirilemez</b>: her satır bir öncekinin karmasını
+        içerir, biri satırı değiştirirse zincir bozulur ve tespit edilir.
+      </p>
+      <p>
+        <b>Kaydedilen:</b> bağlantı başlangıç/bitiş, cihaz, teknisyen, oturum süresi.
+        <br>
+        <b>Kaydedilmeyen planlanan:</b> ekran görüntüsünün içeriği (bu pilotta
+        hiçbir görüntü diskte saklanmaz).
+      </p>
+    </div>
+
+    <div class="tabpane">
+      <h3>Arayüz İngilizce görünüyor</h3>
+      <p>
+        Teknik log'lar ve hata mesajları İngilizce bırakıldı — çünkü bunlar
+        geliştiricinin okuması için yazılıyor. Kullanıcıya görünen metinlerin
+        Türkçeye çevrilmesi planın yapılacakları arasında; bağlantı, onay ve
+        kapatma ekranları öncelikli.
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="grid g2">
+      <div><b>Segnox</b> — müşteri görünümü<br>
+        <span style="color:var(--fg3)">Pilot sürümü · satılabilir ürün değildir.</span></div>
+      <div><a href="index.html">← Genel bakış</a> · <a href="bayi.html">Bayi / teknisyen →</a></div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function t(b,i){
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.tabpane').forEach(x=>x.classList.remove('on'));
+  b.classList.add('on');
+  document.querySelectorAll('.tabpane')[i].classList.add('on');
+}
+</script>
+</body>
+</html>
