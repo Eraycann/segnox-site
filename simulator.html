@@ -218,6 +218,11 @@
     Üç akışı yaşayarak öğren. Ekranda ne gördüğünü gerçekten gör, butonlara
     bas, kararları sen ver. Kurulum gerektirmez — hepsi tarayıcıda.
   </p>
+  <div class="note ok"><b>Akış A gerçek kod.</b> 4. adımda yazıldı ve 14 senaryoyla
+    test edildi — ilk kare 574 ms, koptuktan 321 ms sonra geri geliyor, yanlış parola
+    reddediliyor, ikinci teknisyen kontrol alamıyor. Aşağıda aynen oynatıyorum.</div>
+  <div class="note warn"><b>Akış B ve C'nin büyük kısmı henüz kodda yok.</b> Tasarımın
+    nereye gittiğini göstermek için çizdim — rozetler hangisinin gerçek olduğunu söylüyor.</div>
   <div class="legend">
     <span><i style="background:var(--ok)"></i>Çalışan / doğrulanan davranış</span>
     <span><i style="background:var(--warn)"></i>Planlanmış — henüz kodda yok</span>
@@ -310,12 +315,15 @@ function setup(){
     'yukarıdaki ayarları seç ve başla.</div>' +
 
     '<div class="grid g3" style="margin-top:26px">' +
-      '<div class="card tight"><h4>Akış A · Acil Destek</h4><small style="color:var(--fg2)">' +
-      'Müşteri "Destek İste" diyor, teknisyen bağlanıyor, iş bitiyor. <b>4. adımda yapılıyor.</b></small></div>' +
-      '<div class="card tight"><h4>Akış B · Gözetimsiz</h4><small style="color:var(--fg2)">' +
-      'Program arka planda çalışıyor, teknisyen listeden tıklıyor. <b>5. adımda — henüz yok.</b></small></div>' +
-      '<div class="card tight"><h4>Akış C · Bayi</h4><small style="color:var(--fg2)">' +
-      'Firma açılıyor, marka koyuluyor, müşteriye dağıtılıyor. <b>6. adımda — kısmen var.</b></small></div>' +
+      '<div class="card tight"><h4><span class="badge b-ok">TAMAMLANDI</span> Akış A</h4><small style="color:var(--fg2)">' +
+      'Müşteri "Destek İste" diyor, teknisyen bağlanıyor, iş bitiyor. ' +
+      '<b>4. adımda yazıldı, 14 senaryoyla test edildi.</b> Bu akış gerçek kod.</small></div>' +
+      '<div class="card tight"><h4><span class="badge b-warn">5. ADIM</span> Akış B</h4><small style="color:var(--fg2)">' +
+      'Program arka planda çalışıyor, teknisyen listeden tıklıyor. ' +
+      '<b>Henüz yok</b> — pilotda bağlantı için müşteri program açmak zorunda.</small></div>' +
+      '<div class="card tight"><h4><span class="badge b-pur">6. ADIM</span> Akış C</h4><small style="color:var(--fg2)">' +
+      'Firma açılıyor, marka koyuluyor, müşteriye dağıtılıyor. ' +
+      '<b>Kısmen var</b> — tenant altyapısı hazır, panel ve toplu dağıtım kalmadı.</small></div>' +
     '</div>'
   );
 }
@@ -614,7 +622,7 @@ function renderA(i){
     (st.a ? '<span style="font-size:13.5px;color:var(--fg2)">→</span>' : '') +
     '</div>';
   screen('<div class="win-bar" style="background:none;border:0;padding:6px 0 0">' +
-      '<span class="badge b-info">Akış A · Acil Destek</span>' +
+      '<span class="badge b-ok">Akış A · Acil Destek</span>' +
       '<span style="font-size:13px;color:var(--fg3)">' + esc(st.t) + '</span></div>' +
     st.h() +
     '<div class="say">' + st.d() + '</div>' +

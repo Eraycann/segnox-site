@@ -285,10 +285,17 @@
           <li>Değiştirilemez işlem kaydı (hash zinciri)</li>
           <li>Açık REST API + kapsamlı erişim anahtarı + hız sınırı + kota</li>
           <li>Yönetim paneli (cihazlar, gruplar, kullanıcılar, kayıtlar)</li>
+          <li>Onay penceresi (firma logosu + dolandırıcılık uyarısı)</li>
+          <li>Kapatılamayan bilgi çubuğu — süre sayar, "Bağlantıyı Kes"</li>
+          <li>Destek kuyruğu — talep havuza düşer, parola okunmaz</li>
+          <li>Sohbet, ortak pano, dosya transferi</li>
+          <li>Kontrol / izleme rolleri (bir cihazda tek kontrol eden)</li>
+          <li>Aktarım sunucusu (TURN) + zorunlu-aktarım testi</li>
+          <li>Bağlantı koptuysa otomatik geri gelme (ICE restart)</li>
         </ul>
         <p style="font-size:14px;color:var(--fg2);margin-top:10px">
-          <b>4. adımda ekleniyor:</b> onay penceresi, kapatılamayan çubuk,
-          Destek İste kuyruğu, sohbet, ortak pano, dosya transferi, aktarım sunucusu.
+          <b>4b adımında ekleniyor:</b> Docker paketi, yedekleme ve geri yükleme
+          betikleri, kurulum rehberi. Sonra sen kendi bilgisayarında çalıştırabileceksin.
         </p>
       </div>
 
@@ -344,13 +351,13 @@
         <b>Hesap ve firma</b>
         <small>Giriş, 2FA, e-posta, parola sıfırlama, roller, cihaz kaydı, API.</small>
       </div>
-      <div class="step next">
-        <div class="k">4 · SÜRÜYOR</div>
+      <div class="step done">
+        <div class="k">4 · BİTTİ</div>
         <b>Destek akışı</b>
-        <small>Onay, çubuk, kuyruk, sohbet, pano, dosya, TURN.</small>
+        <small>Onay, çubuk, kuyruk, sohbet, pano, dosya, roller, TURN.</small>
       </div>
-      <div class="step late">
-        <div class="k">4b</div>
+      <div class="step next">
+        <div class="k">4b · SIRADA</div>
         <b>Canlıya alma paketi</b>
         <small>Docker, yedekleme, geri yükleme, kurulum rehberi.</small>
       </div>
@@ -380,29 +387,34 @@
     </div>
 
     <h3>Şu ana kadar ölçülenler</h3>
-    <p>1, 2 ve 3. adımlar tamamlandı. Gerçek ölçümler:</p>
+    <p>1-4. adımlar tamamlandı, 4. adımın test matrisi 14 senaryoyla doğrulandı.</p>
     <div class="metrics">
-      <div class="metric"><div class="v">412 ms</div><div class="l">ilk kare — <b>3. adım e2e</b><br>(2. adımda 1,0–1,2 sn)</div></div>
-      <div class="metric"><div class="v">28 fps</div><div class="l">sentetik 1080p<br>JPEG karo ile akış</div></div>
-      <div class="metric"><div class="v">1 ms</div><div class="l">kare kodlama süresi<br>(p50, donanımsız)</div></div>
-      <div class="metric"><div class="v">90–280 KB</div><div class="l">anahtar kare boyutu<br>~12 ms'de üretiliyor</div></div>
+      <div class="metric"><div class="v">574 ms</div><div class="l">ilk kare — <b>M1 tek oturum</b><br>27,7 fps</div></div>
+      <div class="metric"><div class="v">656 ms</div><div class="l">ilk kare — <b>M2 zorunlu relay</b><br>27,5 fps</div></div>
+      <div class="metric"><div class="v">321 ms</div><div class="l">6 sn kesinti sonrası<br>kareler geri döndü</div></div>
+      <div class="metric"><div class="v">3,2 sn</div><div class="l">15 sn kesinti sonrası<br>ICE restart ile dönüş</div></div>
     </div>
     <div class="note">
-      <b>Not:</b> Bunlar sentetik (yapay) görüntü üzerinde alındı — yani
+      <b>Not:</b> Bunlar sentetik (yapay) görüntü üzerinde, `127.0.0.1` üzerinde alındı —
       "ekranın ne kadar karmaşık olduğu" etkisi ölçülmedi. Gerçek masaüstünde
       (açık pencereler, video oynar) sonuçlar farklı olacaktır.
     </div>
     <p>
-      1. adım güvenlik denetimi 0 bulgu, 2. adım 2 tur denetim yüksek/orta bulgu
-      olmadan kapandı, 3. adım <b>yüksek/orta bulgu yok</b>. 3. adımda ayrıca
-      firma sızıntısı, kayıt zinciri, sıfırlama anahtarının tek kullanımlığı,
-      hız sınırı ve API yetki testleri geçti.
+      Her adım güvenlik denetiminden <b>yüksek/orta bulgu olmadan</b> geçti.
+      4. adımda ek olarak test edilenler: yanlış parola reddi, başka firmanın
+      cihazına erişim reddi, süresi dolmuş aktarım anahtarı reddi, aynı cihaza
+      ikinci kontrol isteğinin reddi, plan limitinin aşılınca bağlantı vermemesi.
+    </p>
+    <p>
+      <b>Kalan tek test:</b> M7 — farklı bir ağdan (telefon hattı gibi) gerçek
+      bağlantı denemesi. Bu bilgisayarın dışından yapılmalı, o yüzden
+      kullanıcı gerektiriyor. Diğer 14 senaryo otomatik geçti.
     </p>
 
     <h3>Yazılan kod</h3>
     <div class="grid g4">
-      <div class="metric"><div class="v">31.721</div><div class="l">Go satırı<br>(167 dosya)</div></div>
-      <div class="metric"><div class="v">5.746</div><div class="l">TypeScript satırı<br>(38 dosya)</div></div>
+      <div class="metric"><div class="v">39.641</div><div class="l">Go satırı<br>(201 dosya)</div></div>
+      <div class="metric"><div class="v">7.024</div><div class="l">TypeScript satırı<br>(44 dosya)</div></div>
       <div class="metric"><div class="v">0</div><div class="l">cgo bağımlılığı<br>tümü saf Go</div></div>
       <div class="metric"><div class="v">23</div><div class="l">karar kaydı<br>(docs/KARARLAR.md)</div></div>
     </div>

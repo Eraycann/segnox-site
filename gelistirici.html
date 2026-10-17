@@ -33,8 +33,8 @@
     </p>
     <p>
       Modül: <span class="mono">segnox.com/uzakdestek</span> ·
-      <span class="mono">31.721</span> satır Go (167 dosya) ·
-      <span class="mono">5.746</span> satır TypeScript ·
+      <span class="mono">39.641</span> satır Go (201 dosya) ·
+      <span class="mono">7.024</span> satır TypeScript ·
       <span class="mono">0</span> cgo
     </p>
   </div>
@@ -499,15 +499,25 @@ go test ./...
     <h3>Test matrisi</h3>
     <p>4. adımdan itibaren uçtan uca otomatik olarak koşar:</p>
     <ul class="chk">
-      <li>Tek oturum: bağlan → kare → tık → kes</li>
-      <li>Zorunlu aktarım (relay) üzerinden aynı akış</li>
-      <li>Kopma-geri gelme: ağ kesilir, ICE restart ile 10 sn içinde döner</li>
-      <li>Aynı cihaza iki teknisyen: biri kontrol, biri izleyici; ikinci kontrol reddedilir</li>
-      <li>5 eşzamanlı oturum + 6.'sı plan limitiyle reddedilir</li>
-      <li>Yanlış parola / süresi geçmiş kimlik / başka kiracının cihazı → bağlantı yok</li>
-      <li>Farklı ağdan gerçek deneme → kullanıcı yapar (açık konu)</li>
-      <li>TURN açık relay testi: 10 tehlikeli adres reddedilmeli, genel IP kabul edilmeli</li>
+      <li>Tek oturum: bağlan → kare → tık → kes — <b>574 ms, 27,7 fps ✓</b></li>
+      <li>Zorunlu aktarım (relay) üzerinden aynı akış — <b>656 ms, 27,5 fps ✓</b></li>
+      <li>Kopma-geri gelme: <b>6 sn kesinti → 321 ms'de döndü;
+          15 sn kesinti → ICE restart, 3,2 sn ✓</b></li>
+      <li>Aynı cihaza iki teknisyen: <b>ikinci kontrol reddedildi (control_taken),
+          izleyici kabul edildi, izleyiciden girdi gelmedi ✓</b></li>
+      <li>5 eşzamanlı oturum + <b>6.'sı plan limitiyle reddedildi ✓</b></li>
+      <li>Yanlış parola / süresi geçmiş kimlik / başka kiracının cihazı /
+          onay reddi — <b>hepsi reddedildi ✓</b></li>
+      <li>TURN açık relay: <b>10 tehlikeli adres reddedildi, genel IP kabul edildi ✓</b>
+          (hem normal hem açık modda)</li>
+      <li style="color:var(--warn)">Farklı ağdan gerçek deneme — <b>bu bilgisayarın
+          dışından yapılmalı, kullanıcıya kaldı</b></li>
     </ul>
+    <div class="note ok">
+      <b>4. adım sonucu:</b> 14 senaryo geçti, 1 atlandı (sentetik ekranda tek
+      monitör olduğu için çoklu monitör seçimi test edilemedi), 2 tam koşu yapıldı.
+      Güvenlik denetiminde yüksek/orta bulgu çıkmadı.
+    </div>
   </div>
 </section>
 

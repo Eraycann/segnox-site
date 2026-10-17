@@ -65,6 +65,10 @@
         <h3><span class="badge b-warn">ŞU AN HAZIR DEĞİL</span></h3>
         <ul class="chk">
           <li>Gözetimsiz erişim — <b>5. adım</b></li>
+          <li>Yönetici parolası geçişi — <b>5. adım</b></li>
+          <li>Akıcı video (H.264) — <b>5. adım</b></li>
+          <li>Destek kuyruğu, onay penceresi, bilgi çubuğu — <b>4. adımda tamamlandı ✓</b></li>
+          <li>Çoklu izleyici — 4. adımda altyapısı hazır, panelde açılacak</li>
           <li>Toplu kurulum ve kod imzası — <b>6. adım</b></li>
           <li>Kurumsal yönetim paneli — <b>6. adım</b></li>
           <li>Fiyat/plan sistemi — <b>6. adım</b></li>
@@ -186,10 +190,19 @@
         <h4>Kritik kural 2 — eşzamanlılık</h4>
         <p>
           Her cihazda <b>aynı anda yalnızca bir kişi kontrol edebilir</b>.
-          İzleyici sayısı plan tablosundaki sınıra bağlı. Yani müşterinin
-          ekranına 3 kişi birden fare giremez.
+          İkinci kontrol isteği reddedilir. İzleyici sayısı plan tablosundaki
+          sınıra bağlı. Yani müşterinin ekranına 3 kişi birden fare giremez.
         </p>
       </div>
+    </div>
+    <div class="note ok">
+      <b>Bu kural test edildi.</b> Test matrisi madde 4: aynı cihaza iki teknisyen
+      bağlandı — biri kontrol aldı, ikinci kontrol isteği <span class="mono">control_taken</span>
+      ile reddedildi, izleyici kabul edildi ve izleyiciden girdi gelmedi.
+      <br><br>
+      <b>Plan limiti de test edildi.</b> 5 eşzamanlı oturum açıldı, 6.'sı
+      <span class="mono">plan_limit</span> ile reddedildi — sunucu tarafında,
+      istemcide değil.
     </div>
   </div>
 </section>

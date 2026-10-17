@@ -148,12 +148,22 @@
         </small>
       </div>
 
-      <div class="ev now">
-        <b>Adım 4 — Destek akışı <span class="badge b-info">SÜRÜYOR</span></b>
+      <div class="ev ok">
+        <b>Adım 4 — Destek akışı <span class="badge b-ok">BİTTİ</span></b>
         <small>
           Onay penceresi (logo + dolandırıcılık uyarısı), kapatılamayan çubuk,
-          Destek İste kuyruğu, sohbet, ortak pano, dosya gezgini, aktarım sunucusu.
-          Arayüzler yazıldı, uygulama paralel geliştiricilerde.
+          Destek İste kuyruğu, sohbet, ortak pano, dosya, kontrol/izleme rolleri,
+          aktarım sunucusu, bağlantı koptukça otomatik geri gelme.
+          Test matrisi 14 senaryoyla geçti. <b>Güvenlik denetimi temiz.</b>
+        </small>
+      </div>
+
+      <div class="ev now">
+        <b>Adım 4b — Canlı paket <span class="badge b-info">SIRADA</span></b>
+        <small>
+          Docker tanımı, aktarım sunucusu ayarı, Caddy yapılandırması, yedekleme
+          ve geri yükleme betikleri, kurulum rehberi. Bundan sonra bu adımları
+          kendi bilgisayarında çalıştırabileceksin.
         </small>
       </div>
 
@@ -193,11 +203,9 @@
     </div>
 
     <div class="note warn">
-      <b>1, 2 ve 3. adımlar bitti. Şu an 4. adım sürüyor.</b>
-      3. adımda ölçülen gerçek hız: kodla bağlanıp <b>ilk kare 412 ms</b>.
-  2. adımdaki ölçüm 1,0–1,2 saniyeydi; hesap katmanının tamamlanmasıyla aradaki
-  beklemeler azaldı. Bu yüzden 4. ve 4b adımlarını henüz çalıştıramazsın —
-  onay pencerisi ve aktarım sunucusu sürüyor.
+      <b>1-4. adımlar bitti. Şu an 4b (canlı paket) sırada.</b>
+      4. adımda ölçülen gerçek hız: tek oturumda ilk kare <b>574 ms</b>, zorunlu aktarımda <b>656 ms</b>.
+      Bağlantı 6 sn kesilirse <b>321 ms</b>'de geri geliyor; 15 sn kesilirse ICE restart ile <b>3,2 sn</b>'de dönüyor.
 </div>
 
     <div class="note ok">
