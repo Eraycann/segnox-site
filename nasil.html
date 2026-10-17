@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nasıl Çalışır — Segnox</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html">SEG<span>NOX</span></a>
+    <div class="links">
+      <a href="index.html">Genel Bakış</a>
+      <a href="nasil.html" class="on">Nasıl Çalışır</a>
+      <a href="simulator.html">UX Simülatörü</a>
+      <a href="dene.html">Kendin Dene</a>
+      <a href="musteri.html">Müşteri</a>
+      <a href="bayi.html">Bayi / Teknisyen</a>
+      <a href="mimari.html">Mimari</a>
+      <a href="gelistirici.html">Geliştirici</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">Teknik bilgi gerekmez</div>
+    <h1>Nasıl çalışıyor?</h1>
+    <p>
+      İki taraf, bir sunucu, bir de aktarım. Hepsini resimli anlatıyorum —
+      hangi parça nerede duruyor, veri nereden geçiyor, nerede para harcanıyor.
+    </p>
+  </div>
+</header>
+
+<!-- ======= İKİ TARAF ======= -->
+<section>
+  <div class="wrap">
+    <h2><span class="n">01</span>İki taraf var</h2>
+    <p class="sub">Bu ayrımı anlamak gerisini kolaylaştırır.</p>
+
+    <div class="grid g2">
+      <div class="card">
+        <h3>🖥️ Müşteri tarafı — küçük program</h3>
+        <p><code class="inl">segnox-agent.exe</code> — müşterinin bilgisayarında çalışır.</p>
+        <ul class="chk">
+          <li>Ne yapar: <b>ekranını gösterir</b>, <b>fare/klavye komutlarını alır</b></li>
+          <li>Boyut: ~11 MB, kurulum yok, çift tıkla çalışır</li>
+          <li>Windows'ta kaydeder, <b>o bilgisayarın dışında hiçbir yeri değiştirmez</b></li>
+          <li>Şu an <b>yalnızca Windows</b></li>
+        </ul>
+        <div class="note warn" style="margin-top:12px">
+          Tarayıcı bir sayfa içinden ekran yakalayamaz, klavyeyi
+          göndremez. Bu yüzden küçük bir program şart — TeamViewer, AnyDesk,
+          RustDesk'ın hepsinde de böyle.
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>🌐 Teknisyen tarafı — tarayıcı sekmesi</h3>
+        <p>Teknisyen <b>hiçbir şey kurmaz</b>. Siteye girer, cihaz listesini görür, tıklar.</p>
+        <ul class="chk yes">
+          <li><b>Her cihazda çalışır:</b> Windows, Mac, Linux, telefon, tablet</li>
+          <li>Dokunmatik destekli — telefondan yönetebilirsin</li>
+          <li>Güncelleme senin işin değil, tarayıcı halleder</li>
+          <li>Kod çözme tarayıcının donanımıyla, ücretsiz</li>
+        </ul>
+        <div class="note ok" style="margin-top:12px">
+          Yani "platform bağımsız" derken: <b>kontrol ettiğin cihapta zaten
+          hiçbir kısıt yok.</b> Kısıt sadece yönettiğin bilgisayarda.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= BAĞLANTI ======= -->
+<section>
+  <div class="wrap">
+    <h2><span class="n">02</span>Bağlantı nasıl kuruluyor?</h2>
+    <p class="sub">
+      Zor kısım burası. İki bilgisayar da ev/ofis router'ının arkasında,
+      ikisinin de dışarıdan bilinen adresi yok.
+    </p>
+
+    <div class="flow">
+      <div class="step">
+        <div class="k">ADIM 1</div>
+        <b>Program sunucuya bağlanır</b>
+        <small>Ajan "ben buradayım" der, kalıcı bağlantı kurar.</small>
+      </div>
+      <div class="step">
+        <div class="k">ADIM 2</div>
+        <b>Sunucu cihazı listeler</b>
+        <small>Online olanlar teknisyene gösterilir.</small>
+      </div>
+      <div class="step">
+        <div class="k">ADIM 3</div>
+        <b>Teknisyen tıklar</b>
+        <small>Sunucu ajana "şu kişi istiyor" der.</small>
+      </div>
+      <div class="step">
+        <div class="k">ADIM 4</div>
+        <b>Müşteri onaylar</b>
+        <small>Ekranında kabul/reddet çıkar. İstemezse bağlantı yok.</small>
+      </div>
+      <div class="step">
+        <div class="k">ADIM 5</div>
+        <b>Görüntü akar</b>
+        <small>Doğrudan ya da sunucu üzerinden.</small>
+      </div>
+    </div>
+
+    <h3>Sunucu neden şart, görüntü neden çoğunlukla sunucudan geçmiyor?</h3>
+    <p>
+      Sunucunun işi ilk dört adım — 5. adımda devre dışı kalıyor. Görüntü iki
+      bilgisayar arasında doğrudan akar, sunucudan hiç geçmez. Bu yüzden küçük
+      bir sunucu yüzlerce eşzamanlı oturumu kaldırıyor.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Yol</th><th>Ne zaman</th><th>Hız</th><th>Sunucuya yük</th><th>Maliyet</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>Doğrudan (P2P)</b></td>
+            <td>Aynı ağ, ya da karşılıklı port açık</td>
+            <td>En yüksek</td>
+            <td>Sıfır</td>
+            <td>Yok</td>
+          </tr>
+          <tr>
+            <td><b>Aktarım (TURN)</b></td>
+            <td>Doğrudan yol kurulamazsa</td>
+            <td>Daha yavaş</td>
+            <td>Bant genişliği</td>
+            <td>~1 GB / saat</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      Sektörde aktarım oranı <b>%10–25</b>. Yani bağlantıların büyük çoğunluğu
+      bedava. Gerçek oranınız ilk farklı-ağ testinden sonra belli olacak.
+      Aktarım yükü artarsa sunucu Türkiye'ye taşınır — kod değişmez.
+    </div>
+  </div>
+</section>
+
+<!-- ======= SUNUCU ======= -->
+<section>
+  <div class="wrap">
+    <h2><span class="n">03</span>Sunucuda ne çalışıyor?</h2>
+    <p class="sub">
+      Tek makinede dört parça. Docker ile <code class="inl">up</code> yazınca hepsi kalkar.
+    </p>
+
+    <div class="grid g2">
+      <div class="card tight">
+        <h4>Caddy — kapı</h4>
+        <p>Sertifikayı alır ve yeniler. Dışarıya açık olan <b>tek</b> katman.</p>
+        <p style="color:var(--fg3);font-size:13.5px">root olarak çalışmıyor.</p>
+      </div>
+      <div class="card tight">
+        <h4>segnox-server — ana program</h4>
+        <p>Buluşturma, REST API, yönetim paneli, e-posta. Tek bir Go ikilisi.</p>
+        <p style="color:var(--fg3);font-size:13.5px">Panel de aynı API'yi kullanır.</p>
+      </div>
+      <div class="card tight">
+        <h4>PostgreSQL — veri</h4>
+        <p>Hesaplar, cihazlar, oturumlar, kayıt. Firma izolasyonu burada zorlanır.</p>
+        <p style="color:var(--fg3);font-size:13.5px">Uygulama veritabanının sahibi değil.</p>
+      </div>
+      <div class="card tight">
+        <h4>coturn — aktarım</h4>
+        <p>Doğrudan bağlantı kurulamazsa görüntüyü taşır. Özel ağ adreslerine
+        relay vermeyi <b>reddeder</b> (açık relay suistimali).</p>
+        <p style="color:var(--fg3);font-size:13.5px">Kendi IP'lerine relay de yapamaz.</p>
+      </div>
+    </div>
+
+    <h3>Para ne kadar</h3>
+    <div class="metrics">
+      <div class="metric"><div class="v">€8,49</div><div class="l">sunucu / ay<br>4 çekirdek, 8 GB</div></div>
+      <div class="metric"><div class="v">~€3</div><div class="l">ek IP + yedekleme<br>/ ay</div></div>
+      <div class="metric"><div class="v">20 TB</div><div class="l">aylık trafik dahil</div></div>
+      <div class="metric"><div class="v">~40 GB</div><div class="l">tahmini aylık<br>trafik kullanımı</div></div>
+    </div>
+    <div class="note ok">
+      Yani sunucu tarafı <b>ayda ~600 TL</b>. Kod imzalama hariç. Bu, yılda
+      bir kahve parası değil ama yazılım işi için düşük.
+    </div>
+
+    <h3>Sunucu çökerse</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Hedef</th><th>Nasıl sağlanıyor</th></tr></thead>
+        <tbody>
+          <tr><td>En çok veri kaybı</td><td><b>5 dakika</b> — sürekli yedekleme</td></tr>
+          <tr><td>Geri dönüş süresi</td><td><b>2 saat</b> — yazılı prosedür, ayda bir test edilir</td></tr>
+          <tr><td>Erişilebilirlik</td><td>%99,5 hedefi (tek sunucu — bilinçli tercih, maliyet)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <b>"Test edilmemiş yedek, yedek sayılmaz."</b> Ayda bir otomatik olarak
+      son yedek geçici bir kapsayıcıya geri yüklenip kontrol ediliyor. Betikler
+      hazır — sadece sunucu açıldığında çalışmaya başlayacak.
+    </div>
+  </div>
+</section>
+
+<!-- ======= ÇOKLU FİRMA ======= -->
+<section>
+  <div class="wrap">
+    <h2><span class="n">04</span>Birden fazla firma nasıl ayrılıyor?</h2>
+    <p class="sub">
+      Bu, ürünün en kritik parçası. Tek sunucuda birden fazla firma, <b>aynı
+      veritabanında, aynı tablolarda.</b>
+    </p>
+
+    <div class="flow">
+      <div class="step">
+        <div class="k">KATMAN 1</div>
+        <b>Veritabanı</b>
+        <small>Her satır firma etiketi taşır. Başka firmanın satırını vermeyi
+        veritabanı kendisi reddeder.</small>
+      </div>
+      <div class="step">
+        <div class="k">KATMAN 2</div>
+        <b>Uygulama</b>
+        <small>Tüm sorgular tek kapıdan geçer. Kapıdan başka yol yok.</small>
+      </div>
+      <div class="step">
+        <div class="k">SONUÇ</div>
+        <b>Uygulama hatalı olsa bile</b>
+        <small>Veritabanı engeller. Ayrıca sunucu açılışta kendi yetkisini
+        denetler — kuralları atlayan rolle bağlanırsa açılmaz.</small>
+      </div>
+    </div>
+
+    <div class="note ok">
+      <b>Teknisyen tüm cihazları görmez.</b> Sadece üyesi olduğu grupların
+      cihazlarını görür. Yeni teknisyen işe alındığında diğer müşterilere
+      erişemez — "yanlış müşteriye bağlandım" kazası yapısal olarak imkânsız.
+      <br><br>
+      <b>Bir cihazda aynı anda tek kişi kontrol edebilir.</b> İkinci kontrol
+      isteği reddedilir. Bu kural test edildi.
+    </div>
+
+    <h3>Marka özelleştirme</h3>
+    <p>
+      Bayi panelden logo, renk, şirket adı, KVKK metni ve sözleşmesini yüklüyor.
+      Müşteri bilgisayarındaki programın <b>dosya adında bayi kodu var</b>
+      (<code class="inl">ABC-123-agent.exe</code>) ama içeriği sunucudan geliyor.
+      Bu yüzden 50 bayi için ayrı imza almak gerekmiyor — <b>sürüm başına tek imza</b>.
+    </p>
+  </div>
+</section>
+
+<!-- ======= GÜVENLİK ======= -->
+<section>
+  <div class="wrap">
+    <h2><span class="n">05</span>Güvenlik</h2>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Konu</th><th>Ne yapılıyor</th></tr></thead>
+        <tbody>
+          <tr><td>Şifreleme</td>
+              <td class="mono">X25519 + AES-256-GCM · TLS 1.3</td></tr>
+          <tr><td><b>Cihaz parolası sunucuya gitmez</b></td>
+              <td>Parolayı ajan doğrular. Kanıt, iki tarafın DTLS parmak
+              izine bağlı — sunucu ele geçirilse bile araya giremez.</td></tr>
+          <tr><td>Cihaz kimliği</td>
+              <td class="mono">Ed25519 — her bağlantıda yeniden doğrulanır</td></tr>
+          <tr><td>Müşteri onayı</td>
+              <td>Her oturumda ekranda kabul/reddet. Onay penceresi açıkken
+              uzak girdi sayılmaz.</td></tr>
+          <tr><td>Görünürlük</td>
+              <td>Kapatılamayan çubuk + oturum kaydı uyarısı</td></tr>
+          <tr><td>Hesap güvenliği</td>
+              <td class="mono">argon2id</td> · TOTP + 10 kurtarma kodu ·
+              5 hatalı denemede 15 dk kilit</tr>
+          <tr><td>Kayıt</td>
+              <td>Her olay hash zincirine yazılır — biri satırı değiştirirse
+              tespit edilir</td></tr>
+          <tr><td>API</td>
+              <td>Token + IP başına hız sınırı, plan kotası, gövde sınırı</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note">
+      <b>Her adım bağımsız denetimden geçti.</b> Son beş adımda
+      <b>yüksek önemli güvenlik açığı bulunmadı</b>, orta önemdekiler kapatıldı
+      ve doğrulama denetimiyle teyit edildi. Bulunan ve düzeltilenler:
+      otomatik kabul kipinin üretim sürümünde açılabilmesi, onay penceresi
+      açıkken uzaktan girdi sayılabilmesi, dosya yolu kaçışı, veritabanı
+      rolünün kuralları atlayabilmesi.
+    </div>
+  </div>
+</section>
+
+<!-- ======= EKSİKLER ======= -->
+<section>
+  <div class="wrap">
+    <h2><span class="n">06</span>Bugün ne yapamaz?</h2>
+    <p class="sub">Bilmen gereken sınırlar. Hiçbiri gizlenmiyor.</p>
+
+    <div class="grid g2">
+      <div class="card">
+        <h4>En büyük eksiği</h4>
+        <p style="font-size:15px">
+          <b>Gözetimsiz erişim yok.</b> Bağlanmak için müşterinin bilgisayarı
+          açık olmalı ve program çalışmalı. Yani "kur ve unut" değil,
+          "bağlanmadan önce aç" diyorsun.
+        </p>
+        <p style="font-size:14px;color:var(--fg2)">
+          Bu yüzden bugün bir müşteriye "Alpemix yerine bunu alalım" dediğinde
+          reddedilir. <b>5. adımda geliyor</b> ve o adım ürünün doğduğu yer.
+        </p>
+      </div>
+
+      <div class="card">
+        <h4>Yönetici parolası</h4>
+        <p style="font-size:15px">
+          Bir işlem yönetici yetkisi isterse Windows'un güvenlik ekranı açılır
+          ve bağlantı kesilir.
+        </p>
+        <p style="font-size:14px;color:var(--fg2)">
+          Yazılım kurma gibi işlemlerde takılırsın. <b>5. adımda</b> çözülecek —
+          bu ekran normal görüntüleme yoluna girmiyor, ayrı bir tünelleme
+          gerekiyor.
+        </p>
+      </div>
+
+      <div class="card">
+        <h4>Video kalitesi</h4>
+        <p style="font-size:15px">
+          JPEG karo kullanılıyor. <b>Durağan masaüstünde fark etmezsin</b>
+          (sadece değişen yerler gönderilir). Ama video oynar, sayfa kaydırırken
+          akıcılık düşer.
+        </p>
+        <p style="font-size:14px;color:var(--fg2)">H.264 <b>5. adımda</b>.</p>
+      </div>
+
+      <div class="card">
+        <h4>Henüz doğrulanmamış</h4>
+        <p style="font-size:15px">
+          Tüm testler <b>aynı bilgisayarda, sentetik ekranla</b> yapıldı.
+          Gerçek masaüstü, gerçek internet, ikinci bir cihar — <b>hiç denenmedi.</b>
+        </p>
+        <p style="font-size:14px;color:var(--fg2)">
+          Bu tek test senin. Bilgisayarda değil, başka bir ağdan.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="grid g2">
+      <div><b>Segnox</b> — nasıl çalışır<br>
+        <span style="color:var(--fg3)">Teknik pilot tamamlandı. Satılabilir ürün değil.</span></div>
+      <div><a href="simulator.html">UX simülatörü →</a> ·
+           <a href="dene.html">Kendin dene →</a></div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

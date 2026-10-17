@@ -13,11 +13,12 @@
     <a class="brand" href="index.html">SEG<span>NOX</span></a>
     <div class="links">
       <a href="index.html">Genel Bakış</a>
-      <a href="musteri.html">Müşteri</a>
-      <a href="bayi.html">Bayi / Teknisyen</a>
+      <a href="nasil.html">Nasıl Çalışır</a>
       <a href="simulator.html">UX Simülatörü</a>
       <a href="dene.html" class="on">Kendin Dene</a>
-      <a href="mimari.html">Mimari &amp; Sunucu</a>
+      <a href="musteri.html">Müşteri</a>
+      <a href="bayi.html">Bayi / Teknisyen</a>
+      <a href="mimari.html">Mimari</a>
       <a href="gelistirici.html">Geliştirici</a>
     </div>
   </div>
@@ -25,440 +26,295 @@
 
 <header class="hero">
   <div class="wrap">
-    <div class="eyebrow">4b adımına kadar</div>
-    <h1>Kendin dene: ne kuracaksın,<br>ne deneyeceksin</h1>
+    <div class="eyebrow">Çalışan kod</div>
+    <h1>Kendin dene</h1>
     <p>
-      Bu sayfa, pilot sürümünü (4b adımına kadar olan kısım) bilgisayarında
-      çalıştırmak için gerekenleri adım adım anlatıyor. Her adımda
-      <b>ne kuruyorsun, neden, ve sonunda ne göreceksin</b> yazılı.
+      Teknik pilot tamamlandı. Bu sayfa, bilgisayarında gerçekten çalıştırıp
+      gerçek masaüstüne bağlanman için. Kurulum, bağlantı, Türkçe klavye testi.
     </p>
-    <div class="note warn" style="max-width:760px">
-      <b>Önce bil:</b> Bu bir pilot. Alpemix yerine geçecek bir ürün değil.
-      Ama çalışıp çalışmadığını, ekranın ve tuşların nasıl aktarıldığını
-      görmek için elimde.
+    <div class="note ok" style="max-width:760px">
+      <b>Ne kuracaksın:</b> Sadece iki şey — <b>Go</b> (zaten kurulu) ve
+      <b>PostgreSQL</b> (embedded olarak program kendisi başlatıyor).
+      Sunucu için Docker <b>gerekmiyor</b> — Docker sadece gerçek sunucuya
+      kurarken lazım, yerelde değil.
     </div>
   </div>
 </header>
 
-<!-- ============ NE KURULACAK ============ -->
+<!-- ======= HIZLI YOL ======= -->
 <section>
   <div class="wrap">
-    <h2><span class="n">01</span>Bilgisayarına ne kurulacak</h2>
-    <p class="sub">İki şey. Biri senin bilgisayarında, biri test sunucusunda. Başka hiçbir şey gerekmiyor.</p>
-
-    <div class="grid g2">
-      <div class="card">
-        <h3>🖥️ Müşteri tarafı — Windows bilgisayarında</h3>
-        <table>
-          <tr><td>Ne</td><td class="mono">segnox-agent.exe</td></tr>
-          <tr><td>Boyut</td><td>yaklaşık 10–15 MB</td></tr>
-          <tr><td>Kurulum</td><td>gerekmez — çift tıkla çalışır</td></tr>
-          <tr><td>Nereye yazar</td><td class="mono">%LOCALAPPDATA%\Segnox\device.json</td></tr>
-          <tr><td>Sistem değişikliği</td><td>yok — servis modu 5. adımda</td></tr>
-          <tr><td>Bağımlılık</td><td>yok — tek dosya, DLL gerektirmez</td></tr>
-        </table>
-        <p style="font-size:14px;color:var(--fg2)">
-          <b>Neden Roaming değil LocalAppData?</b> Roaming klasörü kullanıcı
-          profili ağ üzerinden taşınır. Anahtar orada olursa başka bir bilgisayara
-          kopyalanır ve kimlik karışır. LocalAppData yerelde kalır.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>🖧 Test tarafında — Docker ortamı</h3>
-        <table>
-          <tr><td>Ne</td><td class="mono">docker compose up</td></tr>
-          <tr><td>İçinde</td><td>segnox-server, PostgreSQL, coturn, Caddy</td></tr>
-          <tr><td>Kurulum</td><td>Docker Desktop</td></tr>
-          <tr><td>Adres</td><td class="mono">https://localhost</td></tr>
-          <tr><td>Veri</td><td class="mono">./data</td><td>klasöründe, kalıcı</td></tr>
-          <tr><td>Sıfırlama</td><td>klasörü sil, yeniden başlat</td></tr>
-        </table>
-        <p style="font-size:14px;color:var(--fg2)">
-          <b>Neden Docker?</b> Çünkü kurduğun şey birebir sunucudaki şey olsun.
-          Kendi bilgisayarında çalıştırdığın ile Hetzner'de çalışan aynı yapılandırma
-          dosyasından gelir — "bende çalışıyor sunucuda çalışmıyor" durumu oluşmaz.
-        </p>
-      </div>
-    </div>
-
-    <div class="note">
-      <b>Gereken yazılımlar:</b> Windows 10/11, Docker Desktop, bir tarayıcı
-      (Chrome veya Edge). Başka hiçbir şey — derleme araçları, sunucu bilgisi
-      veya ücretli yazılım gerekmiyor. Pilot sürümü önceden derlenmiş olarak gelir.
-    </div>
-  </div>
-</section>
-
-<!-- ============ ADIMLAR ============ -->
-<section>
-  <div class="wrap">
-    <h2><span class="n">02</span>Adım adım</h2>
-    <p class="sub">Sırayla yap. Her adımda ne olması gerektiğini yazdım.</p>
+    <h2><span class="n">01</span>En hızlı yol — 10 dakika</h2>
+    <p class="sub">
+      Klasör: <code class="inl">Desktop\segnox-uzaktan-erisim</code>
+      Her komutu bu klasörde çalıştır.
+    </p>
 
     <div class="tl">
       <div class="ev now">
-        <b>Adım 1 — Test ortamını ayağa kaldır</b>
+        <b>1. Veritabanını hazırla</b>
         <small>
-          <code class="inl">deploy/</code> klasöründe Docker tanımı hazır olacak.
-          <code class="inl">docker compose up</code> ile dört servis başlar.
-          <b>Beklenen:</b> <code class="inl">https://localhost</code> açılınca
-          karşılama ekranı, sağlık kontrolü <code class="inl">/healthz</code>
-          "sağlıklı" dönüyor.
+          Program kendi içinde geçici bir PostgreSQL başlatıp örnek veri yükler.
+          <pre style="margin:10px 0"><code>go run ./cmd/segnox-devdb -seed</code></pre>
+          Ekranda DSN ve kullanıcı bilgisi yazar (<b>bunu not et</b>, sunucuyu
+          bağlamak için gerekecek).
+        </small>
+      </div>
+
+      <div class="ev">
+        <b>2. Sunucuyu başlat</b>
+        <small>
+          Birinci adımda yazdığın adreslerle bağlan.
+          <pre style="margin:10px 0"><code>go run ./cmd/segnox-server</code></pre>
+          Konsolda <b>http://localhost:PORT</b> gibi bir adres göreceksin.
+        </small>
+      </div>
+
+      <div class="ev">
+        <b>3. Ajanı derle ve çalıştır</b>
+        <small>
+          Müşteri bilgisayarının taklidi. Kendi makinende.
+          <pre style="margin:10px 0"><code>go build -o segnox-agent.exe ./cmd/segnox-agent
+segnox-agent run -server ws://127.0.0.1:PORT/ws/agent</code></pre>
+          Konsolda <b>9 haneli bağlantı kodu</b> görürsün.
+        </small>
+      </div>
+
+      <div class="ev">
+        <b>4. Konsola gir ve giriş yap</b>
+        <small>
+          Tarayıcıda sunucunun verdiği adresi aç. Seed verisindeki kullanıcıyla
+          gir. Cihaz listesi boş görünecek — çünkü ajan henüz bağlandı, sayfayı
+          yenile.
+        </small>
+      </div>
+
+      <div class="ev">
+        <b>5. Bağlan</b>
+        <small>
+          9 haneli kodu gir, bağlan. <b>Kendi gerçek masaüstünü</b> göreceksin —
+          sentetik ekran değil. İlk kare beklenen ~0,6 saniye.
         </small>
       </div>
 
       <div class="ev ok">
-        <b>Adım 2 — İlk kullanıcıyı oluştur <span class="badge b-ok">BİTTİ</span></b>
+        <b>6. Elle test et (asıl önemli kısım)</b>
         <small>
-          Kendi kendine kayıt <b>yok</b> (dolandırıcılık riski nedeniyle).
-          Sunucu komut satırından ilk firmayı ve sahibini sen kurarsın, sonra
-          herkesi <b>davet bağlantısıyla</b> eklersin — davet sınırı firma başına
-          günde 50. <b>Beklenen:</b> giriş yapabiliyor, e-posta adresi doğrulama
-          isteği geliyor, panel açılıyor.
-        </small>
-      </div>
-
-      <div class="ev ok">
-        <b>Adım 3 — İki faktörlü doğrulamayı aç <span class="badge b-ok">BİTTİ</span></b>
-        <small>
-          Telefonundaki kimlik doğrulama uygulamasıyla QR okutursun. Sistem sana
-          <b>10 adet kurtarma kodu</b> verir — bunları yaz ve sakla.
-          <b>Beklenen:</b> giriş ekranı hem parola hem tek kullanımlık kod ister.
-          Aynı zaman adımı tekrar kullanılırsa kabul edilmez (±1 adım tolerans).
-        </small>
-      </div>
-
-      <div class="ev">
-        <b>Adım 4 — Ajanı çalıştır</b>
-        <small>
-          <code class="inl">segnox-agent.exe</code>'yi çift tıklarsın. Konsol
-          penceresinde <b>9 haneli bağlantı kodu</b> görünür.
-          <b>Beklenen:</b> kod ekranda yazıyor, program çalışıyor.
-        </small>
-      </div>
-
-      <div class="ev ok">
-        <b>Adım 3 — Hesap ve firma <span class="badge b-ok">BİTTİ</span></b>
-        <small>
-          Giriş, TOTP + 10 kurtarma kodu, e-posta doğrulama, parola sıfırlama,
-          davet ile kullanıcı ekleme, roller, gruplar, cihaz kaydı (Ed25519),
-          yönetim paneli ve REST API tamamlandı. Güvenlik denetimi yüksek/orta
-          bulgu vermedi.
-        </small>
-      </div>
-
-      <div class="ev ok">
-        <b>Adım 4 — Destek akışı <span class="badge b-ok">BİTTİ</span></b>
-        <small>
-          Onay penceresi (logo + dolandırıcılık uyarısı), kapatılamayan çubuk,
-          Destek İste kuyruğu, sohbet, ortak pano, dosya, kontrol/izleme rolleri,
-          aktarım sunucusu, bağlantı koptukça otomatik geri gelme.
-          Test matrisi 14 senaryoyla geçti. <b>Güvenlik denetimi temiz.</b>
-        </small>
-      </div>
-
-      <div class="ev now">
-        <b>Adım 4b — Canlı paket <span class="badge b-info">SIRADA</span></b>
-        <small>
-          Docker tanımı, aktarım sunucusu ayarı, Caddy yapılandırması, yedekleme
-          ve geri yükleme betikleri, kurulum rehberi. Bundan sonra bu adımları
-          kendi bilgisayarında çalıştırabileceksin.
-        </small>
-      </div>
-
-      <div class="ev">
-        <b>Adım 5 — Bağlan (kodla)</b>
-        <small>
-          Tarayıcıda teknisyen sayfasını açarsın, 9 haneli kodu girersin.
-          <b>Beklenen:</b> uzak ekran açılır. Fare hareket ettir, tıkla, Türkçe
-          harf yaz (<span class="mono">ğüşıöç</span>).
-        </small>
-      </div>
-
-      <div class="ev">
-        <b>Adım 6 — Kapat ve kontrol</b>
-        <small>
-          Bağlantıyı kes. <b>Beklenen:</b> ajanın konsolu normal moda döner,
-          üstünde geçmiş kaydı görünür.
-        </small>
-      </div>
-
-      <div class="ev">
-        <b>Adım 7 — Kayıtları incele</b>
-        <small>
-          Paneldeki işlem geçmişine bak. <b>Beklenen:</b> bağlantı, süre, cihaz,
-          kullanıcı bilgileri kayıtlı. Bu kayıtlar değiştirilemez — bir satırı
-          elle değiştirip zincirin bozulduğunu görebilirsin.
-        </small>
-      </div>
-
-      <div class="ev">
-        <b>Adım 8 — Zorlamalı testler</b>
-        <small>
-          Yanlış parola dene, başka bir firmanın cihazını girmeye çalış, aktarım
-          sunucusu üzerinden bağlanmayı zorla. <b>Beklenen:</b> hepsi reddedilir.
+          Otomatik testler geçti ama <b>bunu sen yapmalısın.</b>
+          <ul class="chk" style="margin:10px 0 0">
+            <li>Not Defteri aç, <b>ğüşıöç</b> yaz — Türkçe Q ve F doğru mu</li>
+            <li>Mouse ile tıkla, sürükle, tekerleği çevir</li>
+            <li><b>Onay penceresi</b> çıktı mı? Kapatılıyor mu?</li>
+            <li><b>Bilgi çubuğu</b> gerçekten kapatılamıyor mu?</li>
+            <li>Sohbet yaz — ajanda mesaj geliyor mu?</li>
+            <li>Kopyala → yapıştır, pano eşitleniyor mu?</li>
+            <li>Dosya gönder (küçük bir resim)</li>
+            <li>İnterneti kes, sonra aç — <b>otomatik geri geliyor mu?</b></li>
+          </ul>
         </small>
       </div>
     </div>
 
     <div class="note warn">
-      <b>1-4. adımlar bitti. Şu an 4b (canlı paket) sırada.</b>
-      4. adımda ölçülen gerçek hız: tek oturumda ilk kare <b>574 ms</b>, zorunlu aktarımda <b>656 ms</b>.
-      Bağlantı 6 sn kesilirse <b>321 ms</b>'de geri geliyor; 15 sn kesilirse ICE restart ile <b>3,2 sn</b>'de dönüyor.
-</div>
+      <b>Test sırasında uyku modu kapat.</b> Bilgisayarın uykuya girerse ekran
+      yakalama durur — bu hata değil, Windows'un davranışı. Güç seçeneklerinden
+      ekranın hiç kapanmamasını ayarla.
+    </div>
+  </div>
+</section>
+
+<!-- ======= SUNUCU PAKETİ ======= -->
+<section>
+  <div class="wrap">
+    <h2><span class="n">02</span>Docker paketi (gerçek sunucu için)</h2>
+    <p class="sub">
+      <code class="inl">deploy/</code> klasöründe hazır. Bu, kendi sunucunda
+      çalıştıracağın hali — Hetzner'de de aynı komut.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Dosya</th><th>Ne işe yarar</th></tr></thead>
+        <tbody>
+          <tr><td class="mono">deploy/compose/compose.yml</td>
+              <td>Dört servisi birden tanımı. Sürümleri sabitlenmiş.</td></tr>
+          <tr><td class="mono">deploy/coturn/turnserver.conf</td>
+              <td>Aktarım sunucusu ayarı. Özel ağ adreslerine relay vermeyi reddeder.</td></tr>
+          <tr><td class="mono">deploy/caddy/Caddyfile</td>
+              <td>TLS ve yönlendirme.</td></tr>
+          <tr><td class="mono">deploy/backup/*.sh</td>
+              <td>Yedekleme, geri yükleme, otomatik geri yükleme testi.</td></tr>
+          <tr><td class="mono">deploy/systemd/*.timer</td>
+              <td>Zamanlanmış görevler (gece yedeği, aylık test, sertifika yenileme).</td></tr>
+          <tr><td class="mono">deploy/.env.example</td>
+              <td>Tüm ayarların şablonu. Gerçek sırlar buraya yazılmaz.</td></tr>
+          <tr><td class="mono">deploy/README.md</td>
+              <td>Adım adım kurulum rehberi.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <pre><code>cp deploy/.env.example deploy/.env
+<span class="c-cm"># .env'i doldur: parolalar, sırlar, alan adı</span>
+docker compose -f deploy/compose/compose.yml config   <span class="c-cm"># doğrula</span>
+docker compose -f deploy/compose/compose.yml up -d      <span class="c-cm"># başlat</span>
+
+<span class="c-cm"># kurulumdan sonra mutlaka:</span>
+docker compose exec coturn /usr/local/bin/turnprobe-check   <span class="c-cm"># 0 bulmalı</span></code></pre>
 
     <div class="note ok">
-      <b>4b adımında ne kurulacak?</b> Şu an Docker tanımı henüz yazılmadı.
-      Adım 4 bitince <code class="inl">deploy/</code> klasöründe dört servisin
-      tanımı, sertleştirilmiş aktarım sunucusu ayarı, Caddy yapılandırması,
-      yedekleme betikleri ve <code class="inl">.env.example</code> hazır olacak —
-      hepsi tek komutla ayağa kalkacak şekilde.
+      <b>Yerelde Docker'a gerek yok.</b> Docker sadece gerçek sunucuya kurarken
+      ve tam sunucu takımını birden çalıştırmak istediğinde gerekiyor. Yukarıdaki
+      hızlı yol (Go + embedded veritabanı) Docker'sız çalışıyor.
     </div>
   </div>
 </section>
 
-<!-- ============ SUNUCUDA ============ -->
+<!-- ======= NE TEST EDİLDİ ======= -->
 <section>
   <div class="wrap">
-    <h2><span class="n">03</span>Sunucuya çıkınca ne değişiyor</h2>
-    <p class="sub">
-      Kendi bilgisayarında Docker ile dört servis başlatıyorsun. Sunucuda da
-      <b>aynı dört servis</b>, ama iki ek fark var.
-    </p>
+    <h2><span class="n">03</span>Otomatik testler ne yaptı?</h2>
+    <p class="sub">Senin yapmana gerek kalmayan kısım.</p>
 
     <div class="tbl-wrap">
       <table>
-        <thead><tr><th></th><th>Bilgisayarında (pilot)</th><th>Sunucuda (6. adım)</th></tr></thead>
+        <thead><tr><th>Ne</th><th>Sonuç</th></tr></thead>
         <tbody>
-          <tr>
-            <td><b>Adres</b></td>
-            <td class="mono">https://localhost</td>
-            <td class="mono">https://destek.segnox.com</td>
-          </tr>
-          <tr>
-            <td><b>Sertifika</b></td>
-            <td>Kendi imzalı (tarayıcı uyarır)</td>
-            <td>Otomatik alınır, 90 gün yenilenir</td>
-          </tr>
-          <tr>
-            <td><b>İnternet erişimi</b></td>
-            <td class="mono">localhost</td>
-            <td>Gerçek IP'ler, DNS kaydı</td>
-          </tr>
-          <tr>
-            <td><b>Aktarım sunucusu adresi</b></td>
-            <td class="mono">localhost</td>
-            <td><b>İkinci bir IP adresi</b> — 443 portu</td>
-          </tr>
-          <tr>
-            <td><b>E-posta</b></td>
-            <td>Dosyaya yazılır, gerçek e-posta gitmez</td>
-            <td>Gerçek SMTP (SES / Postmark / Brevo)</td>
-          </tr>
-          <tr>
-            <td><b>Yedekleme</b></td>
-            <td>Yok (veri zaten yerelde)</td>
-            <td>Otomatik, şifreli, farklı lokasyonda</td>
-          </tr>
-          <tr>
-            <td><b>Erişim</b></td>
-            <td>Sadece senin bilgisayarın</td>
-            <td>Dünyanın her yerinden</td>
-          </tr>
+          <tr><td>Derleme (cgo'suz, Windows + Linux)</td><td><span class="badge b-ok">geçti</span></td></tr>
+          <tr><td><span class="mono">go vet</span> · <span class="mono">golangci-lint</span></td>
+              <td><span class="badge b-ok">geçti</span> 0 bulgu</td></tr>
+          <tr><td>Birim testleri (tüm Go paketleri, internetsiz)</td><td><span class="badge b-ok">geçti</span></td></tr>
+          <tr><td>Tarayıcı testleri (viewer 78, konsol 41)</td><td><span class="badge b-ok">geçti</span></td></tr>
+          <tr><td>Uçtan uca (14 senaryo)</td><td><span class="badge b-ok">14 geçti</span> · 1 atlandı</td></tr>
+          <tr><td>Docker tanımı geçerliliği</td><td><span class="badge b-ok">geçti</span></td></tr>
+          <tr><td>Yedekleme betikleri (shellcheck)</td><td><span class="badge b-ok">temiz</span></td></tr>
+          <tr><td>Veritabanı geçişleri sıfırdan</td><td><span class="badge b-ok">geçti</span></td></tr>
         </tbody>
       </table>
     </div>
 
-    <h3>Neden iki IP adresi gerekiyor</h3>
-    <p>
-      Kurumsal ağların çoğu internet trafiğine sadece <b>443 portundan</b> izin verir.
-      Normalde 80 ve 443 portları web için kullanılır. Aktarım sunucusu da 443'e
-      ihtiyaç duyuyor.
-    </p>
+    <h3>Performans (bu makinede ölçüldü)</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>İşlem</th><th>Sonuç</th></tr></thead>
+        <tbody>
+          <tr><td>İlk kare (DXGI yakalama)</td><td class="mono">15–19 ms</td></tr>
+          <tr><td>Kare kodlama (1080p tam kare)</td><td class="mono">11–14 ms · 91–280 KB</td></tr>
+          <tr><td>Kare kodlama (sadece %10 değişti)</td><td class="mono">3,1 ms · ~26 KB</td></tr>
+          <tr><td>Bant — durağan masaüstü</td><td class="mono">~0,3 Mbps</td></tr>
+          <tr><td>Bant — sürekli hareketli 1080p</td><td class="mono">~4 Mbps</td></tr>
+          <tr><td>Bağlan → ilk kare</td><td class="mono">0,4–0,7 sn</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note">
+      <b>Önemli gözlem:</b> Durağan masaüstünde saniyede ~5 kare gönderiliyor,
+      çünkü sadece değişen yerler gider. Bu yüzden <b>normal kullanımda bant
+      neredeyse sıfır</b>. Sorun sadece video/sayfa kaydırma gibi sürekli
+      hareketli ekranlarda.
+    </div>
+  </div>
+</section>
+
+<!-- ======= BEKLENEN SORUNLAR ======= -->
+<section>
+  <div class="wrap">
+    <h2><span class="n">04</span>Şunları bekleyebilirsin</h2>
+    <p class="sub">Denemeye başlamadan önce bil — sürpriz yaşama.</p>
+
+    <div class="grid g2">
+      <div class="card">
+        <h4>❌ Antivirüs uyarısı</h4>
+        <p>Program <b>imzasız</b>. Windows "korunan bilgisayarınızı engelledi"
+        diyebilir.</p>
+        <p style="color:var(--fg2);font-size:14px">
+          <b>Geçici çözüm:</b> Daha fazla bilgi → <b>Yine de çalıştır</b>.
+          Alpemix de bugün imzasız. İmzalama 6. adımda.
+        </p>
+      </div>
+
+      <div class="card">
+        <h4>❌ Kare gelmiyor / ekran donuyor</h4>
+        <p>Ekran kilitlendiyse veya bilgisayar uykuya girdiyse yakalama durur.</p>
+        <p style="color:var(--fg2);font-size:14px">
+          <b>Geçici çözüm:</b> Uyku modunu kapat. Bu hata değil, Windows'un
+          davranışı — test sırasında ekranı açık tut.
+        </p>
+      </div>
+
+      <div class="card">
+        <h4>❌ Yönetici parolası sordu</h4>
+        <p>Yönetici yetkisi gereken işlemde ekran kararır, bağlantı kesilir.</p>
+        <p style="color:var(--fg2);font-size:14px">
+          Yazılım kurma gibi işlemlerde sıkıntı bekle — bu 5. adımın konusu.
+        </p>
+      </div>
+
+      <div class="card">
+        <h4>❌ Video akıcı değil</h4>
+        <p>JPEG karo kullanılıyor. Sayfa kaydırırken veya video oynarken düşer.</p>
+        <p style="color:var(--fg2);font-size:14px">
+          Normal masaüstü kullanımında fark etmezsin. H.264 <b>5. adımda</b>.
+        </p>
+      </div>
+
+      <div class="card">
+        <h4>❌ Türkçe harfler yanlış</h4>
+        <p>Karakteri <b>uzak makinenin</b> klavye düzeni belirler.</p>
+        <p style="color:var(--fg2);font-size:14px">
+          Kendi makinende denediğin için aynı — ama ikinci bilgisayarda
+          farklı klavye varsa farklı sonuç verir. Bu doğru davranış.
+        </p>
+      </div>
+
+      <div class="card">
+        <h4>❌ WebView2 penceresi açılmıyor</h4>
+        <p>Onay penceresi Windows 10'da WebView2 gerektirir. Temiz Win10
+        kurulumunda eksik olabilir.</p>
+        <p style="color:var(--fg2);font-size:14px">
+          Açılışta önceden kontrol ediliyor, 5. adımda yedek yol yapılacak.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= PİLOT SONRASI ======= -->
+<section>
+  <div class="wrap">
+    <h2><span class="n">05</span>Denemeden sonra</h2>
+
     <div class="flow">
-      <div class="step">
-        <div class="k">ADRES 1</div>
-        <b>Web sitesi</b>
-        <small>443 · HTTPS · paneller ve API</small>
+      <div class="step done">
+        <div class="k">4b ✓ BİTTİ</div>
+        <b>Senin denemen</b>
+        <small>Bu sayfadaki 6 adım. Gerçek masaüstü, gerçek internet.</small>
       </div>
-      <div class="step">
-        <div class="k">ADRES 2</div>
-        <b>Aktarım sunucusu</b>
-        <small>443 · TLS · görüntü geçişi</small>
+      <div class="step next">
+        <div class="k">5 · SIRADA</div>
+        <b>Gözetimsiz erişim</b>
+        <small>Kur ve unut, yönetici parolası, akıcı video.
+        <b>Burada ürün satılabilir olur.</b></small>
       </div>
-    </div>
-    <div class="note">
-      Alternatif (aynı IP'de ayırmak) denenmişti ama sunucunun kullandığı
-      kütüphane bunu "deneysel, desteklenmiyor" olarak işaretliyor. İki IP
-      almak aylık ~€1–2 ve sorunu tamamen ortadan kaldırıyor. <b>Basit olan
-      kazanıldı.</b>
-    </div>
-
-    <h3>Sunucudaki dört servis</h3>
-    <div class="grid g2">
-      <div class="card tight">
-        <h4>Caddy — kapı</h4>
-        <p>Sertifika alır, yeniler, gelen istekleri doğru servise yönlendirir.
-        Hiçbir şey dışarı açık değil.</p>
-      </div>
-      <div class="card tight">
-        <h4>segnox-server — ana program</h4>
-        <p>Sinyal sunucusu (iki bilgisayarı buluşturur), REST API, yönetim paneli
-        ve e-posta gönderimi. Tek bir Go ikilisi.</p>
-      </div>
-      <div class="card tight">
-        <h4>PostgreSQL — veri</h4>
-        <p>Hesaplar, cihazlar, oturumlar, kayıtlar. Firma izolasyonu burada
-        zorlanıyor — veritabanı seviyesinde.</p>
-      </div>
-      <div class="card tight">
-        <h4>coturn — aktarım</h4>
-        <p>Doğrudan bağlantı kurulamazsa görüntüyü taşır. Sadece %10–25 oturum
-        buradan geçer. Özel ağ adreslerine relay vermeyi reddeden yapılandırma ile.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ SORUNLAR ============ -->
-<section>
-  <div class="wrap">
-    <h2><span class="n">04</span>Tahmin edilen sorunlar</h2>
-    <p class="sub">Denemeye başlamadan önce bilmen gerekenler.</p>
-
-    <div class="grid g2">
-      <div class="card">
-        <h3>❌ "Antivirüs uyarısı çıktı"</h3>
-        <p>
-          Pilot sürümü <b>kod imzalı değil</b>. Windows SmartScreen "Windows, korunan
-          bilgisayarınızı korumak için bu uygulamayı engelledi" diyebilir.
-        </p>
-        <p style="color:var(--fg2)">
-          <b>Neden:</b> kod imzalama sertifikası dağıtımdan önce alınacak
-          (6. adım, ~$309/yıl). İmzasız programlar Windows'a yabancı gelir.
-        </p>
-        <p style="color:var(--fg2)">
-          <b>Şimdilik:</b> sadece bu test bilgisayarında geçici istisna ekle.
-          Başka bilgisayara kurma.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>❌ "Ekran akıcı değil"</h3>
-        <p>
-          Pilotta H.264 yerine <b>JPEG karo</b> kullanılıyor. Ekranın tamamı
-          değişiyorsa (video, animasyon, kaydırma) akıcılık belirgin düşer.
-        </p>
-        <p style="color:var(--fg2)">
-          <b>Neden:</b> Gerçek video sıkıştırma 5. adımda geliyor.
-          K-03 kararında ölçülmüş: 64 piksel karo, mesaj başına en fazla 64 KB.
-        </p>
-        <p style="color:var(--fg2)">
-          <b>Şimdilik:</b> normal masaüstü kullanımında (statik ekran) sorun
-          yaşamazsın. Test etmek istediğin şey buysa bekle.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>❌ "Yönetici parolası sordu, ekran karardı"</h3>
-        <p>
-          Yönetici yetkisi gereken bir işlem yapılınca Windows'un güvenlik
-          ekranı açılır ve bağlantı kesilir.
-        </p>
-        <p style="color:var(--fg2)">
-          <b>Neden:</b> Bu ekran normal yakalamaya girmez. Çözümü 5. adımda —
-          bağlantının ayrı bir "yardımcı" bölümüyle tünellenmesi gerekiyor.
-        </p>
-        <p style="color:var(--fg2)">
-          <b>Şimdilik:</b> Yönetici yetkisi gerekmeyen işlerle dene.
-          Yazılım kurma gibi işlemlerde sıkıntı bekle.
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>❌ "Bilgisayarım uyku moduna girdi, kare gelmiyor"</h3>
-        <p>
-          Ekran kilitlenir veya uykuya girerse yakalama durur. Bu bir <b>hata
-          değil</b> — Windows'un kendi davranışı.
-        </p>
-        <p style="color:var(--fg2)">
-          <b>Şimdilik:</b> denemelerden önce bilgisayarın uyku modunu kapat.
-          Güç seçeneklerinden ekran ve bilgisayarın hiç kapanmasın.
-        </p>
-        <p style="color:var(--fg2)">
-          Test sırasında "kare gelmiyor" görürsen önce uyku modunu kontrol et.
-        </p>
+      <div class="step late">
+        <div class="k">6</div>
+        <b>Dağıtım</b>
+        <small>Toplu kurulum, imza, otomatik güncelleme</small>
       </div>
     </div>
 
-    <h3>Beklenmeyen sorunlar için</h3>
-    <ul class="chk">
-      <li>Bir hata bulursan: ekrandaki hata mesajını not et, hangi adımda
-          olduğunu yaz. Buna göre düzeltilebilir.</li>
-      <li>Bağlantı hiç kurulmuyorsa: antivirüs/firewall engellemiş olabilir.</li>
-      <li>Türkçe karakterler yanlış geliyorsa: karşı taraftaki klavye
-          düzenini kontrol et (Q vs F) — uzaktaki makine belirler.</li>
-      <li>Performans düşükse: pil performans modunda olabilir, prize takılı bırak.</li>
-    </ul>
-  </div>
-</section>
-
-<!-- ============ SONRASI ============ -->
-<section>
-  <div class="wrap">
-    <h2><span class="n">05</span>Pilottan sonra ne değişiyor</h2>
-    <p class="sub">Aynı kurulum, aynı ayarlar — sadece artık bunlar çalışıyor.</p>
-
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Özellik</th><th>Pilotta</th><th>5–6. adımdan sonra</th></tr></thead>
-        <tbody>
-          <tr>
-            <td>Bağlantı kurma</td>
-            <td><span class="badge b-warn">9 haneli kod, elle</span></td>
-            <td><span class="badge b-ok">Kuyruk + onay penceresi, otomatik</span></td>
-          </tr>
-          <tr>
-            <td>Gözetimsiz erişim</td>
-            <td><span class="badge b-bad">Yok</span></td>
-            <td><span class="badge b-ok">Windows servisi, kur ve unut</span></td>
-          </tr>
-          <tr>
-            <td>Video</td>
-            <td><span class="badge b-warn">JPEG karo</span></td>
-            <td><span class="badge b-ok">H.264, akıcı</span></td>
-          </tr>
-          <tr>
-            <td>Kurulum</td>
-            <td><span class="badge b-bad">Tek tek, antivirüs uyarısı</span></td>
-            <td><span class="badge b-ok">MSI, toplu kurulum, imzalı</span></td>
-          </tr>
-          <tr>
-            <td>Yönetici yetkisi</td>
-            <td><span class="badge b-bad">Ekran kararır</span></td>
-            <td><span class="badge b-ok">Tünellenir, sorun yok</span></td>
-          </tr>
-          <tr>
-            <td>Firma hesabı</td>
-            <td><span class="badge b-warn">Sadece komut satırından</span></td>
-            <td><span class="badge b-ok">Panelden, kendi kendine</span></td>
-          </tr>
-          <tr>
-            <td>Raporlama</td>
-            <td><span class="badge b-mut">Ham kayıt</span></td>
-            <td><span class="badge b-ok">Müşteri bazlı faturalanabilir</span></td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="note warn">
+      <b>Şu anki durumun dürüst özeti:</b>
+      Teknik pilot tamamlandı, testler geçti, kod temiz. Ama <b>bu satılabilir bir
+      ürün değil</b> — gözetimsiz erişim ve kurumsal dağıtım yok. Arkadaşının
+      bilgisayarına kurup "bana bak şunu yapayım" demek için mükemmel.
+      Müşteriye satmak için 5-6. adım gerekiyor.
     </div>
 
     <div class="note">
-      <b>İyi haber:</b> Sunucu tarafında değişen neredeyse yok. Aynı Docker
-      tanımı, aynı veritabanı, aynı ayarlar. Değişen şey ajanın içi — daha
-      akıcı video, arka planda çalışan servis, imzalı kurulum.
-      Bu yüzden 4b adımında sunucuyu düzgün kurmak, sonraki tüm adımların
-      temelini hazırlamak demek.
+      <b>Kendin kullanacaksan:</b> Adım 5'ten sonra kendi 5-10 bilgisayarını
+      uzaktan yönetebilir hale gelirsin. Bir destek firmasına ödediğin yıllık
+      lisansın yerini alır. Bu, satış yapmadan bile geri ödenecek bir yatırım.
     </div>
   </div>
 </section>
@@ -466,11 +322,13 @@
 <footer>
   <div class="wrap">
     <div class="grid g2">
-      <div><b>Segnox</b> — pilot kurulum rehberi<br>
-        <span style="color:var(--fg3)">Pilot sürümü · satılabilir ürün değildir.</span></div>
-      <div><a href="bayi.html">← Bayi / teknisyen</a> · <a href="mimari.html">Mimari →</a></div>
+      <div><b>Segnox</b> — kendin dene<br>
+        <span style="color:var(--fg3)">Teknik pilot tamamlandı. Satılabilir ürün değil.</span></div>
+      <div><a href="nasil.html">← Nasıl çalışır</a> ·
+           <a href="simulator.html">UX simülatörü →</a></div>
     </div>
   </div>
 </footer>
+
 </body>
 </html>

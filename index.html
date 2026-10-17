@@ -5,6 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Segnox — Uzak Destek Platformu</title>
 <link rel="stylesheet" href="assets/style.css">
+<style>
+.statusbar {
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:10px; margin:26px 0;
+}
+.sbox {
+  background:var(--bg2); border:1px solid var(--line);
+  border-radius:10px; padding:15px;
+}
+.sbox.ok { border-color:rgba(63,185,80,.4); background:rgba(63,185,80,.05); }
+.sbox.next { border-color:rgba(62,166,255,.45); background:rgba(62,166,255,.06); }
+.sbox .n { font-size:12px; color:var(--fg3); letter-spacing:.5px; text-transform:uppercase; }
+.sbox .v { font-size:16px; font-weight:700; margin-top:5px; }
+.sbox.ok .v { color:var(--ok); }
+.sbox.next .v { color:var(--acc); }
+.sbox .s { font-size:12.5px; color:var(--fg2); margin-top:4px; }
+</style>
 </head>
 <body>
 
@@ -13,11 +30,12 @@
     <a class="brand" href="index.html">SEG<span>NOX</span></a>
     <div class="links">
       <a href="index.html" class="on">Genel Bakış</a>
-      <a href="musteri.html">Müşteri</a>
-      <a href="bayi.html">Bayi / Teknisyen</a>
+      <a href="nasil.html">Nasıl Çalışır</a>
       <a href="simulator.html">UX Simülatörü</a>
       <a href="dene.html">Kendin Dene</a>
-      <a href="mimari.html">Mimari &amp; Sunucu</a>
+      <a href="musteri.html">Müşteri</a>
+      <a href="bayi.html">Bayi / Teknisyen</a>
+      <a href="mimari.html">Mimari</a>
       <a href="gelistirici.html">Geliştirici</a>
     </div>
   </div>
@@ -25,560 +43,358 @@
 
 <header class="hero">
   <div class="wrap">
-    <div class="eyebrow">Uzak Destek Platformu · Türkiye</div>
+    <div class="eyebrow">Türkçe uzaktan destek platformu</div>
     <h1>Bilgisayarınıza uzaktan yardım,<br>ama sizin kurallarınızla.</h1>
     <p>
-      Segnox, bir teknisyenin uzak bilgisayara bağlanmasını sağlayan yazılımdır.
-      Müşterinin bilgisayarına kurulan <b>tek bir EXE</b> ve teknisyenin
-      kullandığı <b>bir tarayıcı sekmesi</b> vardır. Kurulum sihirbazı, DLL ya da
-      antivirüs uyarısı yoktur.
-    </p>
-    <p>
-      Aynı sistemi birden fazla firma kendi markasıyla kullanabilir — logo, sözleşme
-      metni ve müşterileri birbirinden ayrılmış olarak.
-    </p>
-    <p style="margin-top:22px">
-      <span class="badge b-warn">Teknik pilot</span>
-      <span style="font-size:14px;color:var(--fg2);margin-left:8px">
-        Bu sitedeki ürünün ilk sürümü pilot aşamasında — <a href="dene.html">neyin çalıştığını kendiniz deneyebilirsiniz</a>.
-      </span>
+      Müşterinin bilgisayarına kurulan <b>tek bir EXE</b>, teknisyenin kullandığı
+      <b>bir tarayıcı sekmesi</b>. Kurulum sihirbazı, DLL ya da antivirüs uyarısı yok.
+      Başka bir firma kendi markasıyla, kendi müşterileriyle ayrı olarak kullanabiliyor.
     </p>
   </div>
 </header>
 
-<!-- ============================ SORUN ============================ -->
+<!-- ======= DURUM ======= -->
 <section>
   <div class="wrap">
-    <h2><span class="n">01</span>Bu iş neden zor?</h2>
-    <p class="sub">
-      Uzak bağlantı yazılımının zor tarafı ekranı göstermek değil, iki bilgisayarın
-      birbirini bulabilmesi. İki taraf da ev router'ının arkasında, ikisinin de
-      bilinen bir adresi yok.
-    </p>
-
-    <div class="flow">
-      <div class="step">
-        <div class="k">ADIM 1</div>
-        <b>İki taraf da NAT arkasında</b>
-        <small>Ev veya ofis router'ı. Dışarıdan gelen bağlantıyı engeller.</small>
-      </div>
-      <div class="step">
-        <div class="k">ADIM 2</div>
-        <b>Buluşma noktası gerek</b>
-        <small>Önce bir buluşma (rendezvous) sunucusu iki tarafı tanıştırır.</small>
-      </div>
-      <div class="step">
-        <div class="k">ADIM 3</div>
-        <b>Direkt yol denenir</b>
-        <small>Aynı ağdaysa doğrudan konuşurlar — sunucuya hiç veri gitmez.</small>
-      </div>
-      <div class="step">
-        <div class="k">ADIM 4</div>
-        <b>Olmazsa aktarım (TURN)</b>
-        <small>Görüntü sunucu üzerinden taşınır. Yavaş ama her yerde çalışır.</small>
-      </div>
+    <div class="statusbar">
+      <div class="sbox ok"><div class="n">MVP</div><div class="v">Tamamlandı</div>
+        <div class="s">5 adım bitti, testler geçti</div></div>
+      <div class="sbox next"><div class="n">Sıradaki</div><div class="v">Adım 5</div>
+        <div class="s">Gözetimsiz erişim + akıcı video</div></div>
+      <div class="sbox"><div class="n">Kod</div><div class="v">39.958 satır</div>
+        <div class="s">Go 204 dosya · TypeScript 7.024</div></div>
+      <div class="sbox"><div class="n">Bağımlılık</div><div class="v">0 cgo</div>
+        <div class="s">Tümü saf Go, çapraz derlenebilir</div></div>
+      <div class="sbox"><div class="n">Güvenlik</div><div class="v">0 yüksek bulgu</div>
+        <div class="s">Her adım bağımsız denetimden geçti</div></div>
     </div>
 
-    <div class="note">
-      <b>Neden bu önemli?</b> Doğrudan bağlantı kurulursa görüntü sunucudan geçmez —
-      hızlıdır ve sunucuya hiç yük bindirmez. Kurulamazsa görüntü sunucudan akar ve
-      trafik masrafı doğar. Segnox her oturumda hangi yolun seçildiğini ölçer;
-      bu oran ileride fiyatlamanın temeli olacak.
-    </div>
-
-    <h3>Alpemix bugün nerede duruyor?</h3>
-    <p>
-      Türkiye'de uzaktan destek fiilen standardı Alpemix (2009'dan beri). Ancak
-      sitemizdeki incelemeye göre üç yapısal sorunu var:
-    </p>
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Sorun</th><th>Sonuç</th></tr></thead>
-        <tbody>
-          <tr>
-            <td><b>Eski kriptografi</b></td>
-            <td>1024-bit RSA kullanıyor. 2010'dan beri kırılabilir kabul ediliyor.</td>
-          </tr>
-          <tr>
-            <td><b>Kullanıcıya yük</b></td>
-            <td>Müşteri, teknisyene 9 haneli kodu telefonla okumak zorunda. Hem yavaş hem dolandırıcılığa açık.</td>
-          </tr>
-          <tr>
-            <td><b>Bağımlı kırılganlık</b></td>
-            <td>Tek sunucu. 2026'da ekşi sözlük'te "500+ bilgisayar, sabahtan beri destek veremiyoruz" yazıyor.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <p>
-      Ek olarak Alpemix'in kendi sitesinde <b>olmayanlar</b>: açık API, kurumsal
-      toplu kurulum (MSI/GPO), cihaz sağlığı ve alarm. Segnox'un farkı burada.
-    </p>
-  </div>
-</section>
-
-<!-- ============================ AKISLAR ============================ -->
-<section>
-  <div class="wrap">
-    <h2><span class="n">02</span>Üç akış</h2>
-    <p class="sub">Ürünün günlük hayatta ne yaptığı. Her biri en baştan sona.</p>
-
-    <h3>A. Müşteri destek istiyor — "şu an acil bir sorunum var"</h3>
-    <div class="flow">
-      <div class="step">
-        <div class="k">1</div>
-        <b>Sitesinden "Destek İste"</b>
-        <small>Müşteri web sitesindeki düğmeye basar. Program indirmez.</small>
-      </div>
-      <div class="step">
-        <div class="k">2</div>
-        <b>Onay penceresi çıkar</b>
-        <small>Ekranında: "ABC Bilişim bağlanmak istiyor. Kabul / Reddet".</small>
-      </div>
-      <div class="step">
-        <div class="k">3</div>
-        <b>Teknisyene talep düşer</b>
-        <small>Teknisyen kuyruktan alır, tıklar. Kimse parola okumaz.</small>
-      </div>
-      <div class="step">
-        <div class="k">4</div>
-        <b>Bağlantı kurulur</b>
-        <small>Ekranda kapatılamayan çubuk: kimin bağlandığı, ne kadar süredir.</small>
-      </div>
-      <div class="step">
-        <div class="k">5</div>
-        <b>Çözülür, kapanır</b>
-        <small>Çubuktaki "Bağlantıyı Kes" düğmesi. Oturum kayda geçer.</small>
-      </div>
-    </div>
     <div class="note ok">
-      <b>Alpemix'ten farkı:</b> 4. adım yok. Müşteri hiçbir şey okumaz,
-      söylemez. Dolandırıcılık için kullanılabilecek tek bir alan kalmaz.
-    </div>
-
-    <h3>B. Gözetimsiz — "önceden kurulmuş, sadece bağlanayım"</h3>
-    <p>
-      Müşterinin bilgisayarına ajan bir kez kurulur ve arka planda Windows servisi
-      olarak çalışır. Bilgisayar açıldığında kendiliğinden ayağa kalkar.
-      Technisyen listeden tıklayıp bağlanır — müşterinin hiçbir şey yapması gerekmez.
-    </p>
-    <div class="flow">
-      <div class="step late">
-        <div class="k">SERVİS</div>
-        <b>Ajan kendini kaydeder</b>
-        <small>Windows servisi olarak arka planda çalışır.</small>
-      </div>
-      <div class="step late">
-        <div class="k">İZLEME</div>
-        <b>Panelde görünür</b>
-        <small>Online mı, hangi sürüm, son ne zaman görüldü.</small>
-      </div>
-      <div class="step late">
-        <div class="k">BAĞLAN</div>
-        <b>Tek tıkla bağlantı</b>
-        <small>Müşteri ekranı açık bile değilken bağlanılabilir.</small>
-      </div>
-      <div class="step late">
-        <div class="k">ZORLA</div>
-        <b>Yönetici yetkisi</b>
-        <small>Kilit ekranı ve yönetici parolası ekranı da geçilebilir.</small>
-      </div>
-    </div>
-    <div class="note warn">
-      <b>Bu akış pilotta henüz yok.</b> Gözetimsiz erişim 5. adımda geliyor.
-      Pilot sürümünde bağlantı için müşterinin programı açması ve kodu vermesi gerekiyor.
-    </div>
-
-    <h3>C. Bayi — "kendi markamla müşterilerime satacağım"</h3>
-    <div class="flow">
-      <div class="step">
-        <div class="k">1</div>
-        <b>Tenanta (kiracıya) alır</b>
-        <small>ABC Bilişim kendine ait bir alan açar.</small>
-      </div>
-      <div class="step">
-        <div class="k">2</div>
-        <b>Markasını koyar</b>
-        <small>Logo, renk, KVKK aydınlatma metni, kendi sözleşmesi.</small>
-      </div>
-      <div class="step">
-        <div class="k">3</div>
-        <b>Müşterilerini ekler</b>
-        <small>Her müşteri kendi cihaz havuzu ve teknisyen ekibiyle ayrılır.</small>
-      </div>
-      <div class="step">
-        <div class="k">4</div>
-        <b>Müşteriye dağıtır</b>
-        <small>ABC123.exe dosyası. Kurulum yok, çift tıkla çalışır.</small>
-      </div>
-      <div class="step">
-        <div class="k">5</div>
-        <b>Desteği verir, faturalar</b>
-        <small>Oturum kayıtları üzerinden destek saati çıkarılır.</small>
-      </div>
-    </div>
-    <div class="note ok">
-      <b>Alpemix'te bu yok.</b> Alpemix tek ürün satıyor. Bayi kendi markasıyla
-      çalışmak istediğinde Alpemix kullanmak zorunda. Segnox'ta bu model işin kendisi.
+      <b>Tek cümlelik özet:</b> Çalışan bir sistem var — ekran görüntüsü, fare/klavye,
+      hesaplar, güvenli onaylı bağlantı, sohbet, dosya. Henüz olmayan şey
+      <b>gözetimsiz erişim</b> (bilgisayarın açık olmasını gerektiriyor) ve
+      <b>kurumsal dağıtım</b> (imza, MSI). Bu ikisi 5-6. adımda.
     </div>
   </div>
 </section>
 
-<!-- ============================ ROLLER ============================ -->
+<!-- ======= SAYFA HARİTASI ======= -->
 <section>
   <div class="wrap">
-    <h2><span class="n">03</span>Sana hangisi gerekiyor?</h2>
-    <p class="sub">Üç farklı okuyucu için üç ayrı sayfa.</p>
-    <p class="sub">Dört farklı okuyucu için ayrı sayfa — biri de <b>oynanabilir</b>.</p>
-    <div class="roles" style="grid-template-columns:repeat(4,1fr)">
-      <a class="role" href="musteri.html">
-        <div class="ic">🖥️</div>
-        <b>Müşteri / son kullanıcı</b>
-        <small>Destek alıyorum, biri bilgisayarıma bağlanmak istiyor. Ne görüyorum,
-          nasıl güvende olurum, nasıl iptal ederim?</small>
-      </a>
-      <a class="role" href="bayi.html">
-        <div class="ic">🏢</div>
-        <b>Bayi / teknisyen</b>
-        <small>Müşterilerime kendi markamla uzaktan destek satmak istiyorum.
-          Fiyatlamayı, izolasyonu, raporlamayı nasıl yaparım?</small>
+    <h2><span class="n">01</span>Buradan nereye bakacaksın?</h2>
+    <p class="sub">Karıştırmamak için: amacına göre bir sayfa seç.</p>
+
+    <div class="grid g2">
+      <a class="role" href="nasil.html">
+        <div class="ic">🔧</div>
+        <b>Nasıl çalışır? <span style="color:var(--acc);font-size:13px">→ buradan başla</span></b>
+        <small>İki taraf ne, nerede çalışıyor, veri nereden geçiyor, para ne kadar,
+        kod imzalama şart mı. Teknik bilgi yoksa önce burayı oku.</small>
       </a>
       <a class="role" href="simulator.html" style="border-color:var(--acc);background:rgba(62,166,255,.06)">
         <div class="ic">▶️</div>
         <b>UX Simülatörü</b>
-        <small><b style="color:var(--acc)">Tıkla ve oyna.</b> Üç akışı ekran ekran yaşa —
-        müşteri ya da teknisyen rolünü seç, butonlara bas, kararları sen ver.</small>
+        <small><b style="color:var(--acc)">Tıkla ve oyna.</b> Üç akışı ekran ekran yaşa.
+        Müşteri rolüyle de teknisyen rolüyle de dene.</small>
+      </a>
+      <a class="role" href="dene.html" style="border-color:var(--ok)">
+        <div class="ic">⚡</div>
+        <b>Kendin Dene <span style="color:var(--ok);font-size:13px">→ çalışan kod</span></b>
+        <small>MVP tamamlandı. Bilgisayarında çalıştır, gerçek masaüstüne bağlan,
+        Türkçe harf yaz. Adım adım komutlar burada.</small>
+      </a>
+      <a class="role" href="musteri.html">
+        <div class="ic">🖥️</div>
+        <b>Müşteri</b>
+        <small>Destek alıyorum. Ekranımda ne görünür, nasıl güvende olurum,
+        nasıl iptal ederim?</small>
+      </a>
+      <a class="role" href="bayi.html">
+        <div class="ic">🏢</div>
+        <b>Bayi / Teknisyen</b>
+        <small>Kendi markamla satmak istiyorum. Firma izolasyonu, rol sistemi,
+        raporlama, dağıtım.</small>
       </a>
       <a class="role" href="gelistirici.html">
         <div class="ic">⚙️</div>
         <b>Geliştirici</b>
-        <small>Teknik detaylar: teknoloji seçimleri, protokol, güvenlik
-          modeli, REST API, depo yapısı, karar kayıtları.</small>
+        <small>Teknoloji seçimleri ve gerekçeleri, protokol, güvenlik modeli,
+        REST API, test sonuçları, karar kayıtları.</small>
       </a>
     </div>
   </div>
 </section>
 
-<!-- ============================ NE VAR NE YOK ============================ -->
+<!-- ======= NE YAPAR ======= -->
 <section>
   <div class="wrap">
-    <h2><span class="n">04</span>Ne yapabilir, ne yapamaz</h2>
-    <p class="sub">
-      Pilot sürümünün kapsamı. Buradaki liste <code class="inl">PLAN.md</code>
-      dosyasındaki adım tanımlarından ve yapılmamışlar listesinden alınmıştır.
-    </p>
+    <h2><span class="n">02</span>Ne yapabilir, ne yapamaz</h2>
+    <p class="sub">Yalan yok. Her satır gerçek koddan veya plan dosyasından.</p>
 
     <div class="grid g2">
       <div class="card">
-        <h3><span class="badge b-ok">ÇALIŞIYOR</span> Hazır olan</h3>
+        <h3><span class="badge b-ok">ÇALIŞIYOR</span> Elinde olan</h3>
         <ul class="chk yes">
-          <li>Ekranı teknisyene gösterir (çoklu monitör, monitör seçimi)</li>
-          <li>Teknisyen fare ve klavye kontrolü (Türkçe Q/F doğru çalışır)</li>
+          <li>Ekranı uzak teknisyene gösterir (çoklu monitör, monitör seçimi)</li>
+          <li>Tam fare ve klavye kontrolü — Türkçe Q/F doğru çalışır</li>
           <li>9 haneli kodla bağlantı</li>
-          <li>Hesap, iki faktörlü doğrulama (TOTP + 10 kurtarma kodu)</li>
-          <li>E-posta doğrulama, davet ile kullanıcı ekleme</li>
-          <li>Parola sıfırlama — token 30 dk geçerli, tek kullanımlık</li>
-          <li>Cihaz kaydı ve Ed25519 kimlik doğrulama</li>
-          <li>Çoklu firma (tenant) — veritabanı seviyesinde kesin izolasyon</li>
-          <li>Roller: sahip, yönetici, teknisyen, izleyici</li>
-          <li>Cihaz grupları, teknisyen sadece kendi grubunu görür</li>
-          <li>Değiştirilemez işlem kaydı (hash zinciri)</li>
-          <li>Açık REST API + kapsamlı erişim anahtarı + hız sınırı + kota</li>
-          <li>Yönetim paneli (cihazlar, gruplar, kullanıcılar, kayıtlar)</li>
-          <li>Onay penceresi (firma logosu + dolandırıcılık uyarısı)</li>
-          <li>Kapatılamayan bilgi çubuğu — süre sayar, "Bağlantıyı Kes"</li>
-          <li>Destek kuyruğu — talep havuza düşer, parola okunmaz</li>
+          <li>Hesap, iki katmanlı doğrulama (10 kurtarma kodu)</li>
+          <li>E-posta doğrulama, parola sıfırlama, davetle kullanıcı ekleme</li>
+          <li>Cihaz kaydı ve parola koruması</li>
+          <li><b>Onay penceresi</b> — müşteri kabul/reddet kararı verir</li>
+          <li><b>Kapatılamayan bilgi çubuğu</b> — süre sayar, "Bağlantıyı Kes"</li>
+          <li><b>Destek kuyruğu</b> — talep havuza düşer, parola okunmaz</li>
           <li>Sohbet, ortak pano, dosya transferi</li>
-          <li>Kontrol / izleme rolleri (bir cihazda tek kontrol eden)</li>
-          <li>Aktarım sunucusu (TURN) + zorunlu-aktarım testi</li>
+          <li>Çoklu firma izolasyonu (veritabanı seviyesinde)</li>
+          <li>Roller: sahip, yönetici, teknisyen, izleyici</li>
           <li>Bağlantı koptuysa otomatik geri gelme (ICE restart)</li>
+          <li>Değiştirilemez işlem kaydı (hash zinciri)</li>
+          <li>Açık REST API + hız sınırı + kota</li>
+          <li>Yönetim paneli</li>
+          <li>Docker ile tek komutla ayağa kalkan sunucu paketi</li>
+          <li>Yedekleme + geri yükleme + otomatik geri yükleme testi</li>
         </ul>
-        <p style="font-size:14px;color:var(--fg2);margin-top:10px">
-          <b>4b adımında ekleniyor:</b> Docker paketi, yedekleme ve geri yükleme
-          betikleri, kurulum rehberi. Sonra sen kendi bilgisayarında çalıştırabileceksin.
-        </p>
       </div>
 
       <div class="card">
-        <h3><span class="badge b-bad">YOK</span> Pilotta olmayan</h3>
+        <h3><span class="badge b-bad">EKSİK</span> Elinde olmayan</h3>
         <ul class="chk no">
-          <li><b>Gözetimsiz erişim</b> — bağlanmak için müşteri program açmalı</li>
-          <li><b>H.264 video</b> — JPEG karo kullanılıyor (yavaş, bant yiyen)</li>
-          <li><b>Toplu kurulum</b> (MSI / GPO / Intune) — henüz tek tek kuruluyor</li>
-          <li><b>Kod imzası</b> — antivirüs "tanımayan yayımcı" diyebilir</li>
-          <li><b>Çoklu izleyici</b> — şu an ajan başına tek kontrol eden</li>
-          <li><b>Oturum kaydı</b> — video kaydedilmiyor</li>
-          <li><b>Yönetici yetkisi geçişi</b> — UAC ve kilit ekranı engelleniyor</li>
-          <li><b>Cihaz sağlığı</b> — disk/RAM ölçümü ve alarm yok</li>
-          <li><b>Wake-on-LAN</b> — kapalı bilgisayara uyandırarak bağlanılamıyor</li>
-          <li><b>Sesli konuşma / ses akışı</b></li>
-          <li><b>Linux, Mac, mobil</b> kontrolcü — sadece Windows + tarayıcı</li>
+          <li><b>Gözetimsiz erişim</b> — bilgisayar açık olmalı, program çalışmalı
+              <span class="badge b-mut">5. adım</span></li>
+          <li><b>Yönetici parolası geçişi</b> — UAC/kilit ekranı engelleniyor
+              <span class="badge b-mut">5. adım</span></li>
+          <li><b>H.264 akıcı video</b> — JPEG karo, hareketli içerikte düşük kalite
+              <span class="badge b-mut">5. adım</span></li>
+          <li><b>Toplu kurulum</b> (MSI / GPO / Intune)
+              <span class="badge b-mut">6. adım</span></li>
+          <li><b>Kod imzası</b> — antivirüs "tanımayan yayımcı" diyebilir
+              <span class="badge b-mut">6. adım</span></li>
+          <li><b>Otomatik güncelleme</b></li>
+          <li><b>Çoklu izleyici</b> — altyapı hazır, panelde açılacak</li>
+          <li><b>Oturum video kaydı</b></li>
+          <li><b>Cihaz sağlığı ve alarm</b> <span class="badge b-mut">7. adım</span></li>
+          <li><b>Linux ajanı</b> <span class="badge b-mut">8. adım</span></li>
+          <li><b>Sesli konuşma</b> <span class="badge b-mut">7. adım</span></li>
+          <li><b>Wake-on-LAN</b> <span class="badge b-mut">7. adım</span></li>
+          <li><b>Canlı destek widget'ı</b> <span class="badge b-mut">6. adım</span></li>
           <li><b>Yapay zekâ</b> özeti</li>
-          <li><b>Kendi sunucusuna kurulum</b> (kendi sunucunuza)</li>
+          <li><b>Kendi sunucusuna kurulum</b></li>
         </ul>
       </div>
     </div>
 
-    <div class="note bad" style="margin-top:18px">
-      <b>Bu bir pilot, satılabilir ürün değil.</b>
-      Pilot bitince de eksik olanlar: gözetimsiz erişim, H.264, kurumsal panel,
-      oturum kaydı, çoklu izleyici, imzalı kurulum, web canlı destek kutusu.
-      Bunlar 5. ve 6. adımda geliyor. Sadece arkadaş veya dost müşterilerle
-      deneme için kullanılabilir.
+    <div class="note warn" style="margin-top:18px">
+      <b>Satılabilir olup olmadığı sorusu:</b> Şu an <b>satılabilir değil</b>.
+      Çünkü gözetimsiz erişim yok — yani "kur ve unut" yok, müşterinin bilgisayarı
+      açık olmalı. Bu 5. adımda. Ama bugün <b>arkadaşınızın bilgisayarına kurup
+      deneyebilirsiniz</b>, kod imzası olmadan da çalışır.
     </div>
   </div>
 </section>
 
-<!-- ============================ YOL HARITASI ============================ -->
+<!-- ======= YOL HARİTASI ======= -->
 <section>
   <div class="wrap">
-    <h2><span class="n">05</span>Yol haritası</h2>
-    <p class="sub">Hangi adım ne elde edecek. Durum <code class="inl">PLAN.md</code>'den.</p>
+    <h2><span class="n">03</span>Nereden nereye</h2>
 
     <div class="flow">
-      <div class="step done">
-        <div class="k">1 · BİTTİ</div>
-        <b>İskelet + ekran yakalama</b>
-        <small>DXGI ile yakalama, çoklu monitör, JPEG kodlayıcı.</small>
-      </div>
-      <div class="step done">
-        <div class="k">2 · BİTTİ</div>
-        <b>Bağlantı demosu</b>
-        <small>9 haneli kod, tarayıcıdan görüntü, fare/klavye.</small>
-      </div>
-      <div class="step done">
-        <div class="k">3 · BİTTİ</div>
-        <b>Hesap ve firma</b>
-        <small>Giriş, 2FA, e-posta, parola sıfırlama, roller, cihaz kaydı, API.</small>
-      </div>
-      <div class="step done">
-        <div class="k">4 · BİTTİ</div>
-        <b>Destek akışı</b>
-        <small>Onay, çubuk, kuyruk, sohbet, pano, dosya, roller, TURN.</small>
-      </div>
-      <div class="step next">
-        <div class="k">4b · SIRADA</div>
-        <b>Canlıya alma paketi</b>
-        <small>Docker, yedekleme, geri yükleme, kurulum rehberi.</small>
-      </div>
+      <div class="step done"><div class="k">1 ✓</div><b>Ekran yakalama</b>
+        <small>DXGI + GDI, çoklu monitör, JPEG kodlayıcı</small></div>
+      <div class="step done"><div class="k">2 ✓</div><b>Bağlantı demosu</b>
+        <small>9 haneli kod, tarayıcıdan görüntü, fare/klavye</small></div>
+      <div class="step done"><div class="k">3 ✓</div><b>Hesap ve firma</b>
+        <small>Doğrulama, roller, cihaz kaydı, kayıt zinciri, API</small></div>
+      <div class="step done"><div class="k">4 ✓</div><b>Destek akışı</b>
+        <small>Onay, çubuk, kuyruk, sohbet, pano, dosya, roller</small></div>
+      <div class="step done"><div class="k">4b ✓</div><b>Canlı paket</b>
+        <small>Docker, yedekleme, geri yükleme, kurulum rehberi</small></div>
     </div>
 
     <div class="flow">
-      <div class="step late">
-        <div class="k">5 · PROD</div>
-        <b>Gözetimsiz erişim + H.264</b>
-        <small>Windows servisi, yönetici yetkisi, gerçek video.</small>
-      </div>
-      <div class="step late">
-        <div class="k">6 · PROD</div>
-        <b>Satılabilir sürüm</b>
-        <small>Panel, çoklu izleyici, kayıt, widget, MSI, imza. Satış burada başlar.</small>
-      </div>
-      <div class="step late">
-        <div class="k">7</div>
-        <b>Fark yaratanlar</b>
-        <small>Cihaz sağlığı, alarm, webhook, dokunmatik, ses, WoL.</small>
-      </div>
-      <div class="step late">
-        <div class="k">8</div>
-        <b>Diğer platformlar</b>
-        <small>Linux, Mac, mobil kontrolcü, Türkiye sunucusu.</small>
-      </div>
+      <div class="step next"><div class="k">5 · SIRADA</div><b>Gözetimsiz + H.264</b>
+        <small>Kur ve unut, yönetici parolası, akıcı video.
+        <b>Burada ürün doğuyor.</b></small></div>
+      <div class="step late"><div class="k">6</div><b>Satılabilir sürüm</b>
+        <small>Toplu kurulum, imza, panel, çoklu izleyici, kayıt.
+        <b>Satış burada başlar.</b></small></div>
+      <div class="step late"><div class="k">7</div><b>Fark yaratanlar</b>
+        <small>Cihaz sağlığı, alarm, ses, uyandırma, webhook</small></div>
+      <div class="step late"><div class="k">8</div><b>Diğer platformlar</b>
+        <small>Linux ajanı, Mac/Android izleme</small></div>
     </div>
 
-    <h3>Şu ana kadar ölçülenler</h3>
-    <p>1-4. adımlar tamamlandı, 4. adımın test matrisi 14 senaryoyla doğrulandı.</p>
+    <h3>Gerçek ölçümler</h3>
     <div class="metrics">
-      <div class="metric"><div class="v">574 ms</div><div class="l">ilk kare — <b>M1 tek oturum</b><br>27,7 fps</div></div>
-      <div class="metric"><div class="v">656 ms</div><div class="l">ilk kare — <b>M2 zorunlu relay</b><br>27,5 fps</div></div>
+      <div class="metric"><div class="v">574 ms</div><div class="l">ilk kare — tek oturum<br>27,7 fps</div></div>
+      <div class="metric"><div class="v">656 ms</div><div class="l">ilk kare — zorunlu aktarım<br>27,5 fps</div></div>
       <div class="metric"><div class="v">321 ms</div><div class="l">6 sn kesinti sonrası<br>kareler geri döndü</div></div>
       <div class="metric"><div class="v">3,2 sn</div><div class="l">15 sn kesinti sonrası<br>ICE restart ile dönüş</div></div>
     </div>
     <div class="note">
-      <b>Not:</b> Bunlar sentetik (yapay) görüntü üzerinde, `127.0.0.1` üzerinde alındı —
-      "ekranın ne kadar karmaşık olduğu" etkisi ölçülmedi. Gerçek masaüstünde
-      (açık pencereler, video oynar) sonuçlar farklı olacaktır.
+      <b>Dürüstlük notu:</b> Bu ölçümler <b>sentetik (yapay) görüntü üzerinde</b>,
+      aynı bilgisayarda alındı. Gerçek masaüstünün ne kadar karmaşık olduğu
+      ölçülmedi. Ayrıca <b>hiçbir test farklı ağdan yapılmadı</b> — o senin görevin.
     </div>
-    <p>
-      Her adım güvenlik denetiminden <b>yüksek/orta bulgu olmadan</b> geçti.
-      4. adımda ek olarak test edilenler: yanlış parola reddi, başka firmanın
-      cihazına erişim reddi, süresi dolmuş aktarım anahtarı reddi, aynı cihaza
-      ikinci kontrol isteğinin reddi, plan limitinin aşılınca bağlantı vermemesi.
-    </p>
-    <p>
-      <b>Kalan tek test:</b> M7 — farklı bir ağdan (telefon hattı gibi) gerçek
-      bağlantı denemesi. Bu bilgisayarın dışından yapılmalı, o yüzden
-      kullanıcı gerektiriyor. Diğer 14 senaryo otomatik geçti.
-    </p>
 
-    <h3>Yazılan kod</h3>
-    <div class="grid g4">
-      <div class="metric"><div class="v">39.641</div><div class="l">Go satırı<br>(201 dosya)</div></div>
-      <div class="metric"><div class="v">7.024</div><div class="l">TypeScript satırı<br>(44 dosya)</div></div>
-      <div class="metric"><div class="v">0</div><div class="l">cgo bağımlılığı<br>tümü saf Go</div></div>
-      <div class="metric"><div class="v">23</div><div class="l">karar kaydı<br>(docs/KARARLAR.md)</div></div>
+    <h3>Test sonuçları</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>Ne denendi</th><th>Sonuç</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>Tek oturum: bağlan → kare → tık → kes</td>
+              <td><span class="badge b-ok">geçti</span> 574 ms</td></tr>
+          <tr><td>2</td><td>Zorunlu aktarım sunucusu</td>
+              <td><span class="badge b-ok">geçti</span> 656 ms</td></tr>
+          <tr><td>3</td><td>Bağlantı kopması → geri gelme</td>
+              <td><span class="badge b-ok">geçti</span> 321 ms / 3,2 sn</td></tr>
+          <tr><td>4</td><td>Aynı cihaza iki teknisyen</td>
+              <td><span class="badge b-ok">geçti</span> ikinci kontrol reddedildi</td></tr>
+          <tr><td>5</td><td>5 eşzamanlı oturum + 6.'sı</td>
+              <td><span class="badge b-ok">geçti</span> 6. oturum limitte</td></tr>
+          <tr><td>6</td><td>Yanlış parola / başka firma / onay reddi</td>
+              <td><span class="badge b-ok">geçti</span> hepsi reddedildi</td></tr>
+          <tr><td>8</td><td>Açık relay testi (10 tehlikeli adres)</td>
+              <td><span class="badge b-ok">geçti</span> hepsi reddedildi</td></tr>
+          <tr style="background:rgba(210,153,34,.08)"><td><b>7</b></td>
+              <td><b>Farklı ağdan gerçek bağlantı</b></td>
+              <td><span class="badge b-warn">sen yapacaksın</span></td></tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </section>
 
-<!-- ============================ SUNUCU ============================ -->
+<!-- ======= ALPENEMAlS ======= -->
 <section>
   <div class="wrap">
-    <h2><span class="n">06</span>Sunucuda ne çalışıyor?</h2>
-    <p class="sub">
-      Tek bir sunucuda dört parça. Müşterilerin ve teknisyenlerin bilgisayarlarında
-      <b>hiçbir şey</b> çalışmıyor — tarayıcı hariç.
-    </p>
+    <h2><span class="n">04</span>Alpemix'in yerine geçiyor mu?</h2>
+    <div class="grid g2">
+      <div class="card">
+        <h4>Alpemix'te var, bizde yok</h4>
+        <ul class="chk no">
+          <li>MEB okullarına dağıtım (on yıllık kanal)</li>
+          <li>Raspberry Pi, Linux, iOS istemcileri</li>
+          <li>Çoklu izleyici (altyapımız hazır, panelde açılacak)</li>
+          <li>Oturum video kaydı</li>
+          <li>Web sitesine gömülebilir canlı destek kutusu</li>
+        </ul>
+        <p style="font-size:14px;color:var(--fg2)">
+          Bunların çoğu ya kanal (alınabilir ama yıllar sürer) ya da
+          6-7. adımda gelen özellikler.
+        </p>
+      </div>
+      <div class="card">
+        <h4>Bizde var, Alpemix'te yok</h4>
+        <ul class="chk yes">
+          <li><b>1024-bit yerine X25519 + AES-256-GCM</b> — Alpemix'in kriptografisi 2010'dan beri kırılabilir kabul ediliyor</li>
+          <li><b>Veritabanı seviyesinde firma izolasyonu</b> — birbirini görememe garanti</li>
+          <li><b>Değiştirilemez kayıt</b> (hash zinciri)</li>
+          <li><b>Açık REST API</b> + dokümantasyon</li>
+          <li><b>Plan limitleri sunucuda</b> — korsanlık mümkün değil</li>
+          <li><b>Docker ile tek komut</b> kurulum + otomatik geri yükleme testi</li>
+        </ul>
+      </div>
+    </div>
 
-    <svg class="diagram" viewBox="0 0 1000 340" role="img" aria-label="Sunucu mimarisi">
-      <defs>
-        <marker id="ar" markerWidth="9" markerHeight="9" refX="8" refY="3" orient="auto">
-          <path d="M0,0 L0,6 L8,3 z" fill="#3ea6ff"/>
-        </marker>
-        <marker id="ar2" markerWidth="8" markerHeight="8" refX="7" refY="2.5" orient="auto">
-          <path d="M0,0 L0,5 L7,2.5 z" fill="#6b7d91"/>
-        </marker>
-      </defs>
+    <div class="note">
+      <b>Alpemix hâlâ ayakta çünkü kanalı güçlü, ürünü değil.</b>
+      Türkiye'de kamu ağları TeamViewer'ı engelliyor, Alpemix'i engellemiyor.
+      Kayıp o kanaldan geliyor. Kodla kapatılamaz — satışla kazanılır.
+    </div>
+  </div>
+</section>
 
-      <!-- dis kutular -->
-      <rect x="8" y="40" width="170" height="80" rx="9" fill="#131a23" stroke="#33415a"/>
-      <text x="93" y="68" fill="#e6edf3" font-size="13" font-weight="700" text-anchor="middle">Müşteri bilgisayarı</text>
-      <text x="93" y="88" fill="#9fb0c3" font-size="11" text-anchor="middle">segnox-agent.exe</text>
-      <text x="93" y="104" fill="#6b7d91" font-size="10" text-anchor="middle">Windows · tek dosya</text>
+<!-- ======= PARA ======= -->
+<section>
+  <div class="wrap">
+    <h2><span class="n">05</span>Para ve kod imzalama</h2>
 
-      <rect x="8" y="220" width="170" height="80" rx="9" fill="#131a23" stroke="#33415a"/>
-      <text x="93" y="248" fill="#e6edf3" font-size="13" font-weight="700" text-anchor="middle">Teknisyen</text>
-      <text x="93" y="268" fill="#9fb0c3" font-size="11" text-anchor="middle">Chrome / Edge</text>
-      <text x="93" y="284" fill="#6b7d91" font-size="10" text-anchor="middle">kurulum yok</text>
-
-      <!-- sunucu kutusu -->
-      <rect x="260" y="24" width="470" height="292" rx="12" fill="#0a0e14" stroke="#3ea6ff" stroke-dasharray="5 4"/>
-      <text x="278" y="46" fill="#3ea6ff" font-size="12" font-weight="700">SUNUCU · Hetzner CX33 · Almanya</text>
-
-      <rect x="282" y="58" width="200" height="72" rx="9" fill="#131a23" stroke="#33415a"/>
-      <text x="382" y="80" fill="#e6edf3" font-size="12.5" font-weight="700" text-anchor="middle">Caddy</text>
-      <text x="382" y="98" fill="#9fb0c3" font-size="10.5" text-anchor="middle">TLS otomatik · 443</text>
-      <text x="382" y="115" fill="#6b7d91" font-size="9.5" text-anchor="middle">sertifika yenilemeyi kendi yapar</text>
-
-      <rect x="502" y="58" width="206" height="72" rx="9" fill="#131a23" stroke="#33415a"/>
-      <text x="605" y="80" fill="#e6edf3" font-size="12.5" font-weight="700" text-anchor="middle">segnox-server</text>
-      <text x="605" y="98" fill="#9fb0c3" font-size="10.5" text-anchor="middle">sinyal · API · panel · e-posta</text>
-      <text x="605" y="115" fill="#6b7d91" font-size="9.5" text-anchor="middle">Go · tek ikili</text>
-
-      <rect x="282" y="150" width="200" height="72" rx="9" fill="#131a23" stroke="#33415a"/>
-      <text x="382" y="172" fill="#e6edf3" font-size="12.5" font-weight="700" text-anchor="middle">PostgreSQL</text>
-      <text x="382" y="190" fill="#9fb0c3" font-size="10.5" text-anchor="middle">hesap · cihaz · oturum · kayıt</text>
-      <text x="382" y="207" fill="#6b7d91" font-size="9.5" text-anchor="middle">firma izolasyonu veritabanında</text>
-
-      <rect x="502" y="150" width="206" height="72" rx="9" fill="#131a23" stroke="#33415a"/>
-      <text x="605" y="172" fill="#e6edf3" font-size="12.5" font-weight="700" text-anchor="middle">coturn</text>
-      <text x="605" y="190" fill="#9fb0c3" font-size="10.5" text-anchor="middle">aktarım sunucusu (TURN)</text>
-      <text x="605" y="207" fill="#6b7d91" font-size="9.5" text-anchor="middle">%10–25 oturum buradan geçer</text>
-
-      <rect x="282" y="242" width="426" height="58" rx="9" fill="#0f141b" stroke="#253141"/>
-      <text x="495" y="264" fill="#9fb0c3" font-size="11" text-anchor="middle">Docker Compose ile birlikte kurulur — tek komut</text>
-      <text x="495" y="283" fill="#6b7d91" font-size="10" text-anchor="middle">4 vCPU · 8 GB RAM · €8,49/ay · ~20 TB trafik dahil</text>
-
-      <!-- oklar -->
-      <path d="M178,80 L258,80" stroke="#3ea6ff" stroke-width="2" fill="none" marker-end="url(#ar)"/>
-      <text x="218" y="72" fill="#6b7d91" font-size="9" text-anchor="middle">wss://</text>
-
-      <path d="M258,262 L182,262" stroke="#3ea6ff" stroke-width="2" fill="none" marker-end="url(#ar)"/>
-      <text x="220" y="254" fill="#6b7d91" font-size="9" text-anchor="middle">https://</text>
-
-      <path d="M93,120 L93,300 L340,300 L340,300" stroke="#a371f7" stroke-width="1.6" fill="none" stroke-dasharray="4 3" marker-end="url(#ar2)"/>
-      <text x="150" y="292" fill="#a371f7" font-size="9.5">görüntü: çoğunlukla doğrudan P2P, gerekirse coturn üzerinden</text>
-
-      <!-- yedekleme -->
-      <rect x="770" y="58" width="222" height="164" rx="10" fill="#131a23" stroke="#33415a"/>
-      <text x="881" y="82" fill="#e6edf3" font-size="12.5" font-weight="700" text-anchor="middle">Hetzner Object Storage</text>
-      <text x="781" y="104" fill="#9fb0c3" font-size="10.5">• Şifreli veritabanı yedeği</text>
-      <text x="781" y="122" fill="#9fb0c3" font-size="10.5">• Sunucu diski yedeği (7 gün)</text>
-      <text x="781" y="140" fill="#9fb0c3" font-size="10.5">• Oturum kayıtları (5–6. adım)</text>
-      <text x="781" y="164" fill="#6b7d91" font-size="10">Farklı lokasyonda — sunucu</text>
-      <text x="781" y="179" fill="#6b7d91" font-size="10">tümüyle çökse bile veri durur.</text>
-      <text x="781" y="200" fill="#3fb950" font-size="10">Aylık geri yükleme testi çalışır</text>
-
-      <path d="M730,130 L766,130" stroke="#6b7d91" stroke-width="1.5" fill="none" marker-end="url(#ar2)"/>
-
-      <text x="8" y="332" fill="#6b7d91" font-size="10">Sunucu iki ek adres kullanır: biri web/HTTPS, diğeri TURN-TLS/443 (kurumsal ağların çoğu sadece 443'e izin verir).</text>
-    </svg>
-
-    <h3>Paralar ne kadar</h3>
     <div class="tbl-wrap">
       <table>
         <thead><tr><th>Kalem</th><th>Tutar</th><th>Ne zaman</th></tr></thead>
         <tbody>
-          <tr><td>Sunucu (CX33)</td><td class="mono">€8,49 / ay</td><td>6. adımda</td></tr>
-          <tr><td>Ek IP adresi (TURN için)</td><td class="mono">€1–2 / ay</td><td>6. adımda</td></tr>
-          <tr><td>Object Storage (yedek)</td><td class="mono">~€1–2 / ay</td><td>6. adımda</td></tr>
-          <tr><td>E-posta gönderimi (SMTP)</td><td class="mono">düşük yüzler / ay</td><td>6. adımda</td></tr>
-          <tr><td>Kod imzalama sertifikası</td><td class="mono">~$309 / yıl</td><td>Dağıtım öncesi</td></tr>
+          <tr><td>Sunucu (Hetzner CX33)</td><td class="mono">€8,49 / ay</td><td>canlıya alırken</td></tr>
+          <tr><td>Ek IP (aktarım sunucusu için)</td><td class="mono">~€1–2 / ay</td><td>canlıya alırken</td></tr>
+          <tr><td>Yedekleme deposu</td><td class="mono">~€1–2 / ay</td><td>canlıya alırken</td></tr>
+          <tr><td><b>Kod imzalama</b></td><td class="mono">€0 – €139 / yıl</td><td>dağıtımdan önce</td></tr>
+          <tr><td>KVKK avukatı</td><td class="mono">tek seferlik</td><td>kamu müşterisi gelirse</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="note ok">
+      <b>Kod imzası şart değil — ürün imzasız da çalışır.</b>
+      Kurarken Windows bir uyarı gösterir, kullanıcı "Yine de çalıştır" der.
+      Alpemix de bugün imzasız. İmza sadece uyarıyı kaldırır, çalışma farkı yok.
+      <br><br>
+      <b>Yol haritası:</b> Bayi ve kurumsal müşterilerde müşterinin IT'si
+      kendi sertifikasını grup ilkesiyle dağıtabilir (ücretsiz).
+      KOBİ tek tek indirme senaryosu için €139'luk sertifika yeterli —
+      SSL.com'un $309'una gerek yok.
+    </div>
+
+    <h3>Bedava katman var</h3>
+    <p>
+      Lisanssız da çalışıyor: <b>1 eşzamanlı oturum, oturum başı 45 dakika,
+      ayda 8 saat.</b> Tek kullanıcı kendi makinelerini yönetmek için yeterli.
+      Limitler sunucuda uygulanıyor, yani açmak/kapatmak mümkün değil.
+    </p>
+  </div>
+</section>
+
+<!-- ======= PLATFORM ======= -->
+<section>
+  <div class="wrap">
+    <h2><span class="n">06</span>Hangi cihazlarda çalışır?</h2>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th></th><th>Durum</th><th>Açıklama</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>Kontrol ettiğin cihaz</b><br><span style="color:var(--fg3)">viewer</span></td>
+            <td><span class="badge b-ok">HER ŞEY</span></td>
+            <td>Windows, Mac, Linux, telefon, tablet — hepsi çalışır.
+                Tarayıcı kullanıyor, kurulum yok. Dokunmatik destekli.</td>
+          </tr>
+          <tr>
+            <td><b>Yönettiğin bilgisayar</b><br><span style="color:var(--fg3)">ajan</span></td>
+            <td><span class="badge b-warn">SADECE WINDOWS</span></td>
+            <td>Ekran yakalama ve tuş gönderme Windows API'leriyle çalışıyor.
+                Tarayıcı bunu yapamaz — bu pazarın herkesi için böyle.</td>
+          </tr>
+          <tr>
+            <td>Linux ajanı</td>
+            <td><span class="badge b-mut">8. adım</span></td>
+            <td>X11 mümkün (ekran yakalama + tuş). Wayland yapılmayacak —
+                güvenlik modeli buna izin vermiyor, doğru karar.</td>
+          </tr>
+          <tr>
+            <td>Mac ajanı</td>
+            <td><span class="badge b-mut">yapılmıyor</span></td>
+            <td>Apple izinleri çok kısıtlayıcı. <b>Mac'ten kontrol etmek
+                zaten şu an mümkün</b> — sadece Mac'ten bağlanılan bilgisayar
+                hedeflenirse sorun olur.</td>
+          </tr>
         </tbody>
       </table>
     </div>
 
     <div class="note">
-      <b>Trafik maliyeti nasıl kontrol edilir?</b> Görüntü çoğunlukla iki bilgisayar
-      arasında doğrudan gider, sunucudan geçmez. Sadece %10–25 oturum aktarım sunucusundan
-      geçer. Bir saatlik geçiş yaklaşık 1 GB giden trafik demek. Aylık 300 oturum ×
-      30 dk × %25 ≈ <b>40 GB</b> — kotanın %0,2'si.
+      <b>Kısaca iki taraf ayrı:</b> Kontrol ettiğin yer her cihazda çalışır
+      (sadece bir tarayıcı). Yönettiğin bilgisayar şimdilik sadece Windows.
+      Platform bağımsızlık istersen tek eksik: <b>Linux ajanı</b>.
     </div>
-  </div>
-</section>
-
-<!-- ============================ SONRA ============================ -->
-<section>
-  <div class="wrap">
-    <h2><span class="n">07</span>Şimdi sırada ne var?</h2>
-    <p class="sub">Sitedeki metnin geri kalanı bu klasördeki plan ve karar dosyalarından türetildi.</p>
-    <div class="grid g3">
-      <div class="card tight">
-        <h4>Pilotta denenecekler</h4>
-        <ul class="chk">
-          <li>Gerçek masaüstü ekranıyla deneme</li>
-          <li>Farklı bir ağdan (mobil veri) bağlantı</li>
-          <li>Yönetici parolası gerektiren durumlar</li>
-          <li>Türkçe klavye, yapıştırma, emoji</li>
-        </ul>
-      </div>
-      <div class="card tight">
-        <h4>Bağımlılık gereken işler</h4>
-        <ul class="chk">
-          <li>GitHub deposu (CI için)</li>
-          <li>Test bilgisayarı (ekransız GPU'lu)</li>
-          <li>Sunucu hesabı + alan adı</li>
-          <li>E-posta sağlayıcısı</li>
-        </ul>
-      </div>
-      <div class="card tight">
-        <h4>Karar bekleyenler</h4>
-        <ul class="chk">
-          <li>Fiyat ve plan limitleri</li>
-          <li>KVKK hukuk onayı</li>
-          <li>Kod imzalama sertifikası</li>
-          <li>Harici durum sayfası servisi</li>
-        </ul>
-      </div>
-    </div>
-    <p style="margin-top:20px;color:var(--fg3);font-size:14px">
-      Bunların tamamı ve geçici çözümleri <code class="inl">docs/ACIK-KONULAR.md</code>
-      dosyasında kayıtlı.
-    </p>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
     <div class="grid g2">
-      <div>
-        <b>Segnox</b> — Türkçe uzaktan destek platformu.<br>
-        <span style="color:var(--fg3)">Pilot sürümü · satılabilir ürün değildir.</span>
-      </div>
-      <div>
-        Kaynak: <code class="inl">PLAN.md</code>, <code class="inl">docs/KARARLAR.md</code>,
-        <code class="inl">docs/OPERASYON.md</code>, <code class="inl">docs/ACIK-KONULAR.md</code>, <code class="inl">docs/API.md</code>
-      </div>
+      <div><b>Segnox</b> — Türkçe uzaktan destek platformu<br>
+        <span style="color:var(--fg3)">Teknik pilot tamamlandı. Satılabilir ürün değil.</span></div>
+      <div>Kaynak: <code class="inl">PLAN.md</code>, <code class="inl">docs/RAPOR-MVP.md</code>,
+        <code class="inl">docs/KARARLAR.md</code>, <code class="inl">docs/OPERASYON.md</code></div>
     </div>
   </div>
 </footer>
