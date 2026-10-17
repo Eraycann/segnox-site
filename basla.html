@@ -120,9 +120,10 @@
 <!-- ======= ADIMLAR ======= -->
 <section>
   <div class="wrap">
-    <h2><span class="n">02</span>Yedi adım</h2>
+    <h2><span class="n">02</span>Adımlar</h2>
     <p class="sub">
       Toplam yaklaşık 1 saat. İlk seferde 3-4 dakika ek süre (indirme).
+      <b>Üç ayrı pencere</b> açman gerekecek — her biri açık kalmalı.
     </p>
 
     <!-- ADIM 1 -->
@@ -154,11 +155,12 @@ go run ./cmd/segnox-devdb -seed
         klasöre indirip çalıştırır, örnek veri yükler ve sana bağlantı
         adresini yazar.</div>
       <p style="font-size:14.5px;color:var(--fg2)">
-        <b class="got">✓ Göreceğin:</b> Ekranda birkaç satır —
-        <span class="mono">SEGNOX_DB_URL</span>,
-        <span class="mono">SEGNOX_DATA_KEY</span>,
-        <span class="mono">SEGNOX_DB_OWNER_URL</span>.
-        <b>Bunları kopyalayıp yapıştır</b>, 3. adımda lazım.
+        <b class="got">✓ Göreceğin:</b> Ekranda <b>appDsn</b> ve
+        <b>seed e-posta + parolaları</b>. <b>İkisini de not al</b> —
+        3. adımda lazım.
+        <br><br>
+        <b class="wait">⚠ Bu pencereyi kapatma.</b> Kapatırsan veritabanı da
+        durur. Kapatırsan tekrar çalıştır — veri kaybolmaz.
       </p>
     </div>
 
@@ -168,22 +170,30 @@ go run ./cmd/segnox-devdb -seed
       <div class="why"><b>Neden:</b> İki bilgisayarın birbirini bulabilmesi
         için ortalarda bir buluşma noktası olmalı. Bu sunucu o nokta.
         Hesapları, cihaz listesini ve oturumları da tutar.</div>
-      <p style="font-size:14.5px;color:var(--fg2)">Yeni bir terminal, aynı klasör:</p>
+      <p style="font-size:14.5px;color:var(--fg2)">
+        <b>Yeni bir PowerShell penceresi</b>, aynı klasörde. (PowerShell —
+        <code class="inl">set X=Y</code> değil, <code class="inl">$env:X='Y'</code>)
+      </p>
       <div class="cmd">
-set SEGNOX_ADDR=127.0.0.1:8080
-set SEGNOX_DB_URL=&lt;2. adımdaki değer&gt;
-set SEGNOX_DATA_KEY=&lt;2. adımdaki değer&gt;
-set SEGNOX_COOKIE_SECURE=false
-set SEGNOX_MAIL=file:C:\Temp\segnox-mail
+$env:SEGNOX_DB_URL='&lt;2. adımdaki appDsn&gt;'
+$env:SEGNOX_DATA_KEY='&lt;openssl rand -base64 32&gt;'
+$env:SEGNOX_PUBLIC_URL='http://127.0.0.1:8080'
+$env:SEGNOX_COOKIE_SECURE='false'
+$env:SEGNOX_MAIL='file:./data/mail'
 go run ./cmd/segnox-server
         <span class="c">↵ bu pencereyi AÇIK TUT</span>
       </div>
       <p style="font-size:14.5px;color:var(--fg2)">
-        <b class="got">✓ Göreceğin:</b> Bir adres yazar
-        (<span class="mono">http://127.0.0.1:8080</span> gibi).
-        Tarayıcıda aç. <span class="mono">COOKIE_SECURE=false</span> şart —
-        yerelde HTTPS yok.
+        <b class="got">✓ Göreceğin:</b> <span class="mono">http://127.0.0.1:8080</span>
+        adresi çalışıyor. Tarayıcıda aç.
       </p>
+      <div class="note" style="font-size:13.5px">
+        <b>Bu iki ayar neden özel:</b> <span class="mono">COOKIE_SECURE=false</span>
+        şart, çünkü yerelde HTTPS yok. <span class="mono">MAIL=file:./data/mail</span>
+        e-postaları diske yazar, gerçek e-posta gitmez. <span class="mono">DATA_KEY</span>
+        şifreleme anahtarı — her açılışta yenisi üretmek sorun değil ama
+        <b>not et</b>, yoksa eski kayıtlar açılmaz.
+      </div>
     </div>
 
     <!-- ADIM 4 -->
@@ -193,15 +203,21 @@ go run ./cmd/segnox-server
         küçük program. Ekranını gösterir, tuş komutlarını alır. Kontrol
         ettiğin bilgisayarda <b>bir şey kurmuyorsun</b> — tarayıcı kullanıyorsun.
         Ama buraya kurmak zorundayız, çünkü bu bağlanacağın bilgisayar.</div>
-      <p style="font-size:14.5px;color:var(--fg2)">Üçüncü bir terminal:</p>
+      <p style="font-size:14.5px;color:var(--fg2)">
+        <b>Üçüncü bir PowerShell penceresi.</b> EXE zaten derlenmiş (18 MB):
+      </p>
       <div class="cmd">
-go build -o segnox-agent.exe ./cmd/segnox-agent
-segnox-agent.exe run -server ws://127.0.0.1:8080/ws/agent
+.\segnox-agent.exe run -server ws://127.0.0.1:8080/ws/agent
         <span class="c">↵ bu pencereyi de AÇIK TUT</span>
       </div>
       <p style="font-size:14.5px;color:var(--fg2)">
-        <b class="got">✓ Göreceğin:</b> Konsolda <b>9 haneli sayı</b>.
-        Bu senin bağlantı kodun.
+        Kod değiştirdiysen yeniden derle:
+        <span class="mono">go build -o segnox-agent.exe ./cmd/segnox-agent</span>
+      </p>
+      <p style="font-size:14.5px;color:var(--fg2)">
+        <b class="got">✓ Göreceğin:</b> Konsolda <b>9 haneli sayı</b> —
+        senin bağlantı kodun. Ardından <b>onay penceresi açılır</b>
+        (kabul et → devam).
       </p>
     </div>
 
@@ -267,17 +283,70 @@ segnox-agent.exe run -server ws://127.0.0.1:8080/ws/agent
       </div>
     </div>
 
+    <!-- ADIM 6b: TURN -->
+    <div style="margin-top:30px">
+      <div class="step-h"><span class="step-n">6b</span>TURN (bağlantı kurulamıyorsa)</div>
+      <div class="why"><b>Neden:</b> Eğer 5. adımda bağlantı kurulmuyorsa ya da
+        çok yavaşsa, iki bilgisayar birbirini doğrudan bulamıyor demektir.
+        TURN sunucusu araya girip görüntüyü taşır — aynı ağdaki telepatik
+        hattın karşılığı.</div>
+      <div class="cmd">
+go run ./cmd/segnox-devturn -allow-loopback-peers
+        <span class="c">↵ ayrı bir pencerede, çalışır durumda kalsın</span>
+      </div>
+      <p style="font-size:14.5px;color:var(--fg2)">
+        Sonra 3. adımdaki sunucuya ekle:
+      </p>
+      <div class="cmd">
+$env:SEGNOX_TURN_URLS='&lt;devturn'ün yazdığı adres&gt;'
+$env:SEGNOX_TURN_SECRET='&lt;devturn'ün yazdığı secret&gt;'
+      </div>
+      <p style="font-size:13.5px;color:var(--fg2)">
+        <span class="mono">-allow-loopback-peers</span> bayrağı şart: her şey
+        127.0.0.1'de çalıştığı için sunucu normalde kendi adresine relay
+        vermeyi reddeder. Bu bayrak sadece yerel testte açılır.
+      </p>
+    </div>
+
     <!-- ADIM 7 -->
     <div style="margin-top:30px">
       <div class="step-h"><span class="step-n">7</span>İkinci bilgisayardan dene</div>
       <div class="why"><b>Neden:</b> Tüm testler aynı bilgisayarda, kabloyla
         bağlıydı. Gerçek hayatta iki bilgisayar farklı ağlarda — ev, ofis,
         mobil veri. Gecikme ve bağlantı yolu orada anlaşılıyor.</div>
-      <p style="font-size:14.5px;color:var(--fg2)">
-        2-5. adımları <b>başka bir bilgisayarda</b> tekrarla, sonra o
-        bilgisayardan bağlan. Mobil veri (hotspot) dene — en zor senaryo.
-      </p>
-      <div class="card" style="margin-top:14px">
+
+      <div class="note bad" style="font-size:14px">
+        <b>Sorun:</b> Şu an her şey <span class="mono">127.0.0.1</span> üzerinde —
+        yani <b>sadece o bilgisayardan</b> erişilebilir. İkinci bilgisayar
+        <span class="mono">127.0.0.1</span> deyince <b>kendi kendini</b> gör.
+        <br><br>
+        Ayrıca program şifreli bağlantı şart koşuyor
+        (<span class="mono">http</span> sadece <span class="mono">localhost</span>
+        için kabul ediliyor). Yani ikinci bilgisayardan bağlanmak için
+        <b>HTTPS'li bir adres</b> lazım.
+      </div>
+
+      <div class="grid g2" style="margin-top:16px">
+        <div class="card tight">
+          <h4>Yol A — Tünel (ücretsiz, 5 dk)</h4>
+          <p>Sunucun yerelde çalışmaya devam eder, dışarıya bir HTTPS adresi açılır.</p>
+          <pre style="font-size:12px;margin:10px 0"><code>winget install cloudflare.cloudflared
+cloudflared tunnel --url http://127.0.0.1:8080</code></pre>
+          <p style="font-size:13.5px;color:var(--fg2)">
+            Çıkan adresi telefonunda aç. Sunucuyu
+            <span class="mono">https://</span> adresle yeniden başlatman gerekir.
+          </p>
+        </div>
+        <div class="card tight">
+          <h4>Yol B — Gerçek sunucu (~€8/ay)</h4>
+          <p><code class="inl">deploy/</code> klasörü hazır. Hetzner + alan adı + DNS.</p>
+          <p style="font-size:13.5px;color:var(--fg2)">
+            Kalıcı çözüm ama önce <b>Yol A ile test et</b> — para harcama.
+          </p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
         <h4>Şunları not et</h4>
         <ul class="chk">
           <li>Bağlantı ne kadar sürdü? (kablo: 0,4 sn beklenir)</li>
