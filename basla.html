@@ -162,6 +162,22 @@ go run ./cmd/segnox-devdb -seed
         <b class="wait">⚠ Bu pencereyi kapatma.</b> Kapatırsan veritabanı da
         durur. Kapatırsan tekrar çalıştır — veri kaybolmaz.
       </p>
+      <div class="note" style="font-size:13.5px">
+        <b>Ne çıktı?</b> Şuna benzer bir tek satır:
+      </div>
+      <pre style="font-size:11.5px"><code>{"appDsn":"postgres://segnox_app:...@127.0.0.1:52772/segnox?sslmode=disable",
+ "ownerDsn":"postgres://postgres:...",
+ "tenants":[{"users":[{"email":"owner-a@example.com","password":"dev-...","role":"owner"}]}]}</code></pre>
+      <div class="card tight" style="margin-top:12px">
+        <h4>Seed kullanıcıları ne işe yarar</h4>
+        <p style="font-size:13.5px;color:var(--fg2)">
+          <b>owner-a@example.com</b> — firma sahibi. Tüm cihazları görür.<br>
+          <b>tech-a@example.com</b> — teknisyen. Sadece kendi grubundakileri görür.<br>
+          <b>owner-b@example.com</b> — <b>ikinci firma.</b> Bu hesapla girip
+          firma A'nın cihazını görememen gerekir. <b>İzolasyon testi:</b>
+          firma A'da cihaz ekle, sonra firma B'ye gir — liste boş olmalı.
+        </p>
+      </div>
     </div>
 
     <!-- ADIM 3 -->
@@ -171,17 +187,40 @@ go run ./cmd/segnox-devdb -seed
         için ortalarda bir buluşma noktası olmalı. Bu sunucu o nokta.
         Hesapları, cihaz listesini ve oturumları da tutar.</div>
       <p style="font-size:14.5px;color:var(--fg2)">
+        <b>Önce anahtarı üret</b> (yeni PowerShell penceresinde çalıştır,
+        çıkan satırı kopyala):
+      </p>
+      <div class="cmd">
+openssl rand -base64 32
+      </div>
+      <div class="note bad" style="font-size:13.5px;margin:10px 0">
+        <b>Dikkat:</b> Aşağıdaki komutlarda <code>&lt;...&gt;</code> işaretleri
+        <b>örnek yer tutucudur</b> — tırnak içine olduğu gibi yazma.
+        Gerçek değerleri yapıştıracaksın. <code>&lt;openssl çıktısı&gt;</code>
+        yazan yere bir üstteki komutun sonucunu koy.
+      </div>
+      <p style="font-size:14.5px;color:var(--fg2)">
         <b>Yeni bir PowerShell penceresi</b>, aynı klasörde. (PowerShell —
         <code class="inl">set X=Y</code> değil, <code class="inl">$env:X='Y'</code>)
       </p>
       <div class="cmd">
-$env:SEGNOX_DB_URL='&lt;2. adımdaki appDsn&gt;'
-$env:SEGNOX_DATA_KEY='&lt;openssl rand -base64 32&gt;'
+$env:SEGNOX_DB_URL='postgres://segnox_app:PAROLA@127.0.0.1:PORTA/segnox?sslmode=disable'
+$env:SEGNOX_DATA_KEY='OPENSSL_CIKTISI_BURAYA'
 $env:SEGNOX_PUBLIC_URL='http://127.0.0.1:8080'
 $env:SEGNOX_COOKIE_SECURE='false'
 $env:SEGNOX_MAIL='file:./data/mail'
 go run ./cmd/segnox-server
         <span class="c">↵ bu pencereyi AÇIK TUT</span>
+      </div>
+      <p style="font-size:14.5px;color:var(--fg2)">
+        <b class="got">✓ Göreceğin:</b> <span class="mono">http://127.0.0.1:8080</span>
+        adresi çalışıyor. Tarayıcıda aç.
+      </p>
+      <div class="note" style="font-size:13.5px">
+        <b>Doğru yaptığını nasıl anlarsın:</b> <span class="mono">"server failed"</span>
+        yazmamalı. <span class="mono">SEGNOX_DATA_KEY must be standard base64 of
+        32 bytes</span> hatası çıkarsa → anahtarı tırnak içine yapıştırmamışsın
+        demektir.
       </div>
       <p style="font-size:14.5px;color:var(--fg2)">
         <b class="got">✓ Göreceğin:</b> <span class="mono">http://127.0.0.1:8080</span>
