@@ -168,13 +168,17 @@ try {
 }
 
 # ---------- 5) ajan on planda ----------
-Adim 'Ajan kayit oluyor ve baglaniyor'
+# -VideoMod parametresi: auto (H.264 varsa) veya tiles (JPEG karsilastirma).
+$videoMod = if ($args.Count -ge 1) { $args[0] } else { 'auto' }
+if ($videoMod -notin @('auto','tiles')) { $videoMod = 'auto' }
+
+Adim "Ajan calisiyor - video kipi: $videoMod"
 Say '  Kip: auto (H.264 varsa kullanir, yoksa JPEG karoya duser)'
-Say '  Asagida "video encoder selected" yazisi H.264 mu JPEG mi oldugunu gosterir.'
+Say '  tiles = JPEG karsilastirma (imlec cizimi farki icin)'
 Say '  Kapatmak icin Ctrl+C'
 Say ''
 
-$env:SEGNOX_VIDEO = 'auto'
+$env:SEGNOX_VIDEO = $videoMod
 $env:SEGNOX_ENROLL_TOKEN = $tok.token
 & .\segnox-agent.exe run -server ws://127.0.0.1:8080/ws/agent
 
