@@ -715,6 +715,148 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
   alınıyorken kendi fiyatları 3.500 TL. Aradaki fark satış için yer bırakıyor.
 </div>
 
+<h3>Ücretsiz alternatifler ne işe yarıyor?</h3>
+<div class="card">
+  <table>
+    <tr><th>Ürün</th><th>Ücretsiz mi</th><th>Ticari kullanım</th></tr>
+    <tr><td><b>TeamViewer Personal</b></td><td class="yes2">Evet</td>
+        <td class="no"><b>Yasak.</b> Ticari kullanım tespit edilirse bağlantı kesilir
+            veya lisans uyarısı çıkar.</td></tr>
+    <tr><td><b>AnyDesk Personal</b></td><td class="yes2">Evet</td>
+        <td class="no">Aynı.</td></tr>
+    <tr><td><b>RustDesk</b></td><td class="yes2">Evet</td>
+        <td><b>Yasal.</b> Kendi sunucunu kurup bedava kullanırsın. AGPL —
+            <b>kullanmak</b> serbest, <b>satmak</b> riskli.</td></tr>
+  </table>
+</div>
+
+<h3>Asıl tehdit: RustDesk self-hosted</h3>
+<div class="note bad">
+  <b>En büyük ve en az konuşulan risk.</b> KOBİ'nin kendi IT personeli RustDesk'i
+  kendi sunucusuna kurar ve bir daha hiçbir şeye para harcamaz.<br><br>
+  RustDesk: ücretsiz, yasal, KVKK'ya uygun (veri dışarı çıkmaz), Windows/Linux/macOS
+  çalışıyor, <b>UAC ve kilit ekranı çalışıyor</b> (bizim test edilmedi).
+  <br><br>
+  <b>Hiçbir satış görüşmesinde yenemezsin.</b> Rakip Alpemix değil, bu.
+</div>
+
+<h3>Gerçek rakiplerimiz — sırayla</h3>
+<div class="card">
+  <table>
+    <tr><th>#</th><th>Rakip</th><th>Neden kaybediyoruz</th></tr>
+    <tr><td>1</td><td><b>Ücretsiz TeamViewer</b></td>
+        <td class="no">Sıfır maliyet, kurulum zaten yapılmış, herkes biliyor.
+            Değiştirmek için <b>hiçbir sebep</b> yok.</td></tr>
+    <tr><td>2</td><td><b>AnyDesk</b></td>
+        <td class="no">Aynı gerekçe.</td></tr>
+    <tr><td>3</td><td><b>Alpemix</b></td>
+        <td>Fiyat çöküşü (3.500 → reseller 2.442 TL). Yerli, Türkçe destek.</td></tr>
+    <tr><td>4</td><td><b>RustDesk self-host</b></td>
+        <td class="no">Teknik müşteride yenilemeyiz.</td></tr>
+  </table>
+  <div class="note warn">
+    <b>Önemli düzeltme:</b> Alpemix'e satış yapmıyoruz. Saha teknisyeninin
+    elinde ücretsiz TeamViewer duruyor. Alpemix'e karşı "daha güvenliyiz"
+    demek yetmez — <b>"bedavaya devam et, bize para ver"</b> demek gerekir.
+  </div>
+</div>
+
+<h3>Peki niye yapıyoruz?</h3>
+<div class="card">
+  <pre><code>B��y��k ��irket  → TeamViewer Business (~€200-300/y��l) veya RustDesk self-host
+KOB�� saha    → Alpemix (3.500 TL) veya TeamViewer Personal (yasak)
+Bizin yerimiz → Alpemix'in alt��nda, ama lisansl�� ve fatural��</code></pre>
+  <div class="note">
+    <b>Boşluk var, ama dar.</b> Teknik üstünlüklerimiz (RLS, hash zincirli kayıt,
+    kurulumsuz teknisyen) <b>sat�� sebebi de�il</b> — e�itlik bozan
+    tie-breaker. Dü�üneceğimiz tek iyi s��n m�vcud.
+  </div>
+</div>
+
+<h3>Ne satar?</h3>
+<div class="card">
+  <table>
+    <tr><th>#</th><th>Argüman</th><th>Durumu</th></tr>
+    <tr><td>1</td><td><b>Fiyat</b> — Alpemix'in belirgin alt��nda</td>
+        <td class="no">Belirlenmedi — 6. adım</td></tr>
+    <tr><td>2</td><td><b>Türk şirketi olmak</b> — KDV'li fatura, KVKK metni,
+        Türkçe destek</td>
+        <td class="no">Şirketimiz yok. Alpemix bir Türk şirketi — <b>bu bizim
+        eksikliğimiz</b></td></tr>
+    <tr><td>3</td><td><b>Lisans sorusuna cevap</b> — "Müşterinizin BT'si
+        TeamViewer'ı lisans riski nedeniyle reddediyor; biz faturalıyız ve
+        denetim kaydı tutuyoruz."</td>
+        <td class="yes2">Argüman gerçek</td></tr>
+  </table>
+  <div class="note warn">
+    <b>3. madde yalnız BT departmanı olan müşterilere satar.</b> Dar.
+    Ama boş değil.
+  </div>
+</div>
+
+<h3>En dürüst risk değerlendirmesi</h3>
+<div class="note bad">
+  <b>B2B uzak destek pazarı dolu.</b> Dünya çapında 4 ticari ürün, açık kaynak
+  RustDesk, ucuz yerli Alpemix. Biz sıfırdan yazılmış, gerçek makinede
+  test edilmemiş, imzasız, şirketi olmayan bir ürünle bu pazara girmek
+  <b>zor</b>.
+  <br><br>
+  <b>Var olma şansı olan yer:</b> tek kişi olarak çalışan KOBİ saha teknisyeni —
+  kendi telefonundan/tabletinden bağlanan, lisans maliyetine duyarlı, Türkçe
+  destek isteyen. Bu segment gerçek ama <b>dar</b>: on binlerce müşteri değil,
+  belki yüzler.
+  <br><br>
+  <b>Beklenti doğru tutulmalı.</b> Bu "heyecanlı girişim" değil, <b>niş ürün</b>.
+  Fiyat ortaya çıkmadan "satılır mı" sorusunun cevabı verilemez.
+</div>
+
+<h3>Dışarıdan bakış: hazırlanan rekabet tablosunda düzeltilmesi gerekenler</h3>
+<div class="card">
+  <p style="font-size:14px;color:var(--fg2)">
+    18.10.2026'de dış kaynaktan alınan bir rakip karşılaştırması tarandı.
+    Teknik karşılaştırmaların çoğu doğru, ama <b>dört iddia doğrulanamaz
+    veya yanlış</b>:
+  </p>
+  <table>
+    <tr><th>İddia</th><th>Gerçek</th></tr>
+    <tr><td>"%75–90 P2P oranı"</td><td class="no"><b>Hiç ölçmedik.</b> Tek veriler:
+        aynı Wi-Fi ✓, farklı Wi-Fi ✗, hücresel ✗. Relay oranı bilinmiyor.</td></tr>
+    <tr><td>"~11 MB tek EXE"</td><td class="no">Gerçek: <b>19,1 MB</b> (ölçüldü).</td></tr>
+    <tr><td>"çift IP'li 443 coturn TURN rölesi"</td>
+        <td class="no">Bu bir <b>plan</b>, hi�� kurulmadı. Bugün TURN dışarıdan
+            erişilemiyor.</td></tr>
+    <tr><td>"Alpemix iki tarafta masaüstü uygulaması zorunlu kılar"</td>
+        <td class="no"><b>Tersi.</b> Alpemix'in mobil uygulaması ve web istemcisi
+            var. Bu satır <b>bizim en güçlü farkımızı rakibe attı</b>.</td></tr>
+  </table>
+  <div class="note">
+    <b>Ders:</b> Doğrulanamayan iddia müşteriye verilirse, ilk gerçek denemede
+    tutmazsa güven bir daha kazanılmaz. Rakibi olduğundan küçük göstermek de
+    aynı sonucu verir — kurumsal alıcı bunu bilir.
+  </div>
+</div>
+
+<h3>Gerçekten doğrulanabilir 3 fark</h3>
+<div class="card">
+  <table>
+    <tr><th>Fark</th><th>Rakipte karşılığı</th></tr>
+    <tr><td><b>Teknisyen hiçbir şey kurmaz</b></td>
+        <td class="no">Alpemix mobil uygulama istiyor. TeamViewer, AnyDesk,
+            RustDesk — hepsi istemci kuruyor.</td></tr>
+    <tr><td><b>Cihaz parolası sunucuya hiç gitmez</b></td>
+        <td class="no">Alpemix 1024-bit RSA kullanıyor.</td></tr>
+    <tr><td><b>Veritabanı seviyesinde izolasyon</b> (RLS)</td>
+        <td class="no">Alpemix yazılım katmanında filtreliyor. TeamViewer,
+            AnyDesk merkezi SaaS mantığı.</td></tr>
+  </table>
+  <div class="note ok">
+    <b>Nasıl konuşmalı:</b> RLS bir "teknik üstünlük" değil, bir
+    <b>denetim cevabı</b>. Mühendise "RLS ne" diye sorulmaz; denetim ekibine
+    <i>"firma verisi başka bir firmaya sızar mı?"</i> sorusu sorulur. Cevabımız
+    <b>veritabanının kendisi engelliyor</b>.
+  </div>
+</div>
+
 <!-- ============ 10 PARA ============ -->
 <h2 id="para" style="margin-top:44px">11 · Para tarafı</h2>
 
