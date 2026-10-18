@@ -11,10 +11,21 @@ function Say ($s) { Write-Host $s }
 function Adim ($s) { Write-Host "`n=== $s ===" -ForegroundColor Cyan }
 
 # ---------- onceki koslari temizle ----------
-Adim 'Eski surecler kapatiliyor'
+# YALNIZCA segnox sureclerini kapat. Claude Code veya baska bir islem
+# calisiyorsa ona dokunma.
+Adim 'Eski Segnox surecleri kapatiliyor'
 Get-Process -Name 'segnox-agent','segnox-server','segnox-devdb' -ErrorAction SilentlyContinue |
   ForEach-Object { Say "  $($_.ProcessName) ($($_.Id))"; Stop-Process -Id $_.Id -Force -ErrorAction SilentlyContinue }
 Start-Sleep -Seconds 1
+
+# 8080 doluysa once onu bosalt (onceki bir testten kalmis olabilir)
+$portBusy = (Test-NetConnection -ComputerName 127.0.0.1 -Port 8080 -WarningAction SilentlyContinue -InformationLevel Quiet)
+if ($portBusy) {
+  Say '  8080 dolu, eski sunucu araniyor...'
+  Get-NetTCPConnection -LocalPort 8080 -State Listen -ErrorAction SilentlyContinue |
+    ForEach-Object { Stop-Process -Id $_.OwningProcess -Force -ErrorAction SilentlyContinue }
+  Start-Sleep -Seconds 2
+}
 
 # ---------- 1) veritabani ----------
 Adim 'Veritabani baslatiliyor (birkac saniye)'
