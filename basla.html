@@ -483,29 +483,21 @@ $env:SEGNOX_TURN_SECRET='segnox-gelistirme-anahtari-1234567890'
 
       <div class="grid g2" style="margin-top:16px">
         <div class="card tight">
-          <h4>Yol A — İki tünel (ücretsiz, 20 dk)</h4>
-          <p><b>Sinyal</b> için cloudflared (HTTP), <b>TURN</b> için bore (TCP). İkisi farklı iş görür.</p>
+          <h4>Yol A — TCP tüneli <span class="badge b-mut">ERTELENDİ</span></h4>
+          <p>Sinyal için cloudflared (HTTP) + TURN için TCP tüneli gerekiyordu.</p>
           <p style="font-size:13.5px;color:var(--fg2);margin-top:6px">
-            Neden cloudflared tek başına yetmez: hızlı tünel yalnız HTTP taşır.
-            TURN ise UDP ya da TCP gerektirir. Bu yüzden TURN için ayrı bir
-            TCP tüneli açmak gerekiyor.
+            <b>Kurulum engeline takıldı</b> — ayrıntı aşağıdaki bölümde.
+            6. adımda gerek kalmayacak.
           </p>
         </div>
         <div class="card tight">
-          <h4>Yol B — Gerçek sunucu (~€8/ay)</h4>
-          <p><code class="inl">deploy/</code> klasörü hazır. Hetzner + alan adı + DNS.</p>
-          <p style="font-size:13.5px;color:var(--fg2)">
-            Kalıcı çözüm ama <b>Yol A ile test et önce</b> — para harcama.
+          <h4>Yol B — Gerçek sunucu (~€8/ay) <span class="badge b-info">6. ADIM</span></h4>
+          <p><code class="inl">deploy/</code> klasörü hazır ve CI'da doğrulandı.</p>
+          <p style="font-size:13.5px;color:var(--fg2);margin-top:6px">
+            Kalıcı çözüm. Tüm ağ testleri (hücresel veri dahil) burada,
+            kalıcı adresle yapılacak.
           </p>
         </div>
-      </div>
-
-      <div class="note ok" style="margin-top:16px;font-size:13.5px">
-        <b>Neden bu yöntem çalışıyor:</b> Ajan ve TURN sunucusu <b>aynı
-        bilgisayarda</b>. İnternete yalnız TURN'ün TCP dinleme portunu açıyorsun;
-        relay trafiği 127.0.0.1 içinde kalıyor, relay port aralığını açmana
-        gerek yok. İki TURN adresi veriyorsun — ajan yerel UDP'yi kullanıyor,
-        tarayıcı tünelden TCP'yi.
       </div>
 
       <div class="card" style="margin-top:16px">
@@ -530,98 +522,37 @@ $env:SEGNOX_TURN_SECRET='segnox-gelistirme-anahtari-1234567890'
       </div>
     </div>
 
-    <!-- ============ ADIM 8: TUNEL TESTI (YENI) ============ -->
+    <!-- ============ ADIM 8: TUNEL TESTI ============ -->
     <div style="margin-top:34px; border-top:1px solid var(--line); padding-top:30px">
       <h3 style="margin-top:0">8 · İnternet üzerinden test (tünel)</h3>
-      <p style="font-size:14.5px;color:var(--fg2)">
-        <b>2026-10-18'de eklendi.</b> Sunucu parası harcamadan, arkadaşın
-        evinden ve telefondan hücresel veriyle bağlanmayı denemek için.
-        6. adımda bulunan TURN/StUN düzeltmeleriyle birlikte çalışır.
+
+      <div class="note warn">
+        <b>⏸ 2026-10-18'de ertelendi.</b> Sunucusuz internet testi için
+        TCP tüneli gerekiyor. Üç deneme de kurulum engeline takıldı:
+        <ul style="margin:10px 0 0">
+          <li><b>bore.exe</b> hazır ikilisi → antivirüs karantinaya aldı</li>
+          <li><b>go install</b> → bore Rust ile yazılmış</li>
+          <li><b>cargo build</b> → Visual Studio Build Tools (~6 GB) gerekiyor</li>
+        </ul>
+        <b>Karar:</b> Tünel teşhis aracıdır, ürün değil. Bu test 6. adımdaki
+        gerçek sunucuyla yapılacak. Tüm ağ testleri tek seferde, kalıcı
+        adresle orada çalıştırılacak.
+      </div>
+
+      <p style="font-size:14.5px;color:var(--fg2);margin-top:16px">
+        Yine de bilmek için: yöntem şöyle çalışıyordu ve doğru kurulduğunda
+        test mümkün. Ajan ve TURN sunucusu <b>aynı bilgisayarda</b> olduğu için
+        internete yalnız TURN'ün TCP dinleme portu açılıyor — relay trafiği
+        127.0.0.1 içinde kalıyor, relay port aralığını açmana gerek yok.
+        İki TURN adresi veriliyordu: ajan yerel UDP'yi, tarayıcı tünelden
+        TCP'yi kullanıyordu.
       </p>
 
-      <div class="card" style="margin-top:16px">
-        <h4>Önce hazırlık</h4>
-        <ul class="chk">
-          <li>Devturn, sunucu ve ajan pencerelerini kapat</li>
-          <li><b>devdb</b> ve <b>cloudflared</b> açık kalsın</li>
-          <li>bore.exe indir: <span class="mono">github.com/ekzhang/bore</span>
-              → Releases → Windows zip</li>
-          <li>Ajanı yeniden derle (TURN/TCP desteği eklendi):
-            <pre style="margin:8px 0 0"><code>go build -o segnox-agent.exe ./cmd/segnox-agent</code></pre></li>
-        </ul>
-      </div>
-
-      <div class="tl" style="margin-top:22px">
-        <div class="ev now">
-          <b>Ortak sırrı üret <span class="badge b-warn">BİR KEZ, KOPYALA</span></b>
-          <small>
-            Devturn ile sunucu <b>aynı şifreyi</b> kullanmalı.
-            <pre style="margin:8px 0 0"><code>$b=New-Object byte[] 32
-[Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($b)
-$env:SEGNOX_TURN_SECRET=[Convert]::ToBase64String($b)</code></pre>
-            Çıkan değeri <b>not al</b> — 1. ve 3. adımda aynısını kullanacaksın.
-          </small>
-        </div>
-
-        <div class="ev">
-          <b>1) devturn — TCP dinleyicisiyle</b>
-          <small>
-            <pre style="margin:8px 0 0"><code>go run ./cmd/segnox-devturn -allow-loopback-peers -tcp 127.0.0.1:3478</code></pre>
-            Çıktıda <b>iki</b> adres olacak: <span class="mono">url</span> (UDP,
-            rastgele port) ve <span class="mono">tcpUrl</span> (hep 3478).
-            İkisini de not al.
-          </small>
-        </div>
-
-        <div class="ev">
-          <b>2) TCP tünelini aç</b>
-          <small>
-            <pre style="margin:8px 0 0"><code>.\bore.exe local 3478 --to bore.pub</code></pre>
-            Çıktıda <span class="mono">bore.pub:NNNNN</span> gibi bir adres
-            göreceksin. <b>Port her açılışta değişir.</b>
-          </small>
-        </div>
-
-        <div class="ev">
-          <b>3) Sunucuyu iki TURN adresiyle başlat</b>
-          <small>
-            <pre style="margin:8px 0 0"><code>$env:SEGNOX_TURN_URLS='turn:127.0.0.1:&lt;UDP&gt;?transport=udp,turn:bore.pub:&lt;NNNNN&gt;?transport=tcp'
-$env:SEGNOX_STUN='stun:stun.cloudflare.com:3478'
-$env:SEGNOX_TRUSTED_PROXIES='127.0.0.1'
-go run ./cmd/segnox-server</code></pre>
-            Ayrıca <span class="mono">SEGNOX_PUBLIC_URL</span> cloudflared
-            adresinle <span class="mono">https://</span> olmalı.
-            <br><br>
-            <b class="got">✓ Doğrulama:</b> sunucu çıktısında
-            <span class="mono">"stunServers":1</span> ve
-            <span class="mono">"turnServers":2</span> yazmalı. Adres hatalıysa
-            artık <b>açılışta</b> net hata verir — oturumda patlamaz.
-          </small>
-        </div>
-
-        <div class="ev">
-          <b>4) Ajanı başlat ve dene</b>
-          <small>
-            <pre style="margin:8px 0 0"><code>.\segnox-agent.exe run -server ws://127.0.0.1:8080/ws/agent</code></pre>
-            <b>Sırayla dene:</b>
-            <ol style="margin:10px 0 0;font-size:14px">
-              <li><b>Arkadaşın ev Wi-Fi'si</b> → cloudflared adresini açsın.
-                  STUN tanımlı olduğu için relay'siz bile geçebilir.</li>
-              <li><b>Telefon, hücresel veri</b> → aynısı. Bu relay üzerinden geçmeli.</li>
-            </ol>
-            <b class="got">✓ Başarı ölçütü:</b> oturum bitince ajan
-            <span class="mono">"candidate_type":"relay"</span> yazmalı.
-            <span class="mono">""</span> kalırsa geçmemiş demektir.
-          </small>
-        </div>
-      </div>
-
-      <div class="note">
-        <b>Bittiğinde:</b> Denemelerin saatini ve sonucunu not et.
-        <span class="mono">candidate_type</span> sütunundan hangi yolun
-        seçildiği okunur — <span class="mono">relay</span> / <span class="mono">srflx</span>
-        / <span class="mono">host</span>.
-        Sonra <b>bore</b> ve <b>devturn</b> pencerelerini kapat.
+      <div class="note ok">
+        <b>6. adımda gerçek sunucu açıldığında</b> bu teste dönmeye gerek
+        kalmayacak — <code class="inl">SEGNOX_TURN_URLS</code> doğrudan
+        sunucunun genel adresini gösterecek, TURN kendi TCP'sini 443'te
+        dinleyecek. Tünel gerekmeyecek.
       </div>
     </div>
 
