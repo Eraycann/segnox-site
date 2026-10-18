@@ -154,15 +154,37 @@
           <li>Docker ile tek komutla ayağa kalkan sunucu paketi</li>
           <li>Yedekleme + geri yükleme + otomatik geri yükleme testi</li>
         </ul>
+
+        <h3 style="margin-top:22px"><span class="badge b-warn">YAZILDI, DENENMEDİ</span> Yeni yazılan</h3>
+        <ul class="chk">
+          <li><b>Windows servisi</b> — ProgramData klasörü yalnız SYSTEM ve
+              Administrators erişimiyle açılıyor; servis kurma/kaldırma/başlatma
+              hazır <span class="mono">34d584d</span></li>
+          <li><b>Sessiz kurulum</b> — <span class="mono">/S /TOKEN=xxx</span>,
+              kurulum sihirbazı çıkmadan <span class="mono">b45109f</span></li>
+          <li><b>Süreç ipc'si</b> — servis ile yardımcı arasında adlandırılmış
+              boru; boru izni yalnız aynı kullanıcıya açık
+              <span class="mono">0b0bab8</span></li>
+          <li><b>Giriş masaüstü takibi</b> — UAC ve kilit ekranı için etkin
+              masaüstü izleniyor <span class="mono">b45109f</span></li>
+        </ul>
+        <p style="font-size:13.5px;color:var(--fg2);margin-top:12px">
+          <b>Bunlar çalıştığı kanıtlanmadı.</b> Gerçek servis kurulumu,
+          SYSTEM olarak çalışma, UAC ve kilit ekranı hiç denenmedi —
+          yönetici yetkisi ve bir sanal makine gerekiyor. Ayrıca güvenlik
+          denetimi de yapılmadı. Adım tamamlanmış sayılmaz.
+        </p>
       </div>
 
       <div class="card">
         <h3><span class="badge b-bad">EKSİK</span> Elinde olmayan</h3>
         <ul class="chk no">
-          <li><b>Gözetimsiz erişim</b> — bilgisayar açık olmalı, program çalışmalı
-              <span class="badge b-mut">5. adım</span></li>
-          <li><b>Yönetici parolası geçişi</b> — UAC/kilit ekranı engelleniyor
-              <span class="badge b-mut">5. adım</span></li>
+          <li><b>Gözetimsiz erişim</b> — <span class="badge b-warn">YAPILIYOR</span>
+              Servis kodu, sessiz kurulum ve yardımcı süreç hazır
+              (<span class="mono">0b0bab8</span>); yardımcı henüz arayüze
+              bağlı değil, <b>kullanıma hazır değil</b></li>
+          <li><b>Yönetici parolası geçişi</b> — UAC/kilit ekranı için kod yazıldı,
+              <b>hiç denenmedi</b> <span class="badge b-warn">DOĞRULANMADI</span></li>
           <li><b>H.264 akıcı video</b> — JPEG karo, hareketli içerikte düşük kalite
               <span class="badge b-mut">5. adım</span></li>
           <li><b>Toplu kurulum</b> (MSI / GPO / Intune)
@@ -184,10 +206,12 @@
     </div>
 
     <div class="note warn" style="margin-top:18px">
-      <b>Satılabilir olup olmadığı sorusu:</b> Şu an <b>satılabilir değil</b>.
-      Çünkü gözetimsiz erişim yok — yani "kur ve unut" yok, müşterinin bilgisayarı
-      açık olmalı. Bu 5. adımda. Ama bugün <b>arkadaşınızın bilgisayarına kurup
-      deneyebilirsiniz</b>, kod imzası olmadan da çalışır.
+      <b>Satılabilir olup olmadığı sorusu:</b> Şu an <b>hâlâ satılabilir değil</b>.
+      Gözetimsiz erişim kodu yazıldı ama <b>bitmedi ve denenmedi</b> — gerçek
+      servis kurulumu, SYSTEM olarak çalışma, UAC ve kilit ekranı hiç
+      denenmedi. Bunlar 5. adımın kalanı. Bugün <b>arkadaşınızın
+      bilgisayarına kurup elle deneyebilirsiniz</b>, kod imzası olmadan da
+      çalışır.
     </div>
   </div>
 </section>
