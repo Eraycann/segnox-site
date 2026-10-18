@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Segnox — Bilgi Ansiklopedisi</title>
+<meta name="description" content="Segnox projesinin tüm bilgileri tek sayfada: durum, sözlük, mimari, test matrisi, kararlar, maliyet.">
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  .toc { position:sticky; top:64px; z-index:5; background:var(--bg); padding:14px 0 12px;
+         border-bottom:1px solid var(--line); margin-bottom:22px }
+  .toc .wrap { display:flex; flex-wrap:wrap; gap:6px }
+  .toc a { font-size:12.5px; padding:5px 10px; border:1px solid var(--line2); border-radius:999px;
+           color:var(--fg2); text-decoration:none }
+  .toc a:hover { color:var(--fg); border-color:var(--acc); background:var(--bg3) }
+  .term { border-bottom:1px solid var(--line); padding:11px 0 }
+  .term:last-child { border-bottom:0 }
+  .term b { color:var(--fg) }
+  .term .d { color:var(--fg2); font-size:14px; margin-top:3px }
+  .term .alt { color:var(--fg3); font-size:12.5px }
+  .q { border-left:2px solid var(--line2); padding:2px 0 2px 14px; margin:14px 0 }
+  .q .qq { font-weight:600; color:var(--fg); margin-bottom:4px }
+  .q .qa { color:var(--fg2); font-size:14px }
+  .statline { display:flex; gap:10px; flex-wrap:wrap; margin:14px 0 }
+  .stat { flex:1; min-width:150px; background:var(--bg2); border:1px solid var(--line);
+          border-radius:var(--r); padding:13px 15px }
+  .stat .v { font-size:23px; font-weight:700; color:var(--acc); font-family:var(--mono) }
+  .stat .l { font-size:12.5px; color:var(--fg3); margin-top:3px }
+  .no { color:var(--bad) } .yes2 { color:var(--ok) } .warn2 { color:var(--warn) }
+  code.inl { background:var(--bg3); border:1px solid var(--line2); border-radius:5px;
+              padding:1px 6px; font-family:var(--mono); font-size:13px; color:var(--acc) }
+  .do-dont { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:16px 0 }
+  @media(max-width:760px){ .do-dont{grid-template-columns:1fr} }
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="wrap">
+    <a class="brand" href="index.html">SEG<span>NOX</span></a>
+    <div class="links">
+      <a href="index.html">Genel Bakış</a>
+      <a href="bilgi.html" class="on">Bilgi</a>
+      <a href="nasil.html">Nasıl çalışır</a>
+      <a href="simulator.html">UX Simülatör</a>
+      <a href="basla.html">Başla</a>
+      <a href="mimari.html">Mimari</a>
+      <a href="gelistirici.html">Geliştirici</a>
+    </div>
+  </div>
+</nav>
+
+<div class="toc">
+  <div class="wrap">
+    <a href="#durum">1 · Durum</a>
+    <a href="#ci">2 · CI nedir</a>
+    <a href="#sozluk">3 · Sözlük</a>
+    <a href="#akis">4 · Bağlantı akışı</a>
+    <a href="#mimari">5 · Mimari</a>
+    <a href="#test">6 · Test matrisi</a>
+    <a href="#karar">7 · Kararlar</a>
+    <a href="#risk">8 · Riskler</a>
+    <a href="#rakip">9 · Rakipler</a>
+    <a href="#para">10 · Para</a>
+    <a href="#kim">11 · Kim ne yapıyor</a>
+    <a href="#dosya">12 · Dosya haritası</a>
+    <a href="#arac">13 · Araçlar</a>
+  </div>
+</div>
+
+<div class="wrap">
+
+<!-- ============ 1 DURUM ============ -->
+<h2 id="durum" style="margin-top:0">1 · Şu an neredeyiz</h2>
+<p class="sub">Son güncelleme: 18 Ekim 2026. Aşağıdakiler <b>gerçek koddan</b> ve
+<b>gerçek testlerden</b> alındı. Tahmin yok.</p>
+
+<div class="statline">
+  <div class="stat"><div class="v">5 / 8</div><div class="l">adım kodu bitti<br>(1–4b, 5a/5b)</div></div>
+  <div class="stat"><div class="v">253</div><div class="l">Go dosyası</div></div>
+  <div class="stat"><div class="v">26</div><div class="l">kayıtlı karar (K-01…K-26)</div></div>
+  <div class="stat"><div class="v no">0</div><div class="l">gerçek sunucuda<br>uçtan uca test</div></div>
+</div>
+
+<h3><span class="badge b-ok">TAMAM</span> Çalışan ve doğrulanmış</h3>
+<ul class="chk yes">
+  <li>Ekrana erişim (çoklu monitör, monitör seçimi) — <b>gerçek masaüstünde</b> test edildi</li>
+  <li>Tam fare + klavye (SendInput, Türkçe Q/F dâhil)</li>
+  <li>9 haneli kodla bağlantı</li>
+  <li>Hesap, 2 katmanlı doğrulama, 10 kurtarma kodu</li>
+  <li>E-posta doğrulama, parola sıfırlama, davetle kullanıcı ekleme</li>
+  <li>Cihaz kaydı + cihaz parolası</li>
+  <li>Onay penceresi (WebView2) — dolandırıcılık uyarısı</li>
+  <li>Kapatılamayan bilgi çubuğu — süre sayar, "Bağlantıyı Kes"</li>
+  <li>Destek kuyruğu — talep havuza düşer, parola okunmaz</li>
+  <li>Sohbet, ortak pano, dosya transferi</li>
+  <li>Çoklu firma izolasyonu (PostgreSQL RLS, veritabanı seviyesinde)</li>
+  <li>Bağlantı koparsa otomatik geri gelme (ICE restart)</li>
+  <li>Değiştirilemez işlem kaydı (hash zinciri)</li>
+  <li>REST API + hız sınırı + kota</li>
+  <li>Docker ile tek komutla ayağa kalan sunucu paketi</li>
+  <li>Yedekleme + geri yükleme + otomatik geri yükleme testi</li>
+</ul>
+
+<h3><span class="badge b-warn">YAZILDI, HENÜZ DENENMEDİ</span> 5a/5b dalgası</h3>
+<ul class="chk">
+  <li><b>Windows servisi</b> — ProgramData klasörü yalnız SYSTEM + Administrators; kurma/kaldırma/başlatma hazır</li>
+  <li><b>Sessiz kurulum</b> — <code class="inl">/S /TOKEN=xxx</code>, sihirbaz çıkmadan</li>
+  <li><b>Süreç ipc'si</b> — servis ile yardımcı arasında adlandırılmış boru, izni daraltılmış</li>
+  <li><b>Giriş masaüstü takibi</b> — UAC ve kilit ekranı için etkin masaüstü izleniyor</li>
+  <li><b>Güvenlik denetimi</b> — iki tur yapıldı, yüksek + orta bulgu kapatıldı</li>
+</ul>
+<div class="note warn">
+  <b>Neden "denenmedi":</b> Bu kod bir ajanı Windows servisi olarak, SYSTEM
+  yetkisiyle, başka bir kullanıcının oturumunda çalıştırıyor. Bu sadece
+  <b>gerçek bir makinede yönetici yetkisiyle</b> denenebilir. Otomatik testler
+  "derleniyor ve testleri geçiyor" diyor — "gerçekten çalışıyor" demiyor.
+  <br><br>
+  Servis kipinin <b>UAC geçişi</b> ve <b>kilit ekranı</b> kısımları özellikle
+  riskli: hata varsa bilgisayar açılmaz hale gelebilir. Bu yüzden
+  <b>sanal makinede denenmesi şart</b>.
+</div>
+
+<h3><span class="badge b-bad">EKSİK</span> Olmayanlar</h3>
+<ul class="chk no">
+  <li><b>Gözetimsiz erişım</b> — kod var, çalıştığı doğrulanmadı</li>
+  <li><b>Yönetici parolası geçişi</b> — kod var, denenmedi</li>
+  <li><b>H.264 akıcı video</b> — şu an JPEG karo (hareketli ekranda bulanık)</li>
+  <li><b>Yeniden başlatma sonrası devam</b> (5c)</li>
+  <li><b>Toplu kurulum</b> (MSI / GPO / Intune) — 6. adım</li>
+  <li><b>Kod imzası</b> — antivirüs "tanımayan yayımcı" diyebilir, 6. adım</li>
+  <li><b>Otomatik güncelleme</b></li>
+  <li><b>Çoklu izleyici</b> — altyapı hazır, panelde açılacak</li>
+  <li><b>Oturum video kaydı</b></li>
+  <li><b>Linux ajanı</b> — 8. adım (sunucu zaten Linux'ta, <b>ajan</b> değil)</li>
+  <li><b>Sesli konuşma</b> — 7. adım</li>
+</ul>
+
+<div class="note bad">
+  <b>Satılabilir mi?</b> <b>Hayır, henüz.</b> Eksik olan şey "kur ve unut"
+  deneyimi. Bugün bir müşteriye kurarsan, bilgisayarı açık olmalı ve ajan
+  çalışmalı. Bu yüzden şu an sadece <b>tek tek deneme</b> (pilot) yapılabilir.
+</div>
+
+<!-- ============ 2 CI ============ -->
+<h2 id="ci" style="margin-top:44px">2 · CI nedir</h2>
+<p class="sub">Yeni terimler burada açıklanıyor. CI = <b>kodu gönderince otomatik
+deneyen bilgisayarlar.</b> GitHub'da çalışır, <b>senin bilgisayarına hiçbir
+şey yüklenmez</b>.</p>
+
+<div class="card">
+  <table>
+    <tr><th>İş adı</th><th>Ne yapar</th><th>Ne zaman önemli</th></tr>
+    <tr><td><b>windows</b></td><td>Kodu Windows'ta derler, tüm testleri koşar,
+        <code class="inl">go vet</code>, <code class="inl">golangci-lint</code></td>
+        <td><b>Her zaman.</b> Hedef platform Windows.</td></tr>
+    <tr><td><b>linux</b></td><td>Aynı kod Linux'ta derlenir, testler
+        <code class="inl">-race</code> (veri yarışı bulucusu) ile koşar</td>
+        <td>Sunucu Linux'ta çalışır. <b>Sunucu Linux, ajan Windows.</b></td></tr>
+    <tr><td><b>e2e</b></td><td>Gerçek tarayıcıyı (Edge) açar, iki sanal ajan
+        arasında <b>gerçek bağlantı</b> kurar</td>
+        <td>Arayüzün ve bağlantının uçtan uca çalıştığını kanıtlar</td></tr>
+    <tr><td><b>deploy</b></td><td>Docker kurulum dosyalarını doğrular,
+        <code class="inl">shellcheck</code>, coturn TURN sunucusuna canlı
+        bağlantı denemesi</td>
+        <td>Sunucu 6. adımda kiralanınca kullanılacak</td></tr>
+  </table>
+</div>
+
+<div class="q">
+  <div class="qq">"Linux'da da çalışıyor artık" — ne anlama geliyor?</div>
+  <div class="qa">
+    <b>Ajan (müşterinin bilgisayarındaki program) hayır</b> — sadece Windows,
+    ekran yakalama Windows'a özeldir.<br>
+    <b>Sunucu evet</b> — PostgreSQL, Docker, coturn hepsi Linux. Sunucuyu
+    Linux'ta test etmezsen, kirala'dığında patlayabilir.<br>
+    Yani <b>iki ayrı hedef</b>, ikisi de test ediliyor.
+  </div>
+</div>
+
+<div class="q">
+  <div class="qq">CI kırılırsa ne olur?</div>
+  <div class="qa">
+    Push yapılmaz, hata raporu çıkar, Claude Code düzeltir. <b>Sen müdahale
+    etmezsin.</b> Ama biz CI'ı <b>yok saymıyoruz</b> — bir test iki farklı
+    yerde kırıldığında Claude Code "muhtemelen kararsız test" deyip
+    geçemez, kök nedeni bulmak zorunda. Bu projede CI sayesinde
+    <b>iki gerçek üretim hatası</b> yakalandı (aşağıya bak).
+  </div>
+</div>
+
+<h3>CI'ın yakaladığı gerçek hatalar</h3>
+<div class="card">
+  <table>
+    <tr><th>Tarih</th><th>Hata</th><th>Etkisi</th></tr>
+    <tr><td>18.10</td><td>TURN sunucusu bütün IPv4 adreslerini reddediyordu</td>
+        <td class="no">Uzak bağlantı hiç çalışmazdı</td></tr>
+    <tr><td>18.10</td><td>İptal edilen yazma, tüm sinyal bağlantısını kapatıyordu</td>
+        <td class="no">O ajandaki <b>bütün oturumlar</b> düşerdi</td></tr>
+    <tr><td>18.10</td><td>ICE aday toplama sonu iki kez gönderiliyordu</td>
+        <td><span class="warn2">Bağlantı kararsızlığı</span></td></tr>
+  </table>
+</div>
+
+<!-- ============ 3 SOZLUK ============ -->
+<h2 id="sozluk" style="margin-top:44px">3 · Sözlük</h2>
+<p class="sub">Kodda geçen terimler. Teknik bilgi gerektirmiyor.</p>
+
+<div class="card">
+<div class="term"><b>Ajan (agent)</b>
+  <div class="d">Müşterinin bilgisayarında çalışan program. Ekranı yakalar, fare/klavye gönderir, tek bir .exe dosyası.</div></div>
+
+<div class="term"><b>Teknisyen / kontrolcü (viewer)</b>
+  <div class="d">Yardım eden kişi. <b>Program kurmaz</b>, tarayıcıdan bağlanır. Telefon da olur.</div></div>
+
+<div class="term"><b>WebRTC</b>
+  <div class="d">Tarayıcıda ses/görüntü aktarımının standart yolu. Biz de bunu kullanıyoruz — <b>ekran görüntüsü de bu kanaldan gidiyor</b>, sesli konuşma da aynı yolla gidebilir.</div></div>
+
+<div class="term"><b>ICE</b>
+  <div class="d">"Bu bilgisayara hangi adresle ulaşabilirim?" sorusunu çözen mekanizma. Birden çok aday dener, en iyisini seçer.</div></div>
+
+<div class="term"><b>Aday türleri (candidate_type)</b>
+  <div class="d">ICE'in bulduğu adaylar. <b>host</b> = aynı ağdaki doğrudan IP (en hızlı).
+  <b>srflx</b> = dışarıdan görünen IP (NAT arkasında ama port açık).
+  <b>relay</b> = üçüncü taraf sunucu üzerinden aktarım (en yavaş ama her yerde çalışır).</div></div>
+
+<div class="term"><b>P2P</b>
+  <div class="d">İki taraf doğrudan konuşuyor, arada sunucu yok. Hızlı, ucuz, gizli. Mümkünse hep bu seçilir.</div></div>
+
+<div class="term"><b>STUN</b>
+  <div class="d">Sadece "dışarıdan görünen IP'm ne?" diye soran ücretsiz sunucu. <b>Yalnız IP öğrenir, veri taşımaz.</b></div></div>
+
+<div class="term"><b>TURN</b>
+  <div class="d">Veriyi taşıyan sunucu. NAT veya güvenlik duvarı engel olduğunda devreye girer, iki tarafı kendi üzerinden bağlar. Ücretlendirilmesi bu yüzden önemli.</div></div>
+
+<div class="term"><b>NAT / CGNAT</b>
+  <div class="d">İnternet sağlayıcın evindeki cihazlara bir dış IP verip içeride birden çok cihazı paylaştırır. Bu yüzden "doğrudan bağlanma" çoğu evde imkânsızdır.</div></div>
+
+<div class="term"><b>relay oranı</b>
+  <div class="d">Oturumların yüzde kaçı TURN üzerinden geçiyor. <b>Doğrudan bağlantı %100 ise TURN maliyeti sıfır.</b> Hedefimiz bunu düşürmek.</div></div>
+
+<div class="term"><b>DTLS / SRTP</b>
+  <div class="d">Görüntünün uçtan uca şifrelenmesi. <b>Sunucu videoyu göremez</b>, şifreleme iki taraf arasındadır.</div></div>
+
+<div class="term"><b>coturn</b>
+  <div class="d">Açık kaynak, kanıtlanmış TURN/STUN sunucusu. <b>Kendi sunucumuzda çalışır</b>, dışarıdan hizmet alınmaz.</div></div>
+
+<div class="term"><b>ICE restart</b>
+  <div class="d">Bağlantı kopunca ayarları sıfırlayıp otomatik yeniden denemek. Kullanıcı hiçbir şey yapmaz.</div></div>
+
+<div class="term"><b>DXGI</b>
+  <div class="d">Windows'un ekran yakalama yolu. <b>Hızlı</b>, donanım hızlandırmalı. Yedeği GDI (yavaş ama her yerde çalışır).</div></div>
+
+<div class="term"><b>MJPEG / JPEG karo</b>
+  <div class="d">Şu an kullandığımız görüntü biçimi. Kareyi parçalara bölüp sadece değişenleri gönderiyoruz. <b>Çalışıyor ama hareketli ekranda bulanık.</b></div></div>
+
+<div class="term"><b>H.264</b>
+  <div class="d">Her yerde çalışan, çok sıkıştıran video biçimi. YouTube'daki teknoloji. <b>Sonraki adım.</b> Ses de bununla gider, bant çok düşer.</div></div>
+
+<div class="term"><b>RLS (Row Level Security)</b>
+  <div class="d">PostgreSQL'de "hangi satırı kimin görebileceğini" veritabanının kendi zorlaması. <b>Kod hatası olsa bile veri sızmaz.</b> Çoklu firma için şart.</div></div>
+
+<div class="term"><b>Kiracı (tenant)</b>
+  <div class="d">Bir firma. Platform → bayi → müşteri sırasıyla daralan kovalar. Her firma yalnız kendi verisini görür.</div></div>
+
+<div class="term"><b>Sistem servisi / SYSTEM</b>
+  <div class="d">Windows'un en yüksek yetkili kullanıcısı. Kullanıcı oturumu açık değilken de çalışır. <b>Gözetimsiz erişimin anahtarı.</b></div></div>
+
+<div class="term"><b>SDDL / ACL</b>
+  <div class="d">Dosya izinlerini yazan Windows dili. "Bu klasörü yalnız sistem ve yöneticiler açabilsin" kuralını bu belirtir. Güvenlik denetimlerinin konusu.</div></div>
+
+<div class="term"><b>named pipe</b>
+  <div class="d">Windows'ta iki yerel süreç arasında güvenli kanal. Servis ile yardımcı program böyle konuşuyor.</div></div>
+
+<div class="term"><b>Kurtarma kodu (recovery code)</b>
+  <div class="d">Telefonundaki 2FA uygulamasını kaybedersen giriş için kullanılan 10 tek kullanımlık kod.</div></div>
+
+<div class="term"><b>HMAC</b>
+  <div class="d">Ortak sırla imzalanan istek. TURN sunucusu "bu istek gerçekten bizim sunucumuzdan mı" diye anlar. Anahtar olmadan kimse relay kullanamaz.</div></div>
+
+<div class="term"><b>TLS</b>
+  <div class="d">İnternet üstü şifreli bağlantı (adres çubuğundaki kilit). Sinyal sunucusu için zorunlu.</div></div>
+</div>
+
+<!-- ============ 4 AKIS ============ -->
+<h2 id="akis" style="margin-top:44px">4 · Bağlantı akışı</h2>
+<p class="sub">Teknisyen 9 haneli kodu girince ne olur?</p>
+
+<div class="flow">
+  <div class="card tight"><b>1 · Müşteri</b><br>
+    <small>Ajan çalışıyor, sunucuya "bağlıyım, cihaz kimliğim şu" diyor.</small></div>
+  <div class="card tight"><b>2 · Teknisyen</b><br>
+    <small>Tarayıcıda 9 haneli kodu giriyor.</small></div>
+  <div class="card tight"><b>3 · Sunucu</b><br>
+    <small>Kodu çözer, cihazı bulur, talebi <b>müşterinin ekranına</b> düşürür. Parola hiçbir yere yazılmaz.</small></div>
+  <div class="card tight"><b>4 · Müşteri onaylar</b><br>
+    <small>Ajan ekranında uyarı çıkar. <b>Reddederse bağlantı kurulmaz.</b></small></div>
+  <div class="card tight"><b>5 · Görüntü akar</b><br>
+    <small>Önce doğrudan bağlantı denenir. Olmazsa TURN.</small></div>
+</div>
+
+<div class="note ok">
+  <b>Güvenlik: izleyici şifreyi göremez.</b> 9 haneli kod tek kullanımlıktır ve
+  kısa sürede geçersizleşir. Sunucu cihaz parolasını <b>hiçbir zaman</b>
+  görmez — parola ajanın kendi bilgisayarında doğrulanır.
+</div>
+
+<!-- ============ 5 MIMARI ============ -->
+<h2 id="mimari" style="margin-top:44px">5 · Mimari — üç parça</h2>
+
+<div class="grid g3">
+  <div class="card">
+    <h4>Müşteri tarafı</h4>
+    <ul class="chk yes">
+      <li>Tek bir <b>.exe</b> dosyası</li>
+      <li>Hiçbir şey kurman gerekmez (EXE çalıştır)</li>
+      <li>Ekran, fare, klavye yakalar</li>
+      <li>Onay penceresi gösterir</li>
+    </ul>
+    <p style="font-size:13.5px;color:var(--fg2)">
+      6. adımda <b>Windows servisi</b> olarak da çalışacak: bilgisayar açıldığında
+      kendiliğinden başlar, kullanıcı giriş yapmasa bile.
+    </p>
+  </div>
+  <div class="card">
+    <h4>Teknisyen tarafı</h4>
+    <ul class="chk yes">
+      <li><b>Kurulum yok</b>, tarayıcı yeter</li>
+      <li>Telefondan da çalışır</li>
+      <li>Yönetim paneli</li>
+      <li>Destek kuyruğu</li>
+    </ul>
+    <p style="font-size:13.5px;color:var(--fg2)">
+      Bileşen kurmam gerektiği için yeni sürüm otomatik gelir. Maliyet sıfır.
+    </p>
+  </div>
+  <div class="card">
+    <h4>Sunucu</h4>
+    <ul class="chk yes">
+      <li>Sinyal + API + e-posta</li>
+      <li>PostgreSQL (RLS ile izolasyon)</li>
+      <li><b>coturn</b> TURN sunucusu</li>
+      <li>Caddy (TLS)</li>
+    </ul>
+    <p style="font-size:13.5px;color:var(--fg2)">
+      <code class="inl">docker compose</code> ile tek komutla ayağa kalkar.
+      Hetzner'de ~€8/ay.
+    </p>
+  </div>
+</div>
+
+<div class="card" style="margin-top:16px">
+  <h4>Temel kurallar</h4>
+  <ul class="chk">
+    <li><b>Tamamı Go</b>, C yok. Windows dışında da derlenebilir.</li>
+    <li><b>Görüntü uçtan uca şifreli</b> — sunucu videoyu göremez.</li>
+    <li><b>Firma izolasyonu veritabanında</b>, uygulamada değil.</li>
+    <li><b>Dış bağımlılık sıfır:</b> Terraform yok, Kubernetes yok, üçüncü taraf
+        ölçüm servisi yok.</li>
+  </ul>
+</div>
+
+<!-- ============ 6 TEST ============ -->
+<h2 id="test" style="margin-top:44px">6 · Test matrisi</h2>
+<p class="sub">Neyin nerede test edildiği. "Yeşil" = gerçekten geçti.</p>
+
+<div class="card">
+  <table>
+    <tr><th>#</th><th>Test</th><th>Nasıl yapıldı</th><th>Sonuç</th></tr>
+    <tr><td>1</td><td>Tek oturum: bağlan, gör, tıkla, yaz, kes</td><td>e2e + gerçek masaüstü</td>
+        <td class="yes2">Geçti</td></tr>
+    <tr><td>2</td><td>Zorunlu relay (TURN üzerinden)</td><td>e2e, ortam değişkeni ile</td>
+        <td class="yes2">Geçti</td></tr>
+    <tr><td>3</td><td>Bağlantı kopunca 10 sn içinde geri gelme</td><td>e2e</td>
+        <td class="yes2">Geçti (2 hata bulundu, düzeltildi)</td></tr>
+    <tr><td>4</td><td>Aynı cihaza iki teknisyen</td><td>e2e</td>
+        <td class="yes2">Geçti</td></tr>
+    <tr><td>5</td><td>5 eşzamanlı oturum + 6. reddedilir</td><td>e2e</td>
+        <td class="yes2">Geçti</td></tr>
+    <tr><td>6</td><td>Yanlış parola / süresi geçmiş / başka firma</td><td>e2e</td>
+        <td class="yes2">Geçti</td></tr>
+    <tr><td>7</td><td><b>Farklı ağdan gerçek deneme</b></td>
+        <td><b>Senin ev Wi-Fi'n, arkadaşın evi, hücresel veri</b></td>
+        <td class="no">❌ Yapılamadı — gerçek sunucu lazım</td></tr>
+    <tr><td>8</td><td>TURN açık relay testi</td><td>CI'da gerçek coturn'a karşı</td>
+        <td class="yes2">Geçti (gerçek hatayı yakaladı)</td></tr>
+  </table>
+</div>
+
+<div class="note">
+  <b>Neden 7 numara önemli?</b> Aynı ağda çalışmak kolaydır — bilgisayarlar
+  birbirini doğrudan görür. Gerçek hayatta müşterinin modemi arkasındasındır
+  ve bağlantı ancak TURN ile kurulur. <b>Bu test geçmeden ürün satılamaz</b>,
+  çünkü "uzaktan destek" sözünün tek şartı bu. 6. adımda (gerçek sunucu)
+  yapılacak.
+</div>
+
+<div class="note warn">
+  <b>Yakılan yerler ve ölçümler:</b> Aynı ağda 17–22 fps. Farklı Wi-Fi'de
+  (arkadaşın evi) 15,4 fps bir kez çalıştı. Hücresel veri hiç bağlanamadı —
+  sebebi bulundu: <b>STUN tanımlı değildi</b> ve TURN dışarıdan erişilemiyordu.
+  İkisi de kodda düzeltildi (K-25), ama <b>tekrar denenmedi</b>.
+</div>
+
+<!-- ============ 7 KARARLAR ============ -->
+<h2 id="karar" style="margin-top:44px">7 · Kayıtlı kararlar</h2>
+<p class="sub">Tartışmalı konular ve kapatılan kararlar. Kodda
+<code class="inl">docs/KARARLAR.md</code>. "Geri alındı" yazanlar önemli.</p>
+
+<div class="card">
+<table>
+<tr><th>No</th><th>Karar</th></tr>
+<tr><td>K-01 → <b>K-10 ile geri alındı</b></td>
+    <td>Önce kendi TURN sunucumuzu yazacaktık. Sonra vazgeçildi: kanıtlanmış
+        <b>coturn</b> kullanılacak. Kendi yazımız güvenlik riski.</td></tr>
+<tr><td>K-02</td><td>TURN-TLS/443 ikinci bir IP'de (sinyalle çakışmasın)</td></tr>
+<tr><td>K-03</td><td>Video: Windows'un kendi H.264'ü (Media Foundation) + JPEG
+        karo yedek. <b>Açık kaynak kod derlenmiyor</b> (lisans/derleme sorunu).</td></tr>
+<tr><td>K-04</td><td>Sunucu: Hetzner, Almanya, ~€8/ay</td></tr>
+<tr><td>K-06</td><td>Kod imzası: OV sertifika, uygun fiyatlı. <b>EV (pahalı) gerekmiyor.</b></td></tr>
+<tr><td>K-07</td><td>KVKK: Almanya + standart sözleşme. <b>Avukat onayı bekliyor —
+        6. adımdan önce.</b></td></tr>
+<tr><td>K-08</td><td>Ücretsiz plan var (süre sınırlı) → ölçümü zorlamak için</td></tr>
+<tr><td>K-10</td><td>Canlıda <b>coturn</b>, testlerde Go tabanlı test TURN'ü.
+        İkisi de standart — ajan farkı anlamaz.</td></tr>
+<tr><td>K-11</td><td>Önce çalışan ürün, sonra prod altyapısı</td></tr>
+<tr><td>K-16</td><td>TURN'in açık relay'e izin vermediği <b>CI'da gerçek
+        sunucuya karşı test edilir</b> — bu sayede gerçek hatayı yakaladık</td></tr>
+<tr><td>K-24</td><td>Veritabanı şifreleme anahtarı sunucuya hiç verilmez</td></tr>
+<tr><td>K-25</td><td>STUN canlıda kendi sunucumuzdan. <b>Üçüncü taraf STUN
+        (Google/Cloudflare) yasak</b> — kullanıcı IP'lerini onlara sızdırır.</td></tr>
+<tr><td>K-26</td><td>Gözetimsiz erişim mimarisi: SYSTEM servisi → SYSTEM yardımcı →
+        kullanıcı arayüzü. Veri klasörü ACL denetimli, hata durumunda
+        <b>kapalı</b> (fail-closed).</td></tr>
+</table>
+</div>
+
+<div class="q">
+  <div class="qq">Neden RustDesk / HopToDesk gibi açık kaynakı kopyalamadık?</div>
+  <div class="qa">
+    İkisi de <b>AGPL-3.0</b> lisanslı. AGPL'nin 13. maddesi network kopyleft'i:
+    türev çalışma <b>kendi sunucunu açık kaynak yapmak zorunda</b>. Ticari ürün
+    için ölümcül. Ayrıca Alpemix'in kodu kapalı ve ToS'i tersine mühendislik
+    yasaklıyor.
+  </div>
+</div>
+
+<!-- ============ 8 RISK ============ -->
+<h2 id="risk" style="margin-top:44px">8 · Riskler ve bilinen sınırlar</h2>
+
+<div class="grid g2">
+  <div class="card">
+    <h4><span class="badge b-bad">YÜKSEK</span> Servis kipi denenmedi</h4>
+    <p style="font-size:14px;color:var(--fg2)">
+      Kod var, çalıştığı bilinmiyor. Hata olursa müşterinin bilgisayarı
+      açılmayabilir. <b>Sanal makinede denenmeden kimseye kurulmayacak.</b></p>
+  </div>
+  <div class="card">
+    <h4><span class="badge b-bad">YÜKSEK</span> Farklı ağdan test yok</h4>
+    <p style="font-size:14px;color:var(--fg2)">
+      Gerçek hayatta asıl olan durum hiç test edilmedi. Hücresel veri hiç
+      bağlanamadı. 6. adımın en önemli işi bu.</p>
+  </div>
+  <div class="card">
+    <h4><span class="badge b-wa">ORTA</span> CI'da 6 güvenlik testi kırık</h4>
+    <p style="font-size:14px;color:var(--fg2)">
+      Denetimle kapattığımız <b>yüksek bulgunun kendi testleri</b> "reddedilmeliydi,
+      kabul etti" diyor. Muhtemelen test ortamı yetkisi yetersiz — ama
+      doğrulanmadı. Gerçekten kapalı mı bilmiyoruz.</p>
+  </div>
+  <div class="card">
+    <h4><span class="badge b-wa">ORTA</span> Kabul edilen risk</h4>
+    <p style="font-size:14px;color:var(--fg2)">
+      Aynı Windows kullanıcısı hesabında çalışan zararlı yazılım, onay
+      penceresine tıklayabilir (K-26'ya yazıldı). Gerçekçi: o kullanıcı zaten
+      kendi bilgisayarında.</p>
+  </div>
+  <div class="card">
+    <h4><span class="badge b-wa">ORTA</span> Antivirüs uyarısı</h4>
+    <p style="font-size:14px;color:var(--fg2)">
+      İmzasız .exe "tanımayan yayımcı" uyarısı verir. Bora (tünel aracı)
+      doğrudan antivirüs karantinasına düştü — bu sadece bizim ürün değil,
+      <b>sektörün genel sorunu</b>. 6. adımda çözülecek.</p>
+  </div>
+  <div class="card">
+    <h4><span class="badge b-mut">DÜŞÜK</span> H.264 kalitesi</h4>
+    <p style="font-size:14px;color:var(--fg2)">
+      JPEG karo: statik masaüstünde iyi (0,3 Mbps), hareketli içerikte zayıf.
+      Bu doğrudan <b>satış fiyatını</b> etkiliyor.</p>
+  </div>
+</div>
+
+<!-- ============ 9 RAKIP ============ -->
+<h2 id="rakip" style="margin-top:44px">9 · Rakipler</h2>
+
+<div class="card">
+<table>
+<tr><th>Ürün</th><th>Güçlü yanı</th><th>Zayıf yanı</th></tr>
+<tr><td><b>Alpemix</b></td><td>MEB/kamu ağında TeamViewer engelleniyor,
+    Alpemix geçiyor. Bu yüzden yaygın.</td>
+    <td>1024-bit RSA (eskimiş), eski arayüz. Ücretsiz sürüm çok kısıtlı.
+    Fiyat düşmüş: 3.500 TL.</td></tr>
+<tr><td><b>RustDesk</b></td><td>Açık kaynak, güçlü topluluk, çok dilli</td>
+    <td><b>AGPL</b> — ticari kopyalanamaz. Karmaşık arayüz.</td></tr>
+<tr><td><b>Deskqo</b></td><td>Tek kişi geliştirmiş, basit</td>
+    <td>İmzasız, şirket yok, sürdürülebilirlik soru işareti.</td></tr>
+<tr><td><b>SmartDesk</b></td><td>RustDesk tabanlı</td>
+    <td>Fork olması AGPL riski. Kimlik sunucusu 502 veriyordu.</td></tr>
+<tr><td><b>NOXLINK</b></td><td>ERP modülü entegre</td>
+    <td>Ağır, uzak destek yan ürün.</td></tr>
+</table>
+</div>
+
+<div class="note ok">
+  <b>Bizim açımız:</b> Alpemix kadar basit, ama RustDesk'ten güvenliği ciddiye
+  alıyoruz (RLS, hash zincirli kayıt, uçtan uca şifreli, kendi sunucumuz).
+  Açık API, toplu kurulum, cihaz envanteri — bunlar hiçbirinde tam değil.
+  <br><br>
+  <b>Alpemix fiyat çökmesi</b> bizim lehimize: reseller'lerinden 2.442 TL'ye
+  alınıyorken kendi fiyatları 3.500 TL. Aradaki fark satış için yer bırakıyor.
+</div>
+
+<!-- ============ 10 PARA ============ -->
+<h2 id="para" style="margin-top:44px">10 · Para tarafı</h2>
+
+<div class="grid g2">
+  <div class="card">
+    <h4>Sunucu (6. adımda)</h4>
+    <table>
+      <tr><td>Hetzner CX33 + ek IP</td><td class="mono">€8,49/ay</td></tr>
+      <tr><td>Yedekleme (ayrı lokasyon)</td><td class="mono">~€2/ay</td></tr>
+      <tr><td><b>Toplam başlangıç</b></td><td class="mono"><b>~€10/ay</b></td></tr>
+    </table>
+    <p style="font-size:13.5px;color:var(--fg2);margin-top:10px">
+      300 oturum/ay × 30 dk varsayımıyla ~40 GB trafik. AB paketi 20 TB'ye kadar
+      ücretsiz — doğrulanacak.</p>
+  </div>
+  <div class="card">
+    <h4>Müşteriye ne kadar fatura?</h4>
+    <p style="font-size:14px;color:var(--fg2)">
+      <b>Henüz belirlenmedi.</b> Fiyat, relay oranı ve bant ölçümlerine bağlı —
+      bunlar ancak gerçek sunucuda ölçülebilecek. KDV ve KVKK metinleri de
+      6. adım öncesi hazırlanacak.</p>
+    <p style="font-size:13.5px;color:var(--fg2)">
+      Bilinen: 1 saat relay ≈ 2,7 GB çıkış trafiği.</p>
+  </div>
+</div>
+
+<div class="note">
+  <b>Şu ana kadar hiç para harcanmadı.</b> Sunucu kiralama, sertifika, kod
+  imzası — hepsi 6. adımda, hepsi ölçüm sonrası. Önce ürün çalışsın.
+</div>
+
+<!-- ============ 11 KIM ============ -->
+<h2 id="kim" style="margin-top:44px">11 · Kim ne yapıyor</h2>
+<p class="sub">Proje iki taraf arasında bölünmüş durumda — kafa karışmasın.</p>
+
+<div class="do-dont">
+  <div class="card">
+    <h4 class="yes2">✅ Claude Code yapar</h4>
+    <ul class="chk yes">
+      <li><b>Tüm kod değişikliği</b></li>
+      <li>Test yazma, çalıştırma</li>
+      <li>Güvenlik denetimi</li>
+      <li>Araştırma (teknik kararlar)</li>
+      <li>Commit atmak</li>
+    </ul>
+    <p style="font-size:13.5px;color:var(--fg2)">
+      Çalıştığı klasör:<br>
+      <code class="inl">C:\Users\Erayc\Desktop\segnox-uzaktan-erisim</code>
+    </p>
+  </div>
+  <div class="card">
+    <h4 style="color:var(--acc)">🤖 Bu asistan yapar</h4>
+    <ul class="chk yes">
+      <li><b>GitHub'a push</b> (izin ayarı yüzünden engelli)</li>
+      <li><b>CI sonuçlarını okumak</b> ve kırıkları teşhis etmek</li>
+      <li><b>Bu siteyi güncellemek</b></li>
+      <li>Web araştırması (rakip, fiyat, hukuk)</li>
+      <li>Senin testlerini yönlendirmek</li>
+    </ul>
+    <p style="font-size:13.5px;color:var(--fg2)">
+      <b>Kural:</b> Aynı dosyaya ikimiz de dokunmayız. Site = benim alanım,
+      kod = Claude Code'un alanı.</p>
+  </div>
+</div>
+
+<div class="card">
+  <h4>🤔 Sen yaparsın</h4>
+  <ul class="chk">
+    <li><b>Gerçek testler</b> — sanal makinede kurma, kilit ekranı, UAC</li>
+    <li><b>Kararlar</b> — fiyat, KVKK, sunucu, sertifika</li>
+    <li><b>Karar verme</b> — hangi seçenek, hangi yol</li>
+    <li>Bu ansiklopediyi güncel tutmak için bana düşen bilgiyi vermek</li>
+  </ul>
+</div>
+
+<!-- ============ 12 DOSYA ============ -->
+<h2 id="dosya" style="margin-top:44px">12 · Dosya haritası</h2>
+<p class="sub">Nerede ne var. Site: <code class="inl">C:\Users\Erayc\Desktop\segnox-site</code></p>
+
+<div class="card">
+<table>
+<tr><th>Dosya</th><th>Ne içerir</th></tr>
+<tr><td class="mono">docs/KARARLAR.md</td><td>26 karar. Kodda "Neden böyle?" sorusunun cevabı.</td></tr>
+<tr><td class="mono">docs/ACIK-KONULAR.md</td><td>13 açık soru. <b>Senin kararını bekleyen işler.</b></td></tr>
+<tr><td class="mono">docs/RAPOR-MVP.md</td><td>Adım 1–4b sonuç raporu, eksikler listesi.</td></tr>
+<tr><td class="mono">docs/DEVAM.md</td><td>Claude Code'un kaldığı yer.</td></tr>
+<tr><td class="mono">PLAN.md</td><td>Adım tablosu, mimari, test matrisi.</td></tr>
+<tr><td class="mono">cmd/segnox-server/config.go</td>
+    <td>Sunucu ayarları. <code class="inl">SEGNOX_STUN</code>, <code class="inl">SEGNOX_TURN_URLS</code> burada.</td></tr>
+<tr><td class="mono">internal/testutil/turnserver/</td>
+    <td>Test için TURN sunucusu (yalnız <b>UDP</b> — bu yüzden TCP tüneli gerekli oldu).</td></tr>
+<tr><td class="mono">deploy/</td>
+    <td>Sunucu paketi: Docker, coturn, Caddy, yedekleme betikleri.</td></tr>
+</table>
+</div>
+
+<div class="note">
+  <b>Repo gizli</b> (private) — <code class="inl">Eraycann/segnox-uzaktan-erisim</code>.
+  Kod imzası olmayan tek EXE çıktısı. Bu site açık, kod kapalı.
+</div>
+
+<!-- ============ 13 ARAC ============ -->
+<h2 id="arac" style="margin-top:44px">13 · Kullanılan araçlar</h2>
+
+<div class="grid g2">
+  <div class="card">
+    <h4>Ücretsiz olanlar</h4>
+    <table>
+      <tr><td>GitHub Pages</td><td>Bu site</td></tr>
+      <tr><td>cloudflared</td><td>Sinyal sunucusuna geçici HTTPS adresi</td></tr>
+      <tr><td>PostgreSQL (Docker)</td><td>Veritabanı</td></tr>
+      <tr><td>coturn (Docker)</td><td>TURN/STUN sunucusu</td></tr>
+      <tr><td>Pion (Go)</td><td>WebRTC kütüphanesi — MIT, kendi kodumuz</td></tr>
+      <tr><td>Go</td><td>Programlama dili</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <h4>Denenen ama olmayan</h4>
+    <table>
+      <tr><td class="no">bore</td><td>TCP tüneli. <b>Antivirüs karantinaya aldı</b>,
+          kaynaktan derlemek için 6 GB Visual Studio gerekiyordu. <b>Vazgeçildi.</b></td></tr>
+      <tr><td class="no">Pinggy</td><td>SSH tüneli. Bağlantı kuruldu ama
+          <b>ücretsiz TCP adresi vermedi.</b></td></tr>
+      <tr><td class="no">Windows Sandbox</td><td>Senin Windows'un <b>Home</b> —
+          bu özellik sadece Pro/Enterprise'da.</td></tr>
+      <tr><td class="warn2">VMware Pro</td><td><b>Var</b> — sanal makine için
+          kullanılabilir. (İçindeki Kali bu ajanı test etmez, ajan Windows'ta.)</td></tr>
+    </table>
+  </div>
+</div>
+
+<h3 style="margin-top:34px">Ne sırada</h3>
+<div class="card">
+<ul class="chk">
+  <li><b>Şimdi:</b> güvenlik testlerinin CI'da düzeltilmesi <span class="badge b-warn">1 gün</span></li>
+  <li><b>Sonra:</b> sanal makinede servis denemesi (10 maddelik liste) <span class="badge b-warn">1 gün</span></li>
+  <li><b>5c:</b> yeniden başlatma sonrası oturuma devam <span class="badge b-mut">1 gün</span></li>
+  <li><b>5d:</b> H.264 akıcı video <span class="badge b-mut">2-3 gün</span></li>
+  <li><b>6:</b> gerçek sunucu + farklı ağdan test + fiyat/KVKK <span class="badge b-info">ASIL</span></li>
+</ul>
+<p style="font-size:13.5px;color:var(--fg2);margin-top:12px">
+  Süreler tahmin. <b>6. adımda para harcanmaya başlanır</b> — o ana kadar 0 TL.
+</p>
+</div>
+
+<p style="color:var(--fg3);font-size:13px;margin-top:40px;padding-top:20px;border-top:1px solid var(--line)">
+  Bu sayfa <b>bu sohbetin yerine geçer.</b> Buradan araştır, karar ver, bana
+  sonucu söyle — güncellemesini yaparım.
+</p>
+
+</div>
+</body>
+</html>
