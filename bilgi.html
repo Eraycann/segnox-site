@@ -103,15 +103,53 @@
   <li>Yedekleme + geri yükleme + otomatik geri yükleme testi</li>
 </ul>
 
-<h3><span class="badge b-warn">YAZILDI, HENÜZ DENENMEDİ</span> 5a/5b dalgası</h3>
+<h3><span class="badge b-warn">YAZILDI, HENÜZ DENENMEDİ</span> 5a–5d dalgası</h3>
 <ul class="chk">
-  <li><b>Windows servisi</b> — ProgramData klasörü yalnız SYSTEM + Administrators; kurma/kaldırma/başlatma hazır</li>
+  <li><b>H.264 akıcı video</b> — Windows'un kendi kodlayıcısı, WebRTC kanalından.
+      Bant <b>%57 düştü</b>. JPEG karo yedeğine otomatik düşüyor.</li>
+  <li><b>Yeniden başlat + devam</b> — bilgisayar açılınca oturum, müşteriden
+      yeniden onay istemeden sürüyor</li>
+  <li><b>Windows servisi</b> — ProgramData klasörü yalnız SYSTEM + Administrators;
+      kurma/kaldırma/başlatma hazır</li>
   <li><b>Sessiz kurulum</b> — <code class="inl">/S /TOKEN=xxx</code>, sihirbaz çıkmadan</li>
-  <li><b>Süreç ipc'si</b> — servis ile yardımcı arasında adlandırılmış boru, izni daraltılmış</li>
+  <li><b>Süreç ipc'si</b> — servis ile yardımcı arasında adlandırılmış boru,
+      izni daraltılmış</li>
   <li><b>Giriş masaüstü takibi</b> — UAC ve kilit ekranı için etkin masaüstü izleniyor</li>
-  <li><b>Güvenlik denetimi</b> — iki tur yapıldı, yüksek + orta bulgu kapatıldı</li>
+  <li><b>Güvenlik denetimi</b> — 4 tur, 16 düşük + 3 orta bulgu kapatıldı</li>
 </ul>
+
+<h4>H.264 ölçümü — sentetik 1080p, e2e</h4>
+<div class="card">
+  <table>
+    <tr><th>Kip</th><th>İlk kare</th><th>FPS</th><th>Bant</th></tr>
+    <tr><td class="yes2"><b>H.264</b></td><td>622 ms</td><td>24,0</td>
+        <td class="yes2"><b>1450 kbit/s</b></td></tr>
+    <tr><td>JPEG karo</td><td>1042 ms</td><td>26,4</td><td>3392 kbit/s</td></tr>
+  </table>
+  <div class="note warn">
+    <b>Sentetik ekranla ölçüldü.</b> Gerçek masaüstünde sonuç farklı olabilir.
+    İlk kare de hızlandı (1042 → 622 ms). Bant <b>yaklaşık %57 azaldı</b> —
+    bu doğrudan sunucu maliyetini etkileyen en önemli ölçüm.
+  </div>
+  <div class="note bad">
+    <b>İki sorun açık:</b>
+    <ul style="margin:10px 0 0">
+      <li><b>İnce renkli yazı bulanıklaşıyor</b> — 1 piksel genişliğinde renkli
+          çizgiler büyük ölçüde kayboluyor. Siyah-beyaz yazı sorunsuz.</li>
+      <li><b>Anahtar kareler büyük (~510 KB)</b> — düzenli gönderilmiyor,
+          sadece tarayıcı istediğinde veya monitör değişince.</li>
+    </ul>
+  </div>
+</div>
+
 <div class="note warn">
+  <b>Neden bu kadar önemli:</b> Relay ücreti çıkış trafiğine göre ödeniyor.
+  Bant yarıya inince, 1 saat relay ≈ 2,7 GB yerine ≈ 1,2 GB olur.
+  <b>Sunucu maliyeti doğrudan bu ölçüme bağlı.</b> Bu yüzden H.264
+  gerçek ekranda doğrulanmadan "bitti" sayılmaz.
+</div>
+
+<div class="note">
   <b>Neden "denenmedi":</b> Bu kod bir ajanı Windows servisi olarak, SYSTEM
   yetkisiyle, başka bir kullanıcının oturumunda çalıştırıyor. Bu sadece
   <b>gerçek bir makinede yönetici yetkisiyle</b> denenebilir. Otomatik testler
@@ -582,6 +620,13 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 <tr><td>K-26</td><td>Gözetimsiz erişim mimarisi: SYSTEM servisi → SYSTEM yardımcı →
         kullanıcı arayüzü. Veri klasörü ACL denetimli, hata durumunda
         <b>kapalı</b> (fail-closed).</td></tr>
+<tr><td>K-27</td><td>Yeniden başlatma sonrası devam: yalnız <b>servis kipinde</b>,
+        yalnız <b>kontrol rolünde</b>, yalnız <b>cihaz parolası varken</b>.
+        Devam anahtarı <b>tek kullanımlık, 20 dakika</b> ve <b>sunucudan
+        geçmiyor</b>.</td></tr>
+<tr><td>K-28</td><td>H.264: Windows'un kendi Media Foundation kodlayıcısı,
+        Pion video track. Encoder yoksa veya hata verirse JPEG karoya düşüyor.
+        <b>Anahtar kareler sınırlandırılmalı</b> (şu an 510 KB, açık iş).</td></tr>
 </table>
 </div>
 

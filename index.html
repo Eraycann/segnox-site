@@ -158,6 +158,12 @@
 
         <h3 style="margin-top:22px"><span class="badge b-warn">YAZILDI, DENENMEDİ</span> Yeni yazılan</h3>
         <ul class="chk">
+          <li><b>H.264 akıcı video</b> — Windows'un kendi kodlayıcısı, WebRTC
+              kanalından. Bant <b>%57 düştü</b> (1450 → 3392 kbit/s)
+              <span class="mono">2af392c</span></li>
+          <li><b>Yeniden başlat + devam</b> — bilgisayar açılınca oturum,
+              müşteriden yeniden onay istemeden sürüyor
+              <span class="mono">0f9d1f5</span></li>
           <li><b>Windows servisi</b> — ProgramData klasörü yalnız SYSTEM ve
               Administrators erişimiyle açılıyor; servis kurma/kaldırma/başlatma
               hazır <span class="mono">34d584d</span></li>
@@ -168,30 +174,29 @@
               <span class="mono">0b0bab8</span></li>
           <li><b>Giriş masaüstü takibi</b> — UAC ve kilit ekranı için etkin
               masaüstü izleniyor <span class="mono">b45109f</span></li>
-          <li><b>Güvenlik denetimi</b> — iki tur yapıldı. Yüksek bulgu
-              (veri klasörü ele geçirme) ve orta bulgu (SYSTEM yetkisiyle
-              dosya aktarımı) kapatıldı <span class="mono">38e21be</span></li>
+          <li><b>Güvenlik denetimi</b> — 4 tur, 16 düşük bulgu + 3 orta bulgu
+              kapatıldı</li>
         </ul>
         <p style="font-size:13.5px;color:var(--fg2);margin-top:12px">
-          <b>Bunlar çalıştığı kanıtlanmadı.</b> Gerçek servis kurulumu,
-          SYSTEM olarak çalışma, UAC ve kilit ekranı hiç denenmedi —
-          yönetici yetkisi ve bir sanal makine gerekiyor. Bir kabul edilen
-          risk var: aynı kullanıcıdaki zararlı yazılım onay penceresine
-          zaten tıklayabiliyor. Adım tamamlanmış sayılmaz.
+          <b>Bunlar gerçek makinede denenmedi.</b> Gerçek servis kurulumu,
+          SYSTEM olarak çalışma, UAC, kilit ekranı, gerçek yeniden başlatma ve
+          <b>gerçek ekranda H.264 okunaklılığı</b> — hiçbiri denenmedi.
+          Otomatik testler "derleniyor ve testleri geçiyor" diyor, "gerçekten
+          çalışıyor" demiyor. Adım tamamlanmış sayılmaz.
         </p>
       </div>
 
       <div class="card">
         <h3><span class="badge b-bad">EKSİK</span> Elinde olmayan</h3>
         <ul class="chk no">
-          <li><b>Gözetimsiz erişim</b> — <span class="badge b-warn">YAPILIYOR</span>
+          <li><b>Gözetimsiz erişim</b> — <span class="badge b-warn">YAZILDI, DENENMEDİ</span>
               Servis kodu, sessiz kurulum ve yardımcı süreç hazır
-              (<span class="mono">0b0bab8</span>); yardımcı henüz arayüze
-              bağlı değil, <b>kullanıma hazır değil</b></li>
+              (<span class="mono">0b0bab8</span>); gerçek makinede hiç denenmedi</li>
           <li><b>Yönetici parolası geçişi</b> — UAC/kilit ekranı için kod yazıldı,
               <b>hiç denenmedi</b> <span class="badge b-warn">DOĞRULANMADI</span></li>
-          <li><b>H.264 akıcı video</b> — JPEG karo, hareketli içerikte düşük kalite
-              <span class="badge b-mut">5. adım</span></li>
+          <li><b>H.264'te ince renkli yazı bulanıklaşıyor</b> — 1 piksel genişliğinde
+              renkli çizgiler kayboluyor, siyah-beyaz yazı sorunsuz.
+              <b>Senin gözünle bakman gerekiyor</b></li>
           <li><b>Toplu kurulum</b> (MSI / GPO / Intune)
               <span class="badge b-mut">6. adım</span></li>
           <li><b>Kod imzası</b> — antivirüs "tanımayan yayımcı" diyebilir
