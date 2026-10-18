@@ -54,17 +54,18 @@
   <div class="wrap">
     <a href="#durum">1 · Durum</a>
     <a href="#ci">2 · CI nedir</a>
-    <a href="#sozluk">3 · Sözlük</a>
-    <a href="#akis">4 · Bağlantı akışı</a>
-    <a href="#mimari">5 · Mimari</a>
-    <a href="#test">6 · Test matrisi</a>
-    <a href="#karar">7 · Kararlar</a>
-    <a href="#risk">8 · Riskler</a>
-    <a href="#rakip">9 · Rakipler</a>
-    <a href="#para">10 · Para</a>
-    <a href="#kim">11 · Kim ne yapıyor</a>
-    <a href="#dosya">12 · Dosya haritası</a>
-    <a href="#arac">13 · Araçlar</a>
+    <a href="#ag">3 · Ağ (STUN/TURN)</a>
+    <a href="#sozluk">4 · Sözlük</a>
+    <a href="#akis">5 · Bağlantı akışı</a>
+    <a href="#mimari">6 · Mimari</a>
+    <a href="#test">7 · Test matrisi</a>
+    <a href="#karar">8 · Kararlar</a>
+    <a href="#risk">9 · Riskler</a>
+    <a href="#rakip">10 · Rakipler</a>
+    <a href="#para">11 · Para</a>
+    <a href="#kim">12 · Kim ne yapıyor</a>
+    <a href="#dosya">13 · Dosya haritası</a>
+    <a href="#arac">14 · Araçlar</a>
   </div>
 </div>
 
@@ -203,7 +204,151 @@ deneyen bilgisayarlar.</b> GitHub'da çalışır, <b>senin bilgisayarına hiçbi
 </div>
 
 <!-- ============ 3 SOZLUK ============ -->
-<h2 id="sozluk" style="margin-top:44px">3 · Sözlük</h2>
+<h2 id="ag" style="margin-top:44px">3 · Ağ nasıl kuruluyor (STUN / TURN)</h2>
+<p class="sub">Uzaktan bağlantının en kritik ve en çok kafa karıştıran parçası.
+Buradaki diyagramları anlayan, ürünün en önemli kısmını anlamış olur.</p>
+
+<h3>Problem: iç adreslerin dünyada karşılığı yok</h3>
+
+<div class="card">
+  <div class="flow">
+    <div class="card tight"><b>Müşterinin bilgisayarı</b><br>
+      <small>Ev router'ı arkasında.<br>
+      İç adres: <code class="inl">192.168.1.50</code><br>
+      <span class="no">Dünyada bu adres tekildir — dışarıdan erişilemez.</span></small></div>
+    <div class="card tight"><b>Teknisyenin telefonu</b><br>
+      <small>Hücresel veri.<br>
+      İç adres: <code class="inl">10.0.0.7</code><br>
+      <span class="no">Operatör içinde anlamlı, dışarıdan erişilemez.</span></small></div>
+    <div class="card tight"><b>Sunucu</b><br>
+      <small>Genel IP var, herkes erişebilir.<br>
+      İçerideki adresleri <b>bilir</b> ama <b>bağlatamaz</b> —
+      modem portu kapatır.</small></div>
+  </div>
+  <div class="note">
+    <b>Sonuç:</b> İki taraf da "kapının arkasında". Karşılıklı olarak
+    birbirini göremiyorlar. Burada iki yardımcı devreye girer.
+  </div>
+</div>
+
+<h3>STUN — sadece adres sorar, veri taşımaz</h3>
+<div class="card">
+  <pre><code>  Müşteri ────&gt; STUN sunucusu: "Dışarıdan IP'm ne görünüyor?"
+           &lt;──── 78.180.44.9
+
+  Sonuç: adresi öğrendik.  Ama veri hâlâ taşınmadı.
+         Modem portu kapatıysa bağlantı yine kurulamaz.</code></pre>
+  <table>
+    <tr><th>Ne yapar</th><td>Genel IP adresini öğretir</td></tr>
+    <tr><th>Ne taşır</th><td>Neredeyse hiçbir şey (sadece soru-cevap)</td></tr>
+    <tr><th>Maliyet</th><td class="yes2">Sıfır — kendi sunucumuzda</td></tr>
+    <tr><th>Yeter mi</th><td><span class="warn2">Çoğu durumda evet.</span> Modemlerde
+      port genelde açıktır.</td></tr>
+  </table>
+  <div class="note ok">
+    <b>Bugünkü hata buradaydı:</b> <code class="inl">SEGNOX_STUN</code> hiç
+    tanımlı değildi. Bu yüzden ajan dış IP'sini öğrenemiyor, doğrudan
+    bağlantı hiç denenemiyordu. Düzeltildi (K-25) ama tekrar test edilmedi.
+  </div>
+</div>
+
+<h3>TURN — veriyi kendisi taşır</h3>
+<div class="card">
+  <pre><code>  Teknisyen ──&gt; ╔═══════════╗ ──&gt; Müşteri
+            ║   TURN     ║    (veri buradan geçiyor)
+            ║  sunucusu  ║
+            ╚═══════════╝</code></pre>
+  <table>
+    <tr><th>Ne yapar</th><td>İki tarafı kendi üzerinden bağlar</td></tr>
+    <tr><th>Güvenilir mi</th><td class="yes2">Evet — %100 çalışır, her ağda</td></tr>
+    <tr><th>Hız</th><td class="warn2">En yavaş yol. +30–80 ms gecikme</td></tr>
+    <tr><th>Maliyet</th><td class="no">Sunucudan <b>çıkan</b> trafik = para</td></tr>
+  </table>
+  <div class="note bad">
+    <b>1 saat relay ≈ 2,7 GB</b> giden trafik. Bu yüzden relay oranı
+    doğrudan maliyeti belirler.
+  </div>
+</div>
+
+<h3>Karar nasıl veriliyor — ICE</h3>
+<div class="card">
+<pre><code>  Sırayla dener, ilk çalışan kazanır:
+
+  1. host   192.168.1.50       Aynı Wi-Fi'da        ✓ EN HIZLI, ücretsiz
+  2. srflx  78.180.44.9        STUN ile bulundu     ✓ HIZLI,    ücretsiz
+  3. relay  TURN üzerinden     Her yerde çalışır    ✗ YAVAŞ,    PARALI</code></pre>
+  <p style="font-size:14.5px;color:var(--fg2)">
+    Bu sıralamaya <b>ICE</b> denir. Kararı <b>otomatik</b> verir —
+    kullanıcı hiçbir şey ayarlamaz.
+  </p>
+</div>
+
+<h3>Neyi ölçüyoruz — ajan logundaki satır</h3>
+<div class="card">
+  <table>
+    <tr><th>Log</th><th>Anlamı</th><th>Para</th></tr>
+    <tr><td class="mono">"candidate_type":"host"</td><td>Aynı ağ, doğrudan</td>
+        <td class="yes2">Yok</td></tr>
+    <tr><td class="mono">"candidate_type":"srflx"</td><td>STUN ile doğrudan bulundu</td>
+        <td class="yes2">Yok</td></tr>
+    <tr><td class="mono">"candidate_type":"relay"</td><td>TURN üzerinden</td>
+        <td class="no">Var</td></tr>
+    <tr><td class="mono">"candidate_type":""</td>
+        <td><b>Hiçbiri çalışmadı — bağlantı kurulamadı</b></td>
+        <td class="no">—</td></tr>
+  </table>
+  <div class="note warn">
+    <b>Senin testinde telefon hücresel veride <span class="mono">""</span>
+    çıktı</b> — yani hiçbir yol çalışmadı. Arkadaşın ev Wi-Fi'sinde de aynı.
+    Bu satır bizim en önemli ölçüm metriklerimizden biri.
+  </div>
+</div>
+
+<h3>Biz nasıl kullanıyoruz</h3>
+<div class="card">
+  <pre><code><span class="c-cm"># Sunucu başlarken verilir (6. adımda gerçek sunucu adresi olacak)</span>
+SEGNOX_STUN=<span class="c-ok">stun:sunucu.com:3478</span>
+SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<span class="c-ok">turn:sunucu.com:3478?transport=tcp</span></code></pre>
+  <table>
+    <tr><th>Ne</th><th>Nerede çalışır</th><th>Karar</th></tr>
+    <tr><td>STUN</td><td>Kendi <b>coturn</b> sunucumuzda</td>
+        <td class="yes2">Kabul (K-25)</td></tr>
+    <tr><td>TURN</td><td>Kendi <b>coturn</b> sunucumuzda</td>
+        <td class="yes2">Kabul (K-10)</td></tr>
+    <tr><td>Google / Cloudflare STUN</td><td>Dışarıda</td>
+        <td class="no"><b>Yasak</b> — kullanıcı IP'lerini onlara sızdırır (KVKK)</td></tr>
+  </table>
+  <div class="note">
+    <b>Tek sunucu, iki iş:</b> coturn hem STUN hem TURN yapar.
+    Anahtar (HMAC) sadece bizim sunucumuz üretir — anahtarsız kimse
+    relay kullanamaz, hem de kimin ne kadar kullandığını ölçebiliriz.
+  </div>
+</div>
+
+<h3>Neden ev bilgisayarı olmadı, VPS olacak</h3>
+<div class="card">
+  <table>
+    <tr><th></th><th>Ev bilgisayarın</th><th>Kiralanmış sunucu (VPS)</th></tr>
+    <tr><td>Ne olduğu</td><td>Evindeki bir cihaz</td><td>Sokakta duran, kiralanmış bilgisayar</td></tr>
+    <tr><td>Adresi</td><td class="no">Gizli — router arkasında</td>
+        <td class="yes2">Genel, herkese açık</td></tr>
+    <tr><td>Dışarıdan istek</td><td class="no">Router "kapıyı açmam" der</td>
+        <td class="yes2">Doğrudan gelir</td></tr>
+    <tr><td>Ne zaman açık</td><td class="no">Sen açık oturumdayken</td>
+        <td class="yes2">7/24</td></tr>
+    <tr><td>Adres değişir mi</td><td class="no">Evet, her bağlanmada</td>
+        <td class="yes2">Sabit</td></tr>
+  </table>
+  <div class="note ok">
+    <b>Özet:</b> Ev bilgisayarı <b>bir binanın içinde</b> — adresi yok.
+    VPS <b>sokaktaki bir dükkân</b> — adresi var, kapısı açık.
+    Cloudflare tüneli sadece <b>HTTP için</b> bir istisnaydı; görüntü
+    UDP taşıdığı için işe yaramadı. VPS'te istisna gerekmiyor.
+  </div>
+</div>
+
+<!-- ============ 3 SOZLUK ============ -->
+<h2 id="sozluk" style="margin-top:44px">4 · Sözlük</h2>
 <p class="sub">Kodda geçen terimler. Teknik bilgi gerektirmiyor.</p>
 
 <div class="card">
@@ -283,7 +428,7 @@ deneyen bilgisayarlar.</b> GitHub'da çalışır, <b>senin bilgisayarına hiçbi
 </div>
 
 <!-- ============ 4 AKIS ============ -->
-<h2 id="akis" style="margin-top:44px">4 · Bağlantı akışı</h2>
+<h2 id="akis" style="margin-top:44px">5 · Bağlantı akışı</h2>
 <p class="sub">Teknisyen 9 haneli kodu girince ne olur?</p>
 
 <div class="flow">
@@ -306,7 +451,7 @@ deneyen bilgisayarlar.</b> GitHub'da çalışır, <b>senin bilgisayarına hiçbi
 </div>
 
 <!-- ============ 5 MIMARI ============ -->
-<h2 id="mimari" style="margin-top:44px">5 · Mimari — üç parça</h2>
+<h2 id="mimari" style="margin-top:44px">6 · Mimari — üç parça</h2>
 
 <div class="grid g3">
   <div class="card">
@@ -361,7 +506,7 @@ deneyen bilgisayarlar.</b> GitHub'da çalışır, <b>senin bilgisayarına hiçbi
 </div>
 
 <!-- ============ 6 TEST ============ -->
-<h2 id="test" style="margin-top:44px">6 · Test matrisi</h2>
+<h2 id="test" style="margin-top:44px">7 · Test matrisi</h2>
 <p class="sub">Neyin nerede test edildiği. "Yeşil" = gerçekten geçti.</p>
 
 <div class="card">
@@ -403,7 +548,7 @@ deneyen bilgisayarlar.</b> GitHub'da çalışır, <b>senin bilgisayarına hiçbi
 </div>
 
 <!-- ============ 7 KARARLAR ============ -->
-<h2 id="karar" style="margin-top:44px">7 · Kayıtlı kararlar</h2>
+<h2 id="karar" style="margin-top:44px">8 · Kayıtlı kararlar</h2>
 <p class="sub">Tartışmalı konular ve kapatılan kararlar. Kodda
 <code class="inl">docs/KARARLAR.md</code>. "Geri alındı" yazanlar önemli.</p>
 
@@ -446,7 +591,7 @@ deneyen bilgisayarlar.</b> GitHub'da çalışır, <b>senin bilgisayarına hiçbi
 </div>
 
 <!-- ============ 8 RISK ============ -->
-<h2 id="risk" style="margin-top:44px">8 · Riskler ve bilinen sınırlar</h2>
+<h2 id="risk" style="margin-top:44px">9 · Riskler ve bilinen sınırlar</h2>
 
 <div class="grid g2">
   <div class="card">
@@ -491,7 +636,7 @@ deneyen bilgisayarlar.</b> GitHub'da çalışır, <b>senin bilgisayarına hiçbi
 </div>
 
 <!-- ============ 9 RAKIP ============ -->
-<h2 id="rakip" style="margin-top:44px">9 · Rakipler</h2>
+<h2 id="rakip" style="margin-top:44px">10 · Rakipler</h2>
 
 <div class="card">
 <table>
@@ -521,7 +666,7 @@ deneyen bilgisayarlar.</b> GitHub'da çalışır, <b>senin bilgisayarına hiçbi
 </div>
 
 <!-- ============ 10 PARA ============ -->
-<h2 id="para" style="margin-top:44px">10 · Para tarafı</h2>
+<h2 id="para" style="margin-top:44px">11 · Para tarafı</h2>
 
 <div class="grid g2">
   <div class="card">
@@ -552,7 +697,7 @@ deneyen bilgisayarlar.</b> GitHub'da çalışır, <b>senin bilgisayarına hiçbi
 </div>
 
 <!-- ============ 11 KIM ============ -->
-<h2 id="kim" style="margin-top:44px">11 · Kim ne yapıyor</h2>
+<h2 id="kim" style="margin-top:44px">12 · Kim ne yapıyor</h2>
 <p class="sub">Proje iki taraf arasında bölünmüş durumda — kafa karışmasın.</p>
 
 <div class="do-dont">
@@ -596,7 +741,7 @@ deneyen bilgisayarlar.</b> GitHub'da çalışır, <b>senin bilgisayarına hiçbi
 </div>
 
 <!-- ============ 12 DOSYA ============ -->
-<h2 id="dosya" style="margin-top:44px">12 · Dosya haritası</h2>
+<h2 id="dosya" style="margin-top:44px">13 · Dosya haritası</h2>
 <p class="sub">Nerede ne var. Site: <code class="inl">C:\Users\Erayc\Desktop\segnox-site</code></p>
 
 <div class="card">
@@ -622,7 +767,7 @@ deneyen bilgisayarlar.</b> GitHub'da çalışır, <b>senin bilgisayarına hiçbi
 </div>
 
 <!-- ============ 13 ARAC ============ -->
-<h2 id="arac" style="margin-top:44px">13 · Kullanılan araçlar</h2>
+<h2 id="arac" style="margin-top:44px">14 · Kullanılan araçlar</h2>
 
 <div class="grid g2">
   <div class="card">
