@@ -247,3 +247,9 @@ footer a { color: var(--fg2); }
   border-radius: 6px; padding: 2px 8px; font-family: var(--mono);
   font-size: 12.5px; margin: 2px 4px 2px 0;
 }
+/* ---------- dugme ---------- */
+.btn { display:inline-block; margin-top:4px; padding:8px 16px; border-radius:8px;
+       background:var(--acc); color:#04121f; font-weight:600; font-size:14px;
+       text-decoration:none; transition:filter .15s ease; }
+.btn:hover { filter:brightness(1.1); }
+.btn.ghost { background:transparent; color:var(--acc); border:1px solid var(--acc); }

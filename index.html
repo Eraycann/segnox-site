@@ -29,15 +29,10 @@
   <div class="wrap">
     <a class="brand" href="index.html">SEG<span>NOX</span></a>
     <div class="links">
-      <a href="index.html" class="on">Genel Bakış</a>
-      <a href="bilgi.html">Bilgi Ansiklopedisi</a>
-      <a href="nasil.html">Nasıl Çalışır</a>
-      <a href="simulator.html">UX Simülatörü</a>
-      <a href="basla.html">Başla</a>
-      <a href="musteri.html">Müşteri</a>
-      <a href="bayi.html">Bayi / Teknisyen</a>
+      <a href="index.html" class="on">Genel Bak&#305;&#351;</a>
+      <a href="basla.html">Rehber</a>
+      <a href="bilgi.html">El Kitab&#305;</a>
       <a href="mimari.html">Mimari</a>
-      <a href="gelistirici.html">Geliştirici</a>
     </div>
   </div>
 </nav>
@@ -298,134 +293,40 @@
   </div>
 </section>
 
-<!-- ======= ALPENEMAlS ======= -->
+<!-- ======= BILGIYE YONLENDIR ======= -->
 <section>
   <div class="wrap">
-    <h2><span class="n">04</span>Alpemix'in yerine geçiyor mu?</h2>
-    <div class="grid g2">
-      <div class="card">
-        <h4>Alpemix'te var, bizde yok</h4>
-        <ul class="chk no">
-          <li>MEB okullarına dağıtım (on yıllık kanal)</li>
-          <li>Raspberry Pi, Linux, iOS istemcileri</li>
-          <li>Çoklu izleyici (altyapımız hazır, panelde açılacak)</li>
-          <li>Oturum video kaydı</li>
-          <li>Web sitesine gömülebilir canlı destek kutusu</li>
+    <h2><span class="n">04</span>Detaylar burada</h2>
+    <p class="sub">Bu sayfa k&#305;sa tutuldu. Arad&#305;&#287;&#305;n her &#351;ey i&#231;i El Kitab&#305;.</p>
+    <div class="grid g3">
+      <div class="card"><h4>El Kitab&#305;</h4>
+        <ul class="chk">
+          <li>Durum: &#231;al&#305;&#351;yor / yaz&#305;ld&#305; / eksik</li>
+          <li>S&#246;zl&#252;k &#8212; ICE, TURN, RLS, SYSTEM</li>
+          <li>Test matrisi ve &#246;l&#uuml;&#287;&#252;mler</li>
+          <li>Riskler, pazar, rakipler</li>
+          <li>Karar kay&#305;t&#305; (K-01&#8230;K-28)</li>
         </ul>
-        <p style="font-size:14px;color:var(--fg2)">
-          Bunların çoğu ya kanal (alınabilir ama yıllar sürer) ya da
-          6-7. adımda gelen özellikler.
-        </p>
+        <p style="margin-top:10px"><a class="btn" href="bilgi.html">El Kitab&#305;n&#305; a&#231;</a></p>
       </div>
-      <div class="card">
-        <h4>Bizde var, Alpemix'te yok</h4>
-        <ul class="chk yes">
-          <li><b>1024-bit yerine X25519 + AES-256-GCM</b> — Alpemix'in kriptografisi 2010'dan beri kırılabilir kabul ediliyor</li>
-          <li><b>Veritabanı seviyesinde firma izolasyonu</b> — birbirini görememe garanti</li>
-          <li><b>Değiştirilemez kayıt</b> (hash zinciri)</li>
-          <li><b>Açık REST API</b> + dokümantasyon</li>
-          <li><b>Plan limitleri sunucuda</b> — korsanlık mümkün değil</li>
-          <li><b>Docker ile tek komut</b> kurulum + otomatik geri yükleme testi</li>
+      <div class="card"><h4>Rehber</h4>
+        <ul class="chk">
+          <li>&#350;nceki ad&#305;m ne</li>
+          <li>Bekleyen engeller</li>
+          <li>Kim ne yap&#305;yor</li>
+          <li>Kendi testini nas&#305;l yapars&#305;n</li>
         </ul>
+        <p style="margin-top:10px"><a class="btn" href="basla.html">Rehber&#246;ne git</a></p>
       </div>
-    </div>
-
-    <div class="note">
-      <b>Alpemix hâlâ ayakta çünkü kanalı güçlü, ürünü değil.</b>
-      Türkiye'de kamu ağları TeamViewer'ı engelliyor, Alpemix'i engellemiyor.
-      Kayıp o kanaldan geliyor. Kodla kapatılamaz — satışla kazanılır.
-    </div>
-  </div>
-</section>
-
-<!-- ======= PARA ======= -->
-<section>
-  <div class="wrap">
-    <h2><span class="n">05</span>Para ve kod imzalama</h2>
-
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th>Kalem</th><th>Tutar</th><th>Ne zaman</th></tr></thead>
-        <tbody>
-          <tr><td>Sunucu (Hetzner CX33)</td><td class="mono">€8,49 / ay</td><td>canlıya alırken</td></tr>
-          <tr><td>Ek IP (aktarım sunucusu için)</td><td class="mono">~€1–2 / ay</td><td>canlıya alırken</td></tr>
-          <tr><td>Yedekleme deposu</td><td class="mono">~€1–2 / ay</td><td>canlıya alırken</td></tr>
-          <tr><td><b>Kod imzalama</b></td><td class="mono">€0 – €139 / yıl</td><td>dağıtımdan önce</td></tr>
-          <tr><td>KVKK avukatı</td><td class="mono">tek seferlik</td><td>kamu müşterisi gelirse</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="note ok">
-      <b>Kod imzası şart değil — ürün imzasız da çalışır.</b>
-      Kurarken Windows bir uyarı gösterir, kullanıcı "Yine de çalıştır" der.
-      Alpemix de bugün imzasız. İmza sadece uyarıyı kaldırır, çalışma farkı yok.
-      <br><br>
-      <b>Yol haritası:</b> Bayi ve kurumsal müşterilerde müşterinin IT'si
-      kendi sertifikasını grup ilkesiyle dağıtabilir (ücretsiz).
-      KOBİ tek tek indirme senaryosu için €139'luk sertifika yeterli —
-      SSL.com'un $309'una gerek yok.
-    </div>
-
-    <h3>Bedava katman var</h3>
-    <p>
-      Lisanssız da çalışıyor: <b>1 eşzamanlı oturum, oturum başı 45 dakika,
-      ayda 8 saat.</b> Tek kullanıcı kendi makinelerini yönetmek için yeterli.
-      Limitler sunucuda uygulanıyor, yani açmak/kapatmak mümkün değil.
-    </p>
-  </div>
-</section>
-
-<!-- ======= PLATFORM ======= -->
-<section>
-  <div class="wrap">
-    <h2><span class="n">06</span>Hangi cihazlarda çalışır?</h2>
-
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th></th><th>Durum</th><th>Açıklama</th></tr></thead>
-        <tbody>
-          <tr>
-            <td><b>Kontrol ettiğin cihaz</b><br><span style="color:var(--fg3)">viewer</span></td>
-            <td><span class="badge b-warn">TARAYICI — DENENMEDİ</span></td>
-            <td>Windows, Mac, Linux, telefon, tablet — hepsi tarayıcı kullanıyor,
-                kurulum yok. <b>Ancak gerçek telefonda hiç test edilmedi</b>;
-                dokunmatik kontrol kanıtlanmadı.</td>
-          </tr>
-          <tr>
-            <td><b>Yönettiğin bilgisayar</b><br><span style="color:var(--fg3)">ajan</span></td>
-            <td><span class="badge b-bad">SADECE WINDOWS</span></td>
-            <td>Ekran yakalama ve tuş gönderme Windows API'leriyle çalışıyor.
-                Tarayıcı bunu yapamaz — bu pazarın herkesi için böyle.</td>
-          </tr>
-          <tr>
-            <td>Linux ajanı</td>
-            <td><span class="badge b-mut">8. ADIM</span></td>
-            <td><b>Yapılacak.</b> X11 mümkün (ekran yakalama + tuş).
-                Wayland yapılmayacak — güvenlik modeli buna izin vermiyor.</td>
-          </tr>
-          <tr>
-            <td>Mac ajanı</td>
-            <td><span class="badge b-mut">YAPILMIYOR</span></td>
-            <td>Apple izinleri çok kısıtlayıcı. <b>Mac'ten kontrol etmek
-                zaten şu an mümkün</b> — sadece Mac'ten bağlanılan bilgisayar
-                hedeflenirse sorun olur.</td>
-          </tr>
-          <tr>
-            <td>Telefon/tablet ajanı<br><span style="color:var(--fg3)">telefonu kontrol etmek</span></td>
-            <td><span class="badge b-mut">YAPILMIYOR</span></td>
-            <td>Apple ve Google, başkasının telefonunu uzaktan kontrol eden
-                uygulamayı mağazalarına koymuyor. Kural dışı, teknik değil.
-                <b>Telefondan kontrol etmek</b> ise ayrı konu — o çalışıyor.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="note">
-      <b>Kısaca iki taraf ayrı:</b> Kontrol ettiğin yer her cihazda çalışır
-      (sadece bir tarayıcı). Yönettiğin bilgisayar şimdilik sadece Windows.
-      Platform bağımsızlık istersen tek eksik: <b>Linux ajanı</b>.
+      <div class="card"><h4>Mimari</h4>
+        <ul class="chk">
+          <li>&#220;;&#231; par&#231;a: ajan, taray&#305;&#231;&#305;, sunucu</li>
+          <li>Veri ak&#305;&#351;&#305;</li>
+          <li>Guvenlik modeli</li>
+          <li>Protokol</li>
+        </ul>
+        <p style="margin-top:10px"><a class="btn" href="mimari.html">Mimariye git</a></p>
+      </div>
     </div>
   </div>
 </section>

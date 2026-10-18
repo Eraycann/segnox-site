@@ -2,32 +2,14 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Başla — Segnox</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Segnox — Rehber</title>
+<meta name="description" content="Segnox'un sıradaki adımları ve test sırası.">
 <link rel="stylesheet" href="assets/style.css">
 <style>
-.why {
-  background:rgba(163,113,247,.07); border-left:3px solid var(--pur);
-  border-radius:0 8px 8px 0; padding:12px 15px; margin:12px 0;
-  font-size:14.5px; color:var(--fg2);
-}
-.why b { color:var(--pur); }
-.cmd {
-  display:block; background:#0a0e14; border:1px solid var(--line2);
-  border-left:3px solid var(--ok); border-radius:0 8px 8px 0;
-  padding:13px 16px; margin:12px 0;
-  font-family:var(--mono); font-size:13.5px; color:#c9d5e3;
-  overflow-x:auto; line-height:1.75;
-}
-.cmd .c { color:var(--fg3); }
-.cmd .v { color:var(--ok); }
-.step-n {
-  display:inline-grid; place-items:center; width:26px; height:26px;
-  border-radius:50%; background:var(--acc2); color:#fff;
-  font-weight:700; font-size:13px; margin-right:9px; flex-shrink:0;
-}
-.step-h { display:flex; align-items:center; margin:0 0 4px; font-size:17px; }
-.got { color:var(--ok); } .wait { color:var(--warn); }
+  .now { border-left:3px solid var(--acc); background:var(--bg3) }
+  code.i { background:var(--bg3); border:1px solid var(--line2); border-radius:5px;
+           padding:1px 6px; font-family:var(--mono); font-size:13px; color:var(--acc) }
 </style>
 </head>
 <body>
@@ -36,634 +18,145 @@
   <div class="wrap">
     <a class="brand" href="index.html">SEG<span>NOX</span></a>
     <div class="links">
-      <a href="index.html">Genel Bakış</a>
-      <a href="bilgi.html">Bilgi Ansiklopedisi</a>
-      <a href="nasil.html">Nasıl Çalışır</a>
-      <a href="basla.html" class="on">Başla</a>
-      <a href="simulator.html">UX Simülatörü</a>
-      <a href="musteri.html">Müşteri</a>
-      <a href="bayi.html">Bayi / Teknisyen</a>
+      <a href="index.html">Genel Bak&#305;&#351;</a>
+      <a href="basla.html" class="on">Rehber</a>
+      <a href="bilgi.html">El Kitab&#305;</a>
       <a href="mimari.html">Mimari</a>
-      <a href="gelistirici.html">Geliştirici</a>
     </div>
   </div>
 </nav>
 
-<header class="hero">
-  <div class="wrap">
-    <div class="eyebrow">Sıfırdan, komut komut</div>
-    <h1>Başla</h1>
-    <p>
-      Kod yazıldı ve testlerden geçti — ama <b>kimse gerçek masaüstünde
-      çalıştırmadı</b>. Bu sayfa seni oraya götürür. Her adımda ne yapacağını,
-      neden yaptığını ve ne görmen gerektiğini yazıyor.
-    </p>
-    <div class="note ok" style="max-width:780px">
-      <b>Ne kuracaksın:</b> Sadece Go (zaten kurulu). Başka hiçbir şey —
-      PostgreSQL kurulum, Docker kurulum, veritabanı yönetimi yok.
-      İlk seferde bir şey indirilir, sonra bir daha indirilmez.
-    </div>
+<div class="wrap">
+
+<h1 style="margin-top:30px">Rehber</h1>
+<p class="sub">Bu sayfa <b>sıradaki işi</b> söyler. Geçmiş ve ayrıntı için
+<a href="bilgi.html">El Kitabı</a>.</p>
+
+<!-- ============ SIMDI ============ -->
+<div class="card" style="border-left:3px solid var(--acc);margin-top:22px">
+  <h2 style="margin-top:0"><span class="badge b-info">&#351;UAN</span> Ne oluyor</h2>
+  <p style="font-size:15px">
+    Claude Code 5. adımın son paketini bitirdi. Kod hazır, CI'da iki test kırık.
+    <b>Sıradaki iş: Claude Code'un onarıp push etmesi, sonra telefondan gerçek
+    fare testi.</b>
+  </p>
+  <p style="font-size:14px;color:var(--fg2)">
+    Senin yapacağın bir şey yok. Claude Code bitince haber ver.
+  </p>
+</div>
+
+<!-- ============ ADIMLAR ============ -->
+<h2 style="margin-top:38px">Sıra</h2>
+
+<div class="tl">
+  <div class="ev done">
+    <b>1–4b · MVP</b>
+    <small>Sinyal, ekran, fare/klavye, hesap, rol, destek kuyruğu, onay penceresi,
+      H.264, yeniden başlat+devam. <b>Bitti.</b></small>
   </div>
-</header>
-
-<!-- ======= NEDEN DOLAYI AYRI AYRI ======= -->
-<section>
-  <div class="wrap">
-    <h2><span class="n">01</span>Neden bu yol? (Docker varken)</h2>
-    <p class="sub">
-      Kafanı karıştıran yer burası. İki ayrı şey var, karıştırma.
-    </p>
-
-    <div class="tbl-wrap">
-      <table>
-        <thead><tr><th></th><th>Ne zaman</th><th>Ne yapıyor</th><th>Neden</th></tr></thead>
-        <tbody>
-          <tr>
-            <td><b>Yerel deneme</b><br><span style="color:var(--fg3)">bu sayfa</span></td>
-            <td>Şimdi, kendi bilgisayarında</td>
-            <td>Programın kendi içinde geçici bir PostgreSQL başlatır.
-                İki tane Go programı çalışır: sunucu + ajan.</td>
-            <td><b>Hızlı.</b> Kod değiştirdiğinde yeniden derleyip
-                çalıştırırsın. Docker'da 4 container her seferinde
-                ayağa kalkardı — yavaş ve gereksiz.</td>
-          </tr>
-          <tr>
-            <td><b>Gerçek sunucu</b><br><span style="color:var(--fg3)">deploy/ klasörü</span></td>
-            <td>Ürünü internete koyduğunda</td>
-            <td>Docker ile dört servis birlikte: sunucu, PostgreSQL,
-                aktarım sunucusu, TLS.</td>
-            <td><b>Gereklidir çünkü</b> 7/24 açık olmalı, yeniden başladığında
-                hepsi birlikte kalkmalı, güncelleme kolay olmalı.
-                Docker tam olarak bunun için.</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="why">
-      <b>Yani "PostgreSQL indiriyoruz" demek şu:</b> Bilgisayarına kalıcı
-      PostgreSQL <b>kurmuyoruz</b>. Program, geçici bir klasöre açılıp
-      çalışan bir kopyasını indiriyor (önbelleğe alıyor, bir daha indirmiyor),
-        veriyi oraya yazıyor, program kapanınca veri duruyor — sonraki açılışta
-        aynı veriyi kullanıyor. Silersen silinir. <b>Sisteminin bir parçası olmuyor.</b>
-    </div>
-
-    <h3>Docker'ı neden şimdi açmıyoruz?</h3>
-    <ul class="chk">
-      <li>Docker Desktop Windows'ta ağır (WSL2, GB'larca RAM)</li>
-      <li>Sen sadece ekran aktarımını denemek istiyorsun, sunucu kurulumu değil</li>
-      <li>Yerelde 4 container ayakta beklerken bilgisayarın yavaşlar</li>
-      <li>Zaten Docker klasörü hazır — sırası gelince tek komutla çalışır</li>
-    </ul>
+  <div class="ev now">
+    <b>5a–5d · Gözetimsiz erişim <span class="badge b-warn">YAZILDI</span></b>
+    <small>
+      Servis, sessiz kurulum, yardımcı süreç, ipc, yeniden başlatma, H.264.
+      <b>Kod tamam. Gerçek makinede hiç denenmedi.</b><br>
+      ⏳ Bekleyen: iki kırık CI testi, sonra <b>sanal makine denemesi</b>.
+    </small>
   </div>
-</section>
-
-<!-- ======= ADIMLAR ======= -->
-<section>
-  <div class="wrap">
-    <h2><span class="n">02</span>Adımlar</h2>
-    <p class="sub">
-      Toplam yaklaşık 1 saat. İlk seferde 3-4 dakika ek süre (indirme).
-      <b>Üç ayrı pencere</b> açman gerekecek — her biri açık kalmalı.
-    </p>
-
-    <!-- ADIM 1 -->
-    <div style="margin-top:26px">
-      <div class="step-h"><span class="step-n">1</span>GitHub'a gönder</div>
-      <p style="color:var(--fg2);font-size:14.5px">
-        Kod sadece bu bilgisayarda duruyor. Hiçbir iş Linux'ta çalışmadı.
-      </p>
-      <div class="why"><b>Neden:</b> Windows'ta geçen bir şey Linux'ta
-        kırılabilir. GitHub Actions ilk kez gerçekten Linux'ta çalıştıracak.
-        Ayrıca gerçek aktarım sunucusuna karşı güvenlik testi de orada.</div>
-      <p style="font-size:14.5px;color:var(--fg2)">
-        <b>Bunu Claude Code'a ver:</b> "GitHub'da private repo aç, push et,
-        Actions'ta <span class="mono">coturn-probe</span> ve
-        <span class="mono">e2e</span> işlerinin yeşil olduğunu kontrol et.
-        Yeşil değilse sebebini raporla, düzeltme yapma."
-      </p>
-    </div>
-
-    <!-- ADIM 2 -->
-    <div style="margin-top:30px">
-      <div class="step-h"><span class="step-n">2</span>Veritabanını başlat</div>
-      <div class="cmd">
-go run ./cmd/segnox-devdb -seed
-        <span class="c">↵ ilk seferde PostgreSQL indirir, 3-4 dk bekleyeceksin</span>
-      </div>
-      <div class="why"><b>Neden:</b> Programın çalışması için bir veritabanı
-        lazım. Normalde PostgreSQL kurman gerekirdi. Bu komut onu geçici bir
-        klasöre indirip çalıştırır, örnek veri yükler ve sana bağlantı
-        adresini yazar.</div>
-      <p style="font-size:14.5px;color:var(--fg2)">
-        <b class="got">✓ Göreceğin:</b> Ekranda <b>appDsn</b> ve
-        <b>seed e-posta + parolaları</b>. <b>İkisini de not al</b> —
-        3. adımda lazım.
-        <br><br>
-        <b class="wait">⚠ Bu pencereyi kapatma.</b> Kapatırsan veritabanı da
-        durur. Kapatırsan tekrar çalıştır — veri kaybolmaz.
-      </p>
-      <div class="note" style="font-size:13.5px">
-        <b>Ne çıktı?</b> Şuna benzer bir tek satır:
-      </div>
-      <pre style="font-size:11.5px"><code>{"appDsn":"postgres://segnox_app:...@127.0.0.1:52772/segnox?sslmode=disable",
- "ownerDsn":"postgres://postgres:...",
- "tenants":[{"users":[{"email":"owner-a@example.com","password":"dev-...","role":"owner"}]}]}</code></pre>
-      <div class="card tight" style="margin-top:12px">
-        <h4>Seed kullanıcıları ne işe yarar</h4>
-        <p style="font-size:13.5px;color:var(--fg2)">
-          <b>owner-a@example.com</b> — firma sahibi. Tüm cihazları görür.<br>
-          <b>tech-a@example.com</b> — teknisyen. Sadece kendi grubundakileri görür.<br>
-          <b>owner-b@example.com</b> — <b>ikinci firma.</b> Bu hesapla girip
-          firma A'nın cihazını görememen gerekir. <b>İzolasyon testi:</b>
-          firma A'da cihaz ekle, sonra firma B'ye gir — liste boş olmalı.
-        </p>
-      </div>
-    </div>
-
-    <!-- ADIM 3 -->
-    <div style="margin-top:30px">
-      <div class="step-h"><span class="step-n">3</span>Sunucuyu başlat</div>
-      <div class="why"><b>Neden:</b> İki bilgisayarın birbirini bulabilmesi
-        için ortalarda bir buluşma noktası olmalı. Bu sunucu o nokta.
-        Hesapları, cihaz listesini ve oturumları da tutar.</div>
-      <p style="font-size:14.5px;color:var(--fg2)">
-        <b>Önce şifreleme anahtarını üret.</b> Program 32 bayt ister —
-        kullanıcı parolalarını şifrelemek için lazım. Aşağıdaki 4 satırı
-        çalıştır, çıkan değeri bir yere not et:
-      </p>
-      <div class="cmd">
-$rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
-$b = New-Object byte[] 32
-$rng.GetBytes($b)
-$key = [Convert]::ToBase64String($b)
-$key
-      </div>
-      <div class="note bad" style="font-size:13.5px;margin:10px 0">
-        <b>Dikkat — bu adımı atlama.</b> Anahtarı atarsan
-        <code>must be standard base64 of 32 bytes</code> hatası alırsın.
-        <br><br>
-        <code>openssl rand -base64 32</code> da aynı işi görür ama Windows'ta
-        <b>openssl genellikle kurulu değildir</b> — yukarıdaki PowerShell
-        sürümü her makinede çalışır.
-      </div>
-      <div class="note bad" style="font-size:13.5px;margin:10px 0">
-        <b>Dikkat:</b> Aşağıdaki komutlarda <code>&lt;...&gt;</code> işaretleri
-        <b>örnek yer tutucudur</b> — tırnak içine olduğu gibi yazma.
-        Gerçek değerleri yapıştıracaksın. <code>&lt;openssl çıktısı&gt;</code>
-        yazan yere bir üstteki komutun sonucunu koy.
-      </div>
-      <p style="font-size:14.5px;color:var(--fg2)">
-        <b>Yeni bir PowerShell penceresi</b>, aynı klasörde. (PowerShell —
-        <code class="inl">set X=Y</code> değil, <code class="inl">$env:X='Y'</code>)
-      </p>
-      <div class="cmd">
-$env:SEGNOX_DB_URL='postgres://segnox_app:PAROLA@127.0.0.1:PORTA/segnox?sslmode=disable'
-$env:SEGNOX_DATA_KEY='YUKARIDA_URETILEN_44_KARAKTERLIK_DEGER'
-$env:SEGNOX_PUBLIC_URL='http://127.0.0.1:8080'
-$env:SEGNOX_COOKIE_SECURE='false'
-$env:SEGNOX_MAIL='file:./data/mail'
-go run ./cmd/segnox-server
-        <span class="c">↵ bu pencereyi AÇIK TUT</span>
-      </div>
-      <p style="font-size:14.5px;color:var(--fg2)">
-        <b class="got">✓ Göreceğin:</b> <span class="mono">http://127.0.0.1:8080</span>
-        adresi çalışıyor. Tarayıcıda aç.
-      </p>
-      <div class="note" style="font-size:13.5px">
-        <b>Doğru yaptığını nasıl anlarsın:</b> <span class="mono">"server failed"</span>
-        yazmamalı. <span class="mono">SEGNOX_DATA_KEY must be standard base64 of
-        32 bytes</span> hatası çıkarsa → anahtarı tırnak içine yapıştırmamışsın
-        demektir.
-      </div>
-      <div class="note ok" style="font-size:13.5px">
-        <b>✓ Bu adım 2026-10-18'de doğrulandı.</b> Doğru çıktı şöyle:
-        <pre style="margin:8px 0 0;font-size:11.5px"><code>{"level":"INFO","msg":"database connected","db":"postgres://segnox_app:xxxxx@127.0.0.1:52772/..."}
-{"level":"INFO","msg":"listening","addr":"127.0.0.1:8080","publicHost":"127.0.0.1",
- "stunServers":0,"turnServers":0,"turnCredentialTTL":"6h0m0s","origins":0,
- "trustedProxies":0,"cookieSecure":false,"smtp":false}</code></pre>
-        <b>"listening" görüyorsan doğru.</b> Port numarası her seferinde
-        değişebilir — ekrandakini kullan.
-      </div>
-      <p style="font-size:14.5px;color:var(--fg2)">
-        <b class="got">✓ Göreceğin:</b> <span class="mono">http://127.0.0.1:8080</span>
-        adresi çalışıyor. Tarayıcıda aç.
-      </p>
-      <div class="note" style="font-size:13.5px">
-        <b>Bu iki ayar neden özel:</b> <span class="mono">COOKIE_SECURE=false</span>
-        şart, çünkü yerelde HTTPS yok. <span class="mono">MAIL=file:./data/mail</span>
-        e-postaları diske yazar, gerçek e-posta gitmez. <span class="mono">DATA_KEY</span>
-        şifreleme anahtarı — her açılışta yenisi üretmek sorun değil ama
-        <b>not et</b>, yoksa eski kayıtlar açılmaz.
-      </div>
-    </div>
-
-    <!-- ADIM 4 -->
-    <div style="margin-top:30px">
-      <div class="step-h"><span class="step-n">4</span>Ajanı çalıştır</div>
-      <div class="why"><b>Neden:</b> Ajan = bağlanacağın bilgisayarda çalışan
-        küçük program. Ekranını gösterir, tuş komutlarını alır. Kontrol
-        ettiğin bilgisayarda <b>bir şey kurmuyorsun</b> — tarayıcı kullanıyorsun.
-        Ama buraya kurmak zorundayız, çünkü bu bağlanacağın bilgisayar.</div>
-      <p style="font-size:14.5px;color:var(--fg2)">
-        <b>Üçüncü bir PowerShell penceresi.</b> EXE zaten derlenmiş (18 MB),
-        <b>derlemeye gerek yok</b> — doğrudan çalıştır:
-      </p>
-      <div class="cmd">
-.\segnox-agent.exe run -server ws://127.0.0.1:8080/ws/agent
-        <span class="c">↵ bu pencereyi de AÇIK TUT</span>
-      </div>
-      <div class="note bad" style="font-size:13.5px">
-        <b>Buradaki <code>ws://</code> sadece aynı bilgisayar içindir.</b>
-        İnternetten (telefondan, başka bilgisayardan) bağlanacaksan
-        <code>wss://</code> yazmalısın ve sunucu
-        <code>https://</code> adresiyle çalışmalı. Bu ayrım kodda
-        zorunlu — bkz. adım 7.
-      </div>
-      <p style="font-size:14.5px;color:var(--fg2)">
-        <b class="got">✓ Göreceğin:</b> Bir <b>onay penceresi</b> açılır
-        ("Segnox bilgisayarınıza bağlanmak istiyor"). Kabul et.
-        Sonra konsolda <b>9 haneli sayı</b> — senin bağlantı kodun.
-      </p>
-      <p style="font-size:14.5px;color:var(--fg2)">
-        <b class="wait">Gerekirse yeniden derleme:</b>
-      </p>
-      <div class="cmd">
-go build -o segnox-agent.exe ./cmd/segnox-agent
-      </div>
-    </div>
-
-    <!-- ADIM 5 -->
-    <div style="margin-top:30px">
-      <div class="step-h"><span class="step-n">5</span>Bağlan</div>
-      <div class="why"><b>Neden:</b> Şimdi iki taraf da hazır. Tarayıcıdan
-        konsola gir, cihazı seç, kodu gir. Görüntü iki bilgisayar arasında
-        akar.</div>
-      <p style="font-size:14.5px;color:var(--fg2)">
-        3. adımdaki adresi aç → giriş yap (seed verisi kullanıcı bilgileri
-        ekrana yazılır) → cihaz listesini aç → 9 haneli kodu gir →
-        <b>bağlan</b>. Listeyi boş görürsen sayfayı yenile.
-      </p>
-      <p style="font-size:14.5px;color:var(--fg2)">
-        <b class="got">✓ Göreceğin:</b> <b>Kendi gerçek masaüstün.</b>
-        Sentetik ekran değil. Beklenen süre: 0,4–0,7 saniye.
-      </p>
-      <div class="note warn" style="font-size:14px">
-        <b>UYKU MODUNU KAPAT.</b> Bilgisayarın uykuya girerse ekran yakalama
-        durur ve "kare gelmiyor" sanırsın. Bu hata değil, Windows'un davranışı.
-      </div>
-      <div class="note warn" style="font-size:14px">
-        <b>İmleç görünmeyecek.</b> Bilinen hata — aşağıda yazılı.
-        Fare tıklamaları ve klavye çalışır, sadece imleç çizilmiyor.
-      </div>
-    </div>
-
-    <!-- NE DEMEK / NASIL ANLAŞILIR -->
-    <div style="margin-top:34px">
-      <h3>Sistem kafanda karışmasın diye</h3>
-      <p style="font-size:14.5px;color:var(--fg2)">
-        Bağlanınca iki ayrı taraf var. Karışmasın diye:
-      </p>
-      <div class="grid g2" style="margin-top:14px">
-        <div class="card tight">
-          <h4>🖥️ Uzaktaki bilgisayar = ajan</h4>
-          <p style="font-size:14px">
-            <b>Bilgisayarında çalışan program.</b> Ekranı <i>gönderen</i> taraf.
-            Fare/klavye komutlarını <i>alıcı</i> taraf.
-          </p>
-          <p style="font-size:13.5px;color:var(--fg2);margin-top:8px">
-            Bu program <b>pencereyi açan tarafta</b> kalır. Kodu
-            <span class="mono">segnox-agent.exe run</span> ile başlattığın
-            pencere budur.
-          </p>
-        </div>
-        <div class="card tight">
-          <h4>🌐 Kontrol ettiğin bilgisayar = tarayıcı</h4>
-          <p style="font-size:14px">
-            <b>Hiçbir şey kurmuyorsun.</b> Siteye gir, cihaz listesinden
-            tıkla, kodu gir. Karşı tarafın ekranı <i>burada</i> açılıyor.
-          </p>
-          <p style="font-size:13.5px;color:var(--fg2);margin-top:8px">
-            <code class="inl">http://127.0.0.1:8080</code> — kod yazdığın adres.
-            Kontrol <b>oradan</b> yapılıyor.
-          </p>
-        </div>
-      </div>
-      <div class="note" style="font-size:14px">
-        <b>Kısaca:</b> Pencere 1 (devdb) → veri. Pencere 2 (server) → düzen.
-        Pencere 3 (agent) → <b>gönderen</b> taraf, buraya bakma sadece açık
-        dursun. <b>Sen 4. yerde</b> tarayıcıdan kontrol ediyorsun.
-      </div>
-    </div>
-
-    <!-- ADIM 6 -->
-    <div style="margin-top:30px">
-      <div class="step-h"><span class="step-n">6</span>Elle test et</div>
-      <div class="why"><b>Neden:</b> Otomatik testler <b>sentetik ekranla</b>
-        çalıştı. Gerçek masaüstünün nasıl davrandığını kimse bilmiyor.
-        Bu listeyi ancak sen yapabilirsin.</div>
-
-      <div class="note ok">
-        <b>✓ 2026-10-18'de ilk gerçek donanım denemesi yapıldı.</b>
-        Ajan gerçek masaüstünde çalıştı ve şunu doğruladı:
-        <ul class="chk" style="margin-top:8px">
-          <li><span class="mono">capture backend selected: dxgi</span> —
-              donanım yakalama sürücüsü gerçekten çalışıyor, GDI'ye düşmemiş</li>
-          <li><span class="mono">webview ui ready, webview2 155</span> —
-              onay penceresi açılıyor</li>
-          <li><span class="mono">registered with signaling server</span> —
-              bağlantı kuruldu</li>
-          <li>9 haneli kod üretildi, bağlantı kuruldu, uzaktan yönetim çalıştı</li>
-        </ul>
-      </div>
-
-      <div class="note bad">
-        <b>🐛 Bulunan hata — fare imleci görünmüyor</b><br><br>
-        Uzak tarafta fare imleci hiç çizilmiyor. Sebep: DXGI ekranı
-        kopyalarken Windows imleci <b>donanımda</b> birleştiriyor, yani
-        piksellere işlenmiyor. Program imlecin konumunu
-        (<span class="mono">PointerX/PointerY/PointerVisible</span>) okumuyor
-        ve kareye çizmiyor.<br><br>
-        <b>Etki:</b> Uzaktaki ekranda imleç görünmez. Fare hâlâ çalışıyor,
-        sadece görsel eksik — önemli ama düzeltilebilir bir hata.
-      </div>
-
-      <div class="card" style="margin-top:14px">
-        <h4>Görüntü ve girdi</h4>
-        <ul class="chk">
-          <li>Not Defteri aç, <b>ğüşıöç</b> yaz → Türkçe Q doğru mu</li>
-          <li>Mouse ile tıkla, sürükle, tekerlek çevir</li>
-          <li>Ekranı kaydır — akıcılık nasıl? (JPEG olduğu için biraz kasılabilir, normal)</li>
-        </ul>
-        <h4 style="margin-top:20px">Güvenlik ekranları</h4>
-        <ul class="chk">
-          <li><b>Onay penceresi</b> çıktı mı? Kapatılabiliyor mu?</li>
-          <li><b>Bilgi çubuğu</b> gerçekten kapatılamıyor mu? Süre sayıyor mu?</li>
-          <li>Reddettiğinde bağlantı gerçekten kurulmuyor mu?</li>
-        </ul>
-        <h4 style="margin-top:20px">Dosya ve pano</h4>
-        <ul class="chk">
-          <li>Sohbet yaz → ajanda mesaj geliyor mu?</li>
-          <li>Bir şey kopyala → yapıştır → pano eşitleniyor mu?</li>
-          <li>Küçük bir dosya gönder</li>
-        </ul>
-        <h4 style="margin-top:20px">Dayanıklılık</h4>
-        <ul class="chk">
-          <li>İnterneti kes, 5 sn sonra aç → <b>otomatik geri geliyor mu?</b></li>
-          <li>Ajan penceresini kapat, tekrar başlat → sunucu yeniden bağlanıyor mu?</li>
-        </ul>
-        <h4 style="margin-top:20px">Beklenmedik</h4>
-        <ul class="chk">
-          <li>Bir işlem yönetici parolası isterse → ekran kararır, bağlantı kesilir.
-              <b>Bu bilinen eksiklik</b>, 5. adımda çözülecek. Panik yapma.</li>
-          <li>Antivirüs "tanımayan yayımcı" derse → imzasız, beklenen.
-              "Daha fazla bilgi → Yine de çalıştır".</li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- ADIM 6b: TURN -->
-    <div style="margin-top:30px">
-      <div class="step-h"><span class="step-n">6b</span>TURN (bağlantı kurulamıyorsa)</div>
-      <div class="why"><b>Neden:</b> Eğer 5. adımda bağlantı kurulmuyorsa ya da
-        çok yavaşsa, iki bilgisayar birbirini doğrudan bulamıyor demektir.
-        TURN sunucusu araya girip görüntüyü taşır — aynı ağdaki telepatik
-        hattın karşılığı.</div>
-      <div class="cmd">
-go run ./cmd/segnox-devturn -allow-loopback-peers
-        <span class="c">↵ ayrı bir pencerede, çalışır durumda kalsın</span>
-      </div>
-      <p style="font-size:14.5px;color:var(--fg2)">
-        Çıkan satır şuna benzeyecek:
-      </p>
-      <pre style="font-size:11.5px"><code>{"url":"turn:127.0.0.1:64309?transport=udp","controlUrl":"http://127.0.0.1:50820"}</code></pre>
-      <p style="font-size:14.5px;color:var(--fg2)">
-        <b>Sonra sunucuya ekle</b> — <code class="inl">url</code> alanındaki
-        adresi <b>harfi harfine</b> kopyala:
-      </p>
-      <div class="cmd">
-$env:SEGNOX_TURN_URLS='turn:127.0.0.1:64309?transport=udp'
-$env:SEGNOX_TURN_SECRET='segnox-gelistirme-anahtari-1234567890'
-      </div>
-      <div class="note bad" style="font-size:13.5px">
-        <b>Yaygın hata:</b> Buradaki port numarası <b>her seferinde değişir</b>.
-        Örnekteki <code>64309</code> yerine kendi ekranındakini yaz.
-        Yer tutucu bırakırsan (<code>PORT</code>, <code>xxx</code> gibi) sunucu
-        bunu <b>kabul eder</b> ve hata oturum başlarken çıkar:
-        <code>InvalidAccessError: invalid port</code>.
-        <br><br>
-        <b>Doğru yaptığını anla:</b> Sunucu çıktısında
-        <code>"turnServers":1</code> yazmalı. <code>0</code> ise TURN
-        tanınmamış demektir.
-      </div>
-      <p style="font-size:13.5px;color:var(--fg2)">
-        <span class="mono">-allow-loopback-peers</span> bayrağı şart: her şey
-        127.0.0.1'de çalıştığı için sunucu normalde kendi adresine relay
-        vermeyi reddeder. Bu bayrak <b>sadece yerel testte</b> açılır —
-        gerçek sunucuda asla.
-      </p>
-    </div>
-
-    <!-- ADIM 7 -->
-    <div style="margin-top:30px">
-      <div class="step-h"><span class="step-n">7</span>İkinci bilgisayardan dene</div>
-      <div class="why"><b>Neden:</b> Tüm testler aynı bilgisayarda, kabloyla
-        bağlıydı. Gerçek hayatta iki bilgisayar farklı ağlarda — ev, ofis,
-        mobil veri. Gecikme ve bağlantı yolu orada anlaşılıyor.</div>
-
-      <div class="note bad" style="font-size:14px">
-        <b>Sorun:</b> Şu an her şey <span class="mono">127.0.0.1</span> üzerinde —
-        yani <b>sadece o bilgisayardan</b> erişilebilir. İkinci bilgisayar
-        <span class="mono">127.0.0.1</span> deyince <b>kendi kendini</b> gör.
-        <br><br>
-        Ayrıca program şifreli bağlantı şart koşuyor
-        (<span class="mono">http</span> sadece <span class="mono">localhost</span>
-        için kabul ediliyor). Yani ikinci bilgisayardan bağlanmak için
-        <b>HTTPS'li bir adres</b> lazım.
-      </div>
-
-      <div class="grid g2" style="margin-top:16px">
-        <div class="card tight">
-          <h4>Yol A — TCP tüneli <span class="badge b-mut">ERTELENDİ</span></h4>
-          <p>Sinyal için cloudflared (HTTP) + TURN için TCP tüneli gerekiyordu.</p>
-          <p style="font-size:13.5px;color:var(--fg2);margin-top:6px">
-            <b>Kurulum engeline takıldı</b> — ayrıntı aşağıdaki bölümde.
-            6. adımda gerek kalmayacak.
-          </p>
-        </div>
-        <div class="card tight">
-          <h4>Yol B — Gerçek sunucu (~€8/ay) <span class="badge b-info">6. ADIM</span></h4>
-          <p><code class="inl">deploy/</code> klasörü hazır ve CI'da doğrulandı.</p>
-          <p style="font-size:13.5px;color:var(--fg2);margin-top:6px">
-            Kalıcı çözüm. Tüm ağ testleri (hücresel veri dahil) burada,
-            kalıcı adresle yapılacak.
-          </p>
-        </div>
-      </div>
-
-      <div class="card" style="margin-top:16px">
-        <h4>Şunları not et</h4>
-        <ul class="chk">
-          <li>Bağlantı ne kadar sürdü? (kablo: 0,4 sn beklenir)</li>
-          <li>Konsolda "bağlantı: P2P" mi yazıyor, "relay" mi?</li>
-          <li>Gecikme kaç ms görünüyor?</li>
-          <li>Görüntü donuyor mu, akıcı mı?</li>
-        </ul>
-        <p style="font-size:14px;color:var(--fg2);margin-top:12px">
-          Bu dört bilgi, ürünün fiyatını belirleyecek. Sunucu maliyeti doğrudan
-          buna bağlı.
-        </p>
-      </div>
-
-      <div class="note bad" style="margin-top:16px">
-        <b>Güvenlik:</b> Tünel açıkken TURN portu internete açık. Oturum
-        kimliği (HMAC) olmadan kullanılamaz, ama yine de
-        <b>yalnız güvendiğin kişiyle dene</b> ve test bitince tüneli
-        kapat.
-      </div>
-    </div>
-
-    <!-- ============ ADIM 8: TUNEL TESTI ============ -->
-    <div style="margin-top:34px; border-top:1px solid var(--line); padding-top:30px">
-      <h3 style="margin-top:0">8 · İnternet üzerinden test (tünel)</h3>
-
-      <div class="note warn">
-        <b>⏸ 2026-10-18'de ertelendi.</b> Sunucusuz internet testi için
-        TCP tüneli gerekiyor. Üç deneme de kurulum engeline takıldı:
-        <ul style="margin:10px 0 0">
-          <li><b>bore.exe</b> hazır ikilisi → antivirüs karantinaya aldı</li>
-          <li><b>go install</b> → bore Rust ile yazılmış</li>
-          <li><b>cargo build</b> → Visual Studio Build Tools (~6 GB) gerekiyor</li>
-        </ul>
-        <b>Karar:</b> Tünel teşhis aracıdır, ürün değil. Bu test 6. adımdaki
-        gerçek sunucuyla yapılacak. Tüm ağ testleri tek seferde, kalıcı
-        adresle orada çalıştırılacak.
-      </div>
-
-      <p style="font-size:14.5px;color:var(--fg2);margin-top:16px">
-        Yine de bilmek için: yöntem şöyle çalışıyordu ve doğru kurulduğunda
-        test mümkün. Ajan ve TURN sunucusu <b>aynı bilgisayarda</b> olduğu için
-        internete yalnız TURN'ün TCP dinleme portu açılıyor — relay trafiği
-        127.0.0.1 içinde kalıyor, relay port aralığını açmana gerek yok.
-        İki TURN adresi veriliyordu: ajan yerel UDP'yi, tarayıcı tünelden
-        TCP'yi kullanıyordu.
-      </p>
-
-      <div class="note ok">
-        <b>6. adımda gerçek sunucu açıldığında</b> bu teste dönmeye gerek
-        kalmayacak — <code class="inl">SEGNOX_TURN_URLS</code> doğrudan
-        sunucunun genel adresini gösterecek, TURN kendi TCP'sini 443'te
-        dinleyecek. Tünel gerekmeyecek.
-      </div>
-    </div>
-
-    <!-- EK: PERFORMANS -->
-    <div style="margin-top:34px">
-      <h3>Referans — bu makinede ölçülenler</h3>
-      <p style="font-size:14.5px;color:var(--fg2)">
-        Kendi bilgisayarında benzer sonuçlar bekleyebilirsin. Ekran kartı ve
-        işlemciye göre değişir.
-      </p>
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr><th>İşlem</th><th>Sonuç</th></tr></thead>
-          <tbody>
-            <tr><td>İlk kare (ekran yakalama)</td><td class="mono">15–19 ms</td></tr>
-            <tr><td>Sıkıştırma — 1080p tam kare</td><td class="mono">11–14 ms · 91–280 KB</td></tr>
-            <tr><td>Sıkıştırma — ekranın %10'u değişince</td><td class="mono">3 ms · ~26 KB</td></tr>
-            <tr><td>Bant — durağan masaüstü</td><td class="mono">~0,3 Mbps</td></tr>
-            <tr><td>Bant — sürekli hareketli 1080p</td><td class="mono">~4 Mbps</td></tr>
-            <tr><td>Bağlan → ilk kare</td><td class="mono">0,4–0,7 sn</td></tr>
-            <tr><td>6 sn kesinti sonrası geri dönüş</td><td class="mono">0,3 sn</td></tr>
-            <tr><td>15 sn kesinti sonrası geri dönüş</td><td class="mono">3,3 sn</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="note" style="font-size:14px">
-        <b>Beklenmedik bir şey:</b> Durağan masaüstünde saniyede sadece ~5 kare
-        gönderiliyor — çünkü sadece <b>değişen yerler</b> gider. Yani normal
-        kullanımda bant neredeyse sıfır. Sorun sadece video oynatırken ya da
-        sayfa kaydırırken çıkar (o zaman ~4 Mbps, kalite düşer).
-      </div>
-    </div>
-
-    <!-- EK: DEPLOY -->
-    <div style="margin-top:34px">
-      <h3>Referans — gerçek sunucu paketi hazır</h3>
-      <p style="font-size:14.5px;color:var(--fg2)">
-        <code class="inl">deploy/</code> klasörü yazıldı ve doğrulandı
-        (Docker tanımı geçerli, betikler hatasız). Ama <b>Docker kapalı
-        olduğu için hiç çalıştırılmadı</b>. İlk gerçek sunucuyu kurduğunda
-        burada bir sorun çıkabilir.
-      </p>
-      <div class="tbl-wrap">
-        <table>
-          <thead><tr><th>Dosya</th><th>Ne işe yarar</th></tr></thead>
-          <tbody>
-            <tr><td class="mono">compose/compose.yml</td><td>Dört servisin tanımı</td></tr>
-            <tr><td class="mono">coturn/turnserver.conf</td><td>Aktarım sunucusu ayarı, özel ağ reddi</td></tr>
-            <tr><td class="mono">caddy/Caddyfile</td><td>TLS ve yönlendirme</td></tr>
-            <tr><td class="mono">backup/*.sh</td><td>Yedekleme, geri yükleme, geri yükleme testi</td></tr>
-            <tr><td class="mono">systemd/*.timer</td><td>Zamanlanmış görevler</td></tr>
-            <tr><td class="mono">.env.example</td><td>Ayarların şablonu</td></tr>
-            <tr><td class="mono">README.md</td><td>Adım adım kurulum</td></tr>
-          </tbody>
-        </table>
-      </div>
-      <pre><code>cp deploy/.env.example deploy/.env
-<span class="c-cm"># sırları ve alan adını yaz</span>
-docker compose -f deploy/compose/compose.yml config
-docker compose -f deploy/compose/compose.yml up -d
-
-<span class="c-cm"># kurulumdan sonra MUTLAKA:</span>
-docker compose exec coturn /usr/local/bin/turnprobe-check
-        <span class="c"># sonuç 0 olmalı — 10 tehlikeli adres reddedildi demek</span></code></pre>
-    </div>
+  <div class="ev">
+    <b>6 · Gerçek sunucu <span class="badge b-bad">ASIL ADIM</span></b>
+    <small>Hetzner sunucu, TURN, alan adı, KVKK metinleri, fiyat, kod imzası,
+      toplu kurulum. <b>Farklı ağdan test de burada yapılacak.</b><br>
+      💰 Burada ilk para harcanır (~€10/ay).
+    </small>
   </div>
-</section>
-
-<!-- ======= SONRA ======= -->
-<section>
-  <div class="wrap">
-    <h2><span class="n">03</span>Şu an yapma</h2>
-    <div class="note warn">
-      <b>Bu adımlar bitmeden hiçbir para harcama:</b><br><br>
-      ⛔ Fiyat belirleme &nbsp;·&nbsp; ⛔ Kod imzalama sertifikası &nbsp;·&nbsp;
-      ⛔ Sunucu kirala &nbsp;·&nbsp; ⛔ Alan adı DNS &nbsp;·&nbsp;
-      ⛔ SMTP sağlayıcısı<br><br>
-      Hepsi boşa. Önce gerçek masaüstünde çalıştığını görmen lazım.
-      Çalışmıyorsa 6. adımda öğreneceğin bir hata, 6. adımda alınan
-      sertifikadan daha değerli.
-    </div>
-
-    <div class="note ok">
-      <b>Sonuç ne olursa olsun yaz.</b> "Çalıştı, güzel" demek yetmez.
-      Neyin tuhaf geldiğini, nerede yavaşladığını, hangi adımda kafanın
-      karıştığını yaz. Siteyi de ona göre düzenleyeyim — şu an anlattıklarım
-      test raporlarından geliyor, senin gözleminden değil.
-    </div>
-
-    <h3>Takılırsan</h3>
-    <ul class="chk">
-      <li>Takıldığın adımın numarasını söyle</li>
-      <li>Ekranda gördüğün hata mesajını aynen yaz</li>
-      <li>Terminale bakmadan önce <span class="mono">go vet ./...</span>
-          çalıştırıp hata var mı kontrol et</li>
-    </ul>
+  <div class="ev">
+    <b>7–8 · Sonra</b>
+    <small>Linux ajanı, mobil ajan (izleme → kontrol), cihaz sağlığı,
+      sesli konuşma.</small>
   </div>
-</section>
+</div>
 
-<footer>
-  <div class="wrap">
-    <div class="grid g2">
-      <div><b>Segnox</b> — başlama rehberi<br>
-        <span style="color:var(--fg3)">Teknik pilot tamamlandı. Satılabilir ürün değil.</span></div>
-      <div><a href="bilgi.html">Bilgi Ansiklopedisi</a>
-      <a href="nasil.html">← Nasıl çalışır</a> ·
-           <a href="simulator.html">UX simülatörü →</a></div>
-    </div>
+<!-- ============ ENGELLI ============ -->
+<h2 style="margin-top:38px">Bekleyen engeller</h2>
+
+<div class="card">
+<table>
+<tr><th>Ne</th><th>Durum</th><th>Kimi bekliyor</th></tr>
+<tr><td><b>Farklı ağdan bağlantı</b></td>
+    <td class="no">Hiç çalışmadı</td><td>6. adım</td></tr>
+<tr><td><b>Servis kipi (SYSTEM, UAC, kilit ekranı)</b></td>
+    <td class="warn2">Kod var, denenmedi</td><td><b>Sanal makine</b></td></tr>
+<tr><td><b>CI'da 2 kırık test</b></td>
+    <td class="warn2">Claude Code'da</td><td>Claude Code</td></tr>
+<tr><td><b>İkinci cihazdan giriş (403)</b></td>
+    <td class="warn2">Claude Code'da</td><td>Claude Code</td></tr>
+<tr><td><b>Fiyat, şirket, KVKK</b></td>
+    <td class="no">Belirlenmedi</td><td><b>Sen</b></td></tr>
+</table>
+</div>
+
+<div class="note warn">
+  <b>En kritik engel:</b> "uzaktan destek" sözünün tek şartı, farklı ağdan
+  bağlanabilmek. Bu çalışmadan ürün satılmaz. 6. adımda, gerçek sunucuyla
+  yapılacak.
+</div>
+
+<!-- ============ KENDI TESTIN ============ -->
+<h2 style="margin-top:38px">Kendi testin</h2>
+
+<div class="card">
+  <p style="font-size:14.5px;color:var(--fg2)">
+    Sistem <b>şu an</b> senin bilgisayarında değil. Bana "başlat" de, tek komutla
+    ayağa kaldırayım. Kurulum tekrarı yok — gerekirse hazır betik var.
+  </p>
+  <div class="note ok" style="margin-top:12px">
+    <b>Son yapılan testler:</b> gerçek masaüstünde ekran aktarımı, fare/klavye,
+    sohbet, ortak pano, dosya transferi, H.264 (21 fps, 1,82 Mbps, gerçek ekranda).
   </div>
-</footer>
+</div>
 
+<!-- ============ DUZENLI YAPILANLAR ============ -->
+<h2 style="margin-top:38px">Her adımda tekrarlanan düzen</h2>
+
+<div class="card">
+<table>
+<tr><th>Kim</th><th>Ne yapar</th></tr>
+<tr><td><b>Claude Code</b></td><td>Tüm kod değişikliği, test, güvenlik denetimi, araştırma</td></tr>
+<tr><td><b>Bu asistan</b></td><td>Push, CI okuma, <b>siteyi güncelleme</b>, sıralamayı kurma</td></tr>
+<tr><td><b>Sen</b></td><td>Sanal makine denemesi, fiyat/karar verme</td></tr>
+</table>
+</div>
+
+<div class="note">
+  <b>Kural:</b> Aynı dosyaya ikimiz de dokunmayız. Kod = Claude Code,
+  site = asistan.
+</div>
+
+<!-- ============ ARSIP ============ -->
+<h2 style="margin-top:38px">Arşiv</h2>
+
+<div class="card">
+  <p style="font-size:14px;color:var(--fg2)">
+    Satış sayfaları (müşteri, bayi), UX simülatörü ve geliştirici sayfası
+    menüden çıkarıldı. Git geçmişinde duruyorlar:
+  </p>
+  <p style="font-size:13.5px;margin-top:10px">
+    <span class="mono">_arsiv/musteri.html</span> ·
+    <span class="mono">_arsiv/bayi.html</span> ·
+    <span class="mono">_arsiv/simulator.html</span> ·
+    <span class="mono">_arsiv/nasil.html</span> ·
+    <span class="mono">_arsiv/gelistirici.html</span>
+  </p>
+  <p style="font-size:13.5px;color:var(--fg3);margin-top:12px">
+    <b>Bayi kanalı 17.10.2026'da kapatıldı</b> — bireysel satış yapılacak.
+    Simülatör müşteri bulununca gerçek bir demo olarak kullanılabilir.
+  </p>
+</div>
+
+<p style="color:var(--fg3);font-size:13px;margin-top:40px;padding-top:20px;border-top:1px solid var(--line)">
+  Soru burada değil, <a href="bilgi.html">El Kitabı</a>'nda. Bilmiyorsan oraya bak.
+</p>
+
+</div>
 </body>
 </html>
