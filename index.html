@@ -382,28 +382,36 @@
         <tbody>
           <tr>
             <td><b>Kontrol ettiğin cihaz</b><br><span style="color:var(--fg3)">viewer</span></td>
-            <td><span class="badge b-ok">HER ŞEY</span></td>
-            <td>Windows, Mac, Linux, telefon, tablet — hepsi çalışır.
-                Tarayıcı kullanıyor, kurulum yok. Dokunmatik destekli.</td>
+            <td><span class="badge b-warn">TARAYICI — DENENMEDİ</span></td>
+            <td>Windows, Mac, Linux, telefon, tablet — hepsi tarayıcı kullanıyor,
+                kurulum yok. <b>Ancak gerçek telefonda hiç test edilmedi</b>;
+                dokunmatik kontrol kanıtlanmadı.</td>
           </tr>
           <tr>
             <td><b>Yönettiğin bilgisayar</b><br><span style="color:var(--fg3)">ajan</span></td>
-            <td><span class="badge b-warn">SADECE WINDOWS</span></td>
+            <td><span class="badge b-bad">SADECE WINDOWS</span></td>
             <td>Ekran yakalama ve tuş gönderme Windows API'leriyle çalışıyor.
                 Tarayıcı bunu yapamaz — bu pazarın herkesi için böyle.</td>
           </tr>
           <tr>
             <td>Linux ajanı</td>
-            <td><span class="badge b-mut">8. adım</span></td>
-            <td>X11 mümkün (ekran yakalama + tuş). Wayland yapılmayacak —
-                güvenlik modeli buna izin vermiyor, doğru karar.</td>
+            <td><span class="badge b-mut">8. ADIM</span></td>
+            <td><b>Yapılacak.</b> X11 mümkün (ekran yakalama + tuş).
+                Wayland yapılmayacak — güvenlik modeli buna izin vermiyor.</td>
           </tr>
           <tr>
             <td>Mac ajanı</td>
-            <td><span class="badge b-mut">yapılmıyor</span></td>
+            <td><span class="badge b-mut">YAPILMIYOR</span></td>
             <td>Apple izinleri çok kısıtlayıcı. <b>Mac'ten kontrol etmek
                 zaten şu an mümkün</b> — sadece Mac'ten bağlanılan bilgisayar
                 hedeflenirse sorun olur.</td>
+          </tr>
+          <tr>
+            <td>Telefon/tablet ajanı<br><span style="color:var(--fg3)">telefonu kontrol etmek</span></td>
+            <td><span class="badge b-mut">YAPILMIYOR</span></td>
+            <td>Apple ve Google, başkasının telefonunu uzaktan kontrol eden
+                uygulamayı mağazalarına koymuyor. Kural dışı, teknik değil.
+                <b>Telefondan kontrol etmek</b> ise ayrı konu — o çalışıyor.</td>
           </tr>
         </tbody>
       </table>
