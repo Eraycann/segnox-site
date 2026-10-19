@@ -63,8 +63,9 @@
 <table>
 <tr><th>Durum</th><th>Ne</th></tr>
 <tr><td><span class="badge b-ok">&#199;ALI&#350;IYOR</span></td>
-    <td>Ekran aktarımı · <b>uzaktan fare + klavye + yazı</b> (telefondan,
-        farklı ağdan doğrulandı) · 9 haneli kod · hesap + 2FA + kurtarma kodları ·
+    <td>Ekran aktarımı · <b>uzaktan fare + klavye + yazı</b> (aynı bilgisayardan
+        doğrulandı; <b>ikinci cihazdan henüz denenmedi</b>) · 9 haneli kod ·
+        hesap + 2FA + kurtarma kodları ·
         cihaz parolası · onay penceresi · kapatılamayan bilgi çubuğu ·
         destek kuyruğu · sohbet, ortak pano, dosya transferi ·
         firma izolasyonu (RLS) · ICE restart · değiştirilemez işlem kaydı ·
@@ -93,11 +94,18 @@
 <h3>Uzaktan girdi — 19.10.2026'da doğrulandı</h3>
 <div class="card">
   <p style="font-size:14.5px">
-    <b>Telefondan, farklı ağdan</b> bağlanıp imleç hareketi, tıklama ve
-    yazma gerçek masaüstünde çalıştı. Ajan logu:
+    <b>Aynı bilgisayardan</b> (yerel ağ üzerinden, sanal makine olmadan)
+    bağlanıp imleç hareketi, tıklama ve yazma gerçek masaüstünde çalıştı.
+    Ajan logu:
   </p>
   <pre style="margin:12px 0"><code>"session_role":"control", "candidate_type":"prflx",
 "duration_s":114.4, "fps_avg":15.8, "mbps_avg":0.83, "input_failures":<span class="c-ok">0</span></code></pre>
+  <div class="note warn">
+    <b>⚠️ Hâlâ doğrulanmamış:</b> <b>ikinci cihazdan</b> (telefon) test
+    yapılmadı. Düzeltme sonrası telefondan denenmedi. <code class="i">prflx</code>
+    (peer-reflexive) yerel ağ bağlantısını gösterir — <b>farklı ağ</b> anlamına
+    gelmez.
+  </div>
   <div class="note bad">
     <b>Bu iş iki gün sürdü ve bir denetim hatasından çıktı.</b> Güvenlik
     denetiminde masaüstü hakları daraltılırken
