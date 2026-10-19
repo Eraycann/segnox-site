@@ -33,13 +33,19 @@ $dbOut = Join-Path $env:TEMP 'segnox-devdb.out'
 $dbErr = Join-Path $env:TEMP 'segnox-devdb.err'
 Remove-Item $dbOut,$dbErr -ErrorAction SilentlyContinue
 
-$dbProc = Start-Process -FilePath 'go' `
-  -ArgumentList @('run','./cmd/segnox-devdb','-seed') `
+# go run her seferinde yeniden deriyordu (90 sn+). Onceden derle.
+$devdbExe = Join-Path $repo 'segnox-devdb.exe'
+if (-not (Test-Path $devdbExe) -or (Get-Item $devdbExe).LastWriteTime -lt (Get-Item (Join-Path $repo 'cmd\segnox-devdb\main.go')).LastWriteTime) {
+  Say '  devdb derleniyor...'
+  & go build -o $devdbExe ./cmd/segnox-devdb
+}
+$dbProc = Start-Process -FilePath $devdbExe `
+  -ArgumentList @('-seed') `
   -WorkingDirectory $repo -PassThru -NoNewWindow `
   -RedirectStandardOutput $dbOut -RedirectStandardError $dbErr
 
 $json = $null
-for ($i = 0; $i -lt 90; $i++) {
+for ($i = 0; $i -lt 240; $i++) {
   Start-Sleep -Seconds 1
   if (Test-Path $dbOut) {
     $line = Get-Content $dbOut -ErrorAction SilentlyContinue |

@@ -106,12 +106,61 @@
 
 <div class="card">
   <p style="font-size:14.5px;color:var(--fg2)">
-    Sistem <b>şu an</b> senin bilgisayarında değil. Bana "başlat" de, tek komutla
-    ayağa kaldırayım. Kurulum tekrarı yok — gerekirse hazır betik var.
+    Sistem <b>şu an</b> senin bilgisayarında değil. Aşağıdaki hazır betik her şeyi
+    tek komutla ayağa kaldırır: veritabanı + sunucu + ajan.
   </p>
+  <pre style="margin:12px 0"><code>cd C:\Users\Erayc\Desktop\segnox-site\.tools
+.\h264-test.ps1</code></pre>
+  <p style="font-size:14px;color:var(--fg2)">
+    Bitince ekrana <b>e-posta, parola ve bağlantı kodu</b> basar. Tarayıcıyı
+    <span class="mono">http://127.0.0.1:8080</span> ya da telefondan
+    <span class="mono">http://192.168.1.26:8080</span> adresinde aç.
+  </p>
+  <div class="note" style="margin-top:12px">
+    <b>İkinci cihaz (telefon) için</b> aynı Wi-Fi'da olmalı ve Windows güvenlik
+    duvarında 8080 açık olmalı:
+    <pre style="margin:8px 0 0"><code>New-NetFirewallRule -DisplayName "Segnox test 8080" -Direction Inbound -LocalPort 8080 -Protocol TCP -Action Allow -Profile Any</code></pre>
+    (Yönetici PowerShell gerekir.)
+  </div>
+</div>
+
+<h3 style="margin-top:26px">Veritabanını elle açmak</h3>
+<div class="card">
+  <p style="font-size:14.5px;color:var(--fg2)">
+    Betik kendi veritabanını açar. Ama ayrı çalıştırmak istersen:
+  </p>
+  <pre style="margin:12px 0"><code>cd C:\Users\Erayc\Desktop\segnox-uzaktan-erisim
+.\segnox-devdb.exe -seed</code></pre>
+  <p style="font-size:14px;color:var(--fg2)">
+    <b>Ctrl+C</b>'ye kadar ayakta kalır. Tek bir JSON satırı basar: veritabanı
+    adresi + seed kullanıcıları. <b>Her koşuda parola değişir.</b>
+    Veriler geçici klasörde tutulur, kapatınca silinir.
+  </p>
+</div>
+
+<h3 style="margin-top:26px">Veritabanı tabloları</h3>
+<div class="card">
+  <p style="font-size:14px;color:var(--fg2)">15 tablo, 2 migration:</p>
+  <table>
+    <tr><th>Alan</th><th>Tablolar</th></tr>
+    <tr><td>Firma ve kişi</td><td class="mono">tenants · users · groups · group_members</td></tr>
+    <tr><td>Cihaz</td><td class="mono">devices</td></tr>
+    <tr><td>Destek</td><td class="mono">support_requests · support_sessions</td></tr>
+    <tr><td>API</td><td class="mono">api_tokens · api_usage · plans</td></tr>
+    <tr><td>Kimlik</td><td class="mono">email_tokens · enrollment_tokens · recovery_codes · web_sessions</td></tr>
+    <tr><td>Denetim</td><td class="mono">audit_log</td></tr>
+  </table>
+  <p style="font-size:13.5px;color:var(--fg3);margin-top:10px">
+    Her tabloda <span class="mono">tenant_id</span> + PostgreSQL RLS var. Uygulama
+    rolü başka bir firmanın verisini <b>hiçbir koşulda</b> göremez.
+  </p>
+</div>
+
+<div class="card">
   <div class="note ok" style="margin-top:12px">
-    <b>Son yapılan testler:</b> gerçek masaüstünde ekran aktarımı, fare/klavye,
-    sohbet, ortak pano, dosya transferi, H.264 (21 fps, 1,82 Mbps, gerçek ekranda).
+    <b>Son yapılan testler:</b> uzaktan fare + klavye + yazı (telefondan, ikinci
+    cihazdan) ✅ · H.264 gerçek masaüstünde 21 fps, %57 daha az bant ✅ ·
+    sohbet, ortak pano, dosya transferi ✅ · aynı ağda 15–22 fps ✅
   </div>
 </div>
 
