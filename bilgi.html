@@ -63,12 +63,13 @@
 <table>
 <tr><th>Durum</th><th>Ne</th></tr>
 <tr><td><span class="badge b-ok">&#199;ALI&#350;IYOR</span></td>
-    <td>Ekran aktarımı (gerçek masaüstünde doğrulandı) · tam fare + klavye ·
-        9 haneli kod · hesap + 2FA + kurtarma kodları · cihaz parolası ·
-        onay penceresi · kapatılamayan bilgi çubuğu · destek kuyruğu ·
-        sohbet, ortak pano, dosya transferi · firma izolasyonu (RLS) ·
-        ICE restart · değiştirilemez işlem kaydı · REST API + kota ·
-        yönetim paneli · Docker sunucu paketi · yedekleme + geri yükleme</td></tr>
+    <td>Ekran aktarımı · <b>uzaktan fare + klavye + yazı</b> (telefondan,
+        farklı ağdan doğrulandı) · 9 haneli kod · hesap + 2FA + kurtarma kodları ·
+        cihaz parolası · onay penceresi · kapatılamayan bilgi çubuğu ·
+        destek kuyruğu · sohbet, ortak pano, dosya transferi ·
+        firma izolasyonu (RLS) · ICE restart · değiştirilemez işlem kaydı ·
+        REST API + kota · yönetim paneli · Docker sunucu paketi ·
+        yedekleme + geri yükleme</td></tr>
 <tr><td><span class="badge b-warn">YAZILDI</span></td>
     <td><b>H.264 video</b> (bant %57 azaldı, gerçek ekranda 21 fps) ·
         <b>yeniden başlat + devam</b> · <b>Windows servisi</b> ·
@@ -87,6 +88,31 @@
   yetkisiyle başka bir kullanıcının oturumunda çalıştırıyor. Bu sadece
   <b>gerçek makinede yönetici yetkisiyle</b> denenebilir. Hata olursa
   bilgisayar açılmaz. Bu yüzden sanal makinede deneniyor.
+</div>
+
+<h3>Uzaktan girdi — 19.10.2026'da doğrulandı</h3>
+<div class="card">
+  <p style="font-size:14.5px">
+    <b>Telefondan, farklı ağdan</b> bağlanıp imleç hareketi, tıklama ve
+    yazma gerçek masaüstünde çalıştı. Ajan logu:
+  </p>
+  <pre style="margin:12px 0"><code>"session_role":"control", "candidate_type":"prflx",
+"duration_s":114.4, "fps_avg":15.8, "mbps_avg":0.83, "input_failures":<span class="c-ok">0</span></code></pre>
+  <div class="note bad">
+    <b>Bu iş iki gün sürdü ve bir denetim hatasından çıktı.</b> Güvenlik
+    denetiminde masaüstü hakları daraltılırken
+    <code class="i">DESKTOP_JOURNALPLAYBACK</code> kaldırılmıştı — "SendInput
+    için gerekmez" sanılmıştı. Injection iş parçacığı o kısıtlı hakla
+    bağlandığı için <b>her</b> SendInput "Access is denied" alıyordu.
+    <br><br>
+    <b>Hata neden görünmüyordu:</b> enjeksiyon hatası <code class="i">Debug</code>
+    seviyesinde yazılıp <code class="i">return nil</code> ile yutuluyordu.
+    Artık <b>Warn</b> seviyesinde, seyreltilerek yazılıyor ve oturum sonunda
+    <code class="i">input_failures</code> sayacı var.
+    <br><br>
+    <b>Ders:</b> Otomatik testler "atlanan" testleri "geçti" sayıyordu.
+    Gerçek girdi testleri SendInput hata verince Skip ediyordu.
+  </div>
 </div>
 
 <h3>H.264 ölçümü — gerçek masaüstü</h3>
