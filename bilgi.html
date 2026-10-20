@@ -850,9 +850,11 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 <table>
 <tr><th>Özellik</th><th>Adım</th><th>Karar</th><th>Durum</th></tr>
 <tr><td class="warn2"><b>Canlı destek düğmesi</b></td><td>6f</td><td>K-36</td>
-    <td>Siteye gömülen tek satır betik (Shadow DOM, çerez kullanmaz), ziyaretçi
-        kodu girer, talep konsolun "Siteden gelenler" listesine düşer, teknisyen
-        koduyla bağlanır. <b>Sunucu tarafı ve testler yazılıyor.</b></td></tr>
+    <td>Betik <span class="mono">/w/v1.js</span> (Shadow DOM, çerez kullanmaz),
+        ziyaretçi kodu girer, talep konsolun "Siteden gelenler" listesine düşer,
+        teknisyen koduyla bağlanır. <b>Sunucu tarafı bitti</b> (izinli köken listesi,
+        bot tuzağı, istek limitleri, imzalı kurulum indirmesi).
+        <b>Uçtan uca testler ve denetim turu sürüyor.</b></td></tr>
 </table>
 </div>
 
@@ -963,9 +965,9 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 <tr><td>RLS, hash zincirli denetim kaydı, hız sınırı, kota, CSRF</td>
     <td class="yes2">Tam</td></tr>
 <tr><td>Güvenlik denetimi</td><td class="yes2">4 tur</td></tr>
-<tr><td>CI</td><td class="warn2">e2e yeşil (29 geçti / 3 atlandı / 0 kaldı) · Go kapısı
-    <b>6f yarım sırasında kırık</b> — yeni migration'daki iki resolver için
-    izolasyon testinin sayacı güncellenmedi</td></tr>
+<tr><td>CI</td><td class="warn2">Go kapısı yeşil (36 paket + 163/163 + e2e 29/3/0).
+    <b>CI'da 3 test kırık:</b> 1 Windows ACL testi (ortam kaynaklı), 1 rtc testi
+    (yük altında), 1 e2e "Güncelle düğmesi" testi (Playwright aralıklı)</td></tr>
 <tr><td>Gerçek sunucu + farklı ağ testi</td><td class="no">Yok — VPS</td></tr>
 <tr><td>Kod imzası</td><td class="no">Yok — sertifika</td></tr>
 <tr><td>KVKK metinleri (avukat)</td><td class="no">Yok</td></tr>
@@ -986,7 +988,7 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 
 <p style="font-size:12.5px;color:var(--fg3);margin:14px 0 0">
   <b>Son güncelleme: 20 Ekim 2026</b> &middot;
-  Kaynak: <span class="mono">Eraycann/segnox-uzaktan-erisim</span> @ <span class="mono">70ad56e</span>
+  Kaynak: <span class="mono">Eraycann/segnox-uzaktan-erisim</span> @ <span class="mono">a4815ee</span>
   &middot; Bu sayfadaki sayıların kaynağı: <span class="mono">PLAN.md</span>,
   <span class="mono">docs/KARARLAR.md</span>, <span class="mono">docs/DEVAM.md</span>,
   <span class="mono">docs/ACIK-KONULAR.md</span>
