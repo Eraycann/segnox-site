@@ -69,13 +69,17 @@
         hesap + 2FA + kurtarma kodları ·
         cihaz parolası · onay penceresi · kapatılamayan bilgi çubuğu ·
         destek kuyruğu · sohbet, ortak pano, dosya transferi ·
+        <b>müşteriler rehberi</b> · <b>çoklu izleyici</b> ·
+        <b>cihaz envanteri</b> · <b>raporlama (P2P/relay oranı, CSV)</b> ·
         firma izolasyonu (RLS) · ICE restart · değiştirilemez işlem kaydı ·
         REST API + kota · yönetim paneli · Docker sunucu paketi ·
         yedekleme + geri yükleme</td></tr>
 <tr><td><span class="badge b-warn">YAZILDI</span></td>
     <td><b>H.264 video</b> (bant %57 azaldı, gerçek ekranda 21 fps) ·
         <b>yeniden başlat + devam</b> · <b>Windows servisi</b> ·
+        <b>siyah ekran (gizlilik)</b> · <b>otomatik güncelleme</b> ·
         sessiz kurulum · süreç ipc · UAC/kilit masaüstü takibi ·
+        <b>oturum kaydı</b> (yarım) ·
         güvenlik denetimi (4 tur, 19 bulgu kapandı)</td></tr>
 <tr><td><span class="badge b-bad">EKS&#304;K</span></td>
     <td><b>farklı ağdan bağlantı</b> (hiç çalışmadı) · <b>ses</b> ·
@@ -553,52 +557,65 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 
 <h2 id="yapilmayanlar" style="margin-top:44px">8 · Yapılmayanlar</h2>
 <p class="sub">
-  <b>20.10.2026'da yapılan denetim.</b> PLAN.md'deki her madde kodda arandı.
+  <b>21.10.2026'da yapılan denetim.</b> PLAN.md'deki her madde kodda arandı.
   <b>Plan yazılı olmak, yapılmış olmak demek değil.</b> Aşağıdaki liste
   bu farkı gösteriyor.
 </p>
 
+<div class="note ok">
+  <b>20.10 gece boyunca 6 adım özellik bitti.</b> Hedef dosyası
+  (<span class="mono">HEDEF-ALPEMIX-ESITLAMA.md</span>) işe yaradı — Claude Code
+  artık her adım sonunda "yapılmayanlar" raporu veriyor.
+</div>
+
 <div class="card">
+<h3>Bitenler</h3>
 <table>
-<tr><th>Özellik</th><th>Plan</th><th>Kod</th><th>Durum</th></tr>
-<tr><td><b>Müşteriler rehberi</b></td><td>5e</td><td class="yes2">Var</td>
-    <td class="yes2">Yapıldı (20.10)</td></tr>
-<tr><td><b>Plan / limit lisans</b></td><td>6</td><td class="yes2">Var</td>
-    <td class="yes2">Yapıldı — <span class="mono">plans</span> tablosu, limitler uygulanıyor</td></tr>
-<tr><td><b>Dokunmatik kontrol</b></td><td>7</td><td class="yes2">Var</td>
-    <td class="yes2">Yapıldı — <span class="mono">gesture.ts</span></td></tr>
-<tr><td><b>Çoklu izleyici</b></td><td>6</td><td class="warn2">Altyapı var</td>
-    <td class="warn2"><span class="mono">MaxViewSessions=4</span> çalışıyor,
-        <b>panelde arayüzü yok</b></td></tr>
-<tr><td><b>Cihaz envanteri</b></td><td>6</td><td class="warn2">Veri var</td>
-    <td class="warn2"><span class="mono">os</span>, <span class="mono">agent_version</span>,
-        <span class="mono">last_seen_at</span> toplanıyor, <b>ekranı yok</b></td></tr>
-<tr><td><b>Raporlama</b></td><td>6</td><td class="warn2">Veri var</td>
-    <td class="warn2">Süre/byte/fps/yol kaydediliyor, <b>rapor ekranı yok</b></td></tr>
-<tr><td><b>Siyah ekran modu</b></td><td>5</td><td class="no">Yok</td>
-    <td class="no">Alpemix'te var</td></tr>
-<tr><td><b>Otomatik güncelleme</b></td><td>6</td><td class="no">Yok</td>
-    <td class="no">Alpemix'te var</td></tr>
-<tr><td><b>Oturum kaydı</b></td><td>6</td><td class="no">Yok</td>
-    <td class="no">Alpemix'te var</td></tr>
-<tr><td><b>Canlı destek widget</b></td><td>6</td><td class="no">Yok</td>
-    <td class="no">Alpemix'te var</td></tr>
-<tr><td><b>Bayi markası</b></td><td>6</td><td class="no">Yok</td>
-    <td class="no">Alpemix'te var (CMX/CM modülleri)</td></tr>
-<tr><td><b>Webhook (ERP/PSA)</b></td><td>7</td><td class="no">Yok</td>
-    <td class="no">—</td></tr>
-<tr><td><b>Cihaz sağlığı (disk/RAM/CPU)</b></td><td>7</td><td class="no">Yok</td>
-    <td class="no">—</td></tr>
-<tr><td><b>Sesli konuşma</b></td><td>7</td><td class="no">Yok</td>
-    <td class="no">Alpemix'te var (yalnız Windows)</td></tr>
-<tr><td><b>Wake-on-LAN</b></td><td>7</td><td class="no">Yok</td>
-    <td class="no">—</td></tr>
-<tr><td><b>Duyarlı izleme</b></td><td>K-15</td><td class="no">Yok</td>
-    <td class="no">—</td></tr>
-<tr><td><b>Abonelik / faturalama</b></td><td>—</td><td class="no">Yok</td>
-    <td class="no"><b>Satış için kritik</b></td></tr>
-<tr><td><b>Linux ajanı</b></td><td>8</td><td class="no">Yok</td>
-    <td class="no">Alpemix Ekim 2025'te ekledi (beta)</td></tr>
+<tr><th>Özellik</th><th>Adım</th><th>Karar</th><th>Detay</th></tr>
+<tr><td class="yes2"><b>Müşteriler rehberi</b></td><td>5e</td><td>K-30</td>
+    <td>Konsol sayfası, cihaz bağlama, belirtçekte müşteri, istek türü rozeti.
+        Türkçe arama katmanı, RLS izolasyon testleri.</td></tr>
+<tr><td class="yes2"><b>Siyah ekran (gizlilik)</b></td><td>5f</td><td>K-32</td>
+    <td>Yakalamaya girmeyen kaplama. <b>Kullanıcı denemesi bekliyor</b> (#16).</td></tr>
+<tr><td class="yes2"><b>Otomatik güncelleme</b></td><td>6a</td><td>K-33</td>
+    <td>Çevrimdışı Ed25519 anahtarla imzalı manifest, ikili sunumu, konsoldan
+        "Güncelle / Tümünü Güncelle", e2e test. <b>Kullanıcı denemesi bekliyor</b> (#17).</td></tr>
+<tr><td class="yes2"><b>Çoklu izleyici</b></td><td>6b</td><td>K-34</td>
+    <td><span class="mono">session.peers</span> yayını, "N kişi bağlı (M izliyor)",
+        müşteri çubuğunda "2 kişi bağlı: 1 kontrol, 1 izliyor".
+        <b>Gözle kontrol bekliyor</b> (#18).</td></tr>
+<tr><td class="yes2"><b>Cihaz envanteri</b></td><td>6c</td><td>—</td>
+    <td>Konsolda durum, OS, sürüm, son görülme, "Güncel değil" uyarısı, filtreler.</td></tr>
+<tr><td class="yes2"><b>Raporlama</b></td><td>6d</td><td>K-34</td>
+    <td><b>P2P/relay oranı</b> (oturum ve bayt), günlük seri grafiği,
+        teknisyen/cihaz kırılımı, CSV (BOM + enjeksiyon kaçışı).</td></tr>
+</table>
+</div>
+
+<div class="card">
+<h3>Yarım kalan</h3>
+<table>
+<tr><th>Özellik</th><th>Adım</th><th>Karar</th><th>Durum</th></tr>
+<tr><td class="warn2"><b>Oturum kaydı (video)</b></td><td>6e</td><td>K-35</td>
+    <td>Sunucu tarafı + ajan bildirimi bitti. <b>Görüntüleyici kaydedici ve
+        konsol "Kayıtlar" sayfası yarım — commit edilmedi.</b>
+        Politika: off / optional / required. Kiracı anahtarıyla AES-GCM.</td></tr>
+</table>
+</div>
+
+<div class="card">
+<h3>Hâlâ lafta (kod yok)</h3>
+<table>
+<tr><th>Özellik</th><th>Plan</th><th>Alpemix'te</th></tr>
+<tr><td>Canlı destek widget</td><td>6f</td><td class="yes2">Var</td></tr>
+<tr><td>Cihaz sağlığı (disk/RAM/CPU) + alarm</td><td>7</td><td>—</td></tr>
+<tr><td>Webhook (ERP/PSA)</td><td>7</td><td>—</td></tr>
+<tr><td>Sesli konuşma</td><td>7</td><td class="yes2">Var (yalnız Windows)</td></tr>
+<tr><td>Wake-on-LAN</td><td>7</td><td>—</td></tr>
+<tr><td>Duyarlı izleme</td><td>K-15</td><td>—</td></tr>
+<tr><td><b>Abonelik / faturalama</b></td><td>—</td><td class="no"><b>Satış için kritik</b></td></tr>
+<tr><td>Linux ajanı</td><td>8</td><td class="warn2">Beta, X11</td></tr>
+<tr><td>Mobil izleme / kontrol</td><td>9 / 10</td><td class="warn2">Kontrol: elle APK</td></tr>
 </table>
 </div>
 
@@ -615,37 +632,37 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 <tr><td>Cihaz parolası</td><td class="yes2">Sunucuya gitmiyor</td>
     <td>1024-bit RSA</td><td class="yes2">Farkımız</td></tr>
 <tr><td>Müşteriler rehberi</td><td class="yes2">Var</td><td>Var</td>
-    <td>Yapıldı (5e)</td></tr>
-<tr><td>Çoklu izleyici</td><td class="warn2">Altyapı var, ekran yok</td>
-    <td class="yes2">2 ücretsiz / 8 pro</td><td class="warn2">6. adım — arayüz</td></tr>
-<tr><td>Cihaz envanteri</td><td class="warn2">Veri var, ekran yok</td>
-    <td class="yes2">Var</td><td class="warn2">6. adım — arayüz</td></tr>
-<tr><td>Raporlama</td><td class="warn2">Veri var, ekran yok</td>
-    <td class="yes2">Var</td><td class="warn2">6. adım — arayüz</td></tr>
-<tr><td>Oturum kaydı</td><td class="no">Yok</td><td class="yes2">Var</td>
-    <td class="no">6. adım</td></tr>
-<tr><td>Siyah ekran modu</td><td class="no">Yok</td><td class="yes2">Var</td>
-    <td class="no">5. adım</td></tr>
-<tr><td>Otomatik güncelleme</td><td class="no">Yok</td><td class="yes2">Var</td>
-    <td class="no">6. adım</td></tr>
+    <td class="yes2">Bitti (5e)</td></tr>
+<tr><td>Çoklu izleyici</td><td class="yes2">Var</td>
+    <td class="yes2">2 ücretsiz / 8 pro</td><td class="yes2">Bitti (6b)</td></tr>
+<tr><td>Cihaz envanteri</td><td class="yes2">Var</td>
+    <td class="yes2">Var</td><td class="yes2">Bitti (6c)</td></tr>
+<tr><td>Raporlama</td><td class="yes2">Var (P2P/relay oranı, CSV)</td>
+    <td class="yes2">Var</td><td class="yes2">Bitti (6d)</td></tr>
+<tr><td>Siyah ekran modu</td><td class="warn2">Var, denenmedi</td>
+    <td class="yes2">Var</td><td class="warn2">Bitti (5f) — #16</td></tr>
+<tr><td>Otomatik güncelleme</td><td class="warn2">Var, denenmedi</td>
+    <td class="yes2">Var</td><td class="warn2">Bitti (6a) — #17</td></tr>
+<tr><td>Oturum kaydı</td><td class="warn2">Yarım</td>
+    <td class="yes2">Var</td><td class="warn2">6e — sürüyor</td></tr>
 <tr><td>Sesli konuşma</td><td class="no">Yok</td><td class="yes2">Var (Windows)</td>
     <td class="no">7. adım</td></tr>
 <tr><td>Canlı destek widget</td><td class="no">Yok</td><td class="yes2">Var</td>
-    <td class="no">6. adım</td></tr>
+    <td class="no">6f</td></tr>
 <tr><td>Bayi markası</td><td class="no">Yok</td><td class="yes2">CMX/CM modülleri</td>
     <td class="no">6. adım</td></tr>
 <tr><td>Android telefon kontrolü</td><td class="no">Yok</td>
-    <td class="warn2">Var ama elle APK ile</td><td class="no">9–10. adım</td></tr>
+    <td class="warn2">Var ama elle APK ile</td><td class="no">10. adım</td></tr>
 <tr><td>Linux ajanı</td><td class="no">Yok</td><td class="warn2">Beta, X11</td>
     <td class="no">8. adım</td></tr>
 <tr><td>Fiyat</td><td class="no">Belirlenmedi</td>
-    <td>3.500 TL (reseller 2.442)</td><td class="no">6. adım — senin kararın</td></tr>
+    <td>3.500 TL (reseller 2.442)</td><td class="no">Senin kararın</td></tr>
 </table>
 <div class="note">
-  <b>Dürüst sonuç:</b> Motor olarak Alpemix'ten daha iyiyiz —
-  izolasyon, denetim kaydı, kriptografi, kurulum yok.
-  Ama <b>ürün olarak 10 özelliğin yarısı eksik.</b> "Daha iyiyiz" demek bugün
-  için erken. Hedef, Alpemix'in özellik listesini eşitlemek.
+  <b>Durum değişti:</b> 20.10'da "motor olarak daha iyi, ürün olarak daha az"
+  diyorduk. Şu an <b>8 özellikte eşitlendik</b> (müşteriler, çoklu izleyici,
+  envanter, raporlama, siyah ekran, otomatik güncelleme + oturum kaydı yolda).
+  Kalan fark: sesli konuşma, canlı destek widget, bayi markası, mobil, Linux.
 </div>
 </div>
 

@@ -106,15 +106,25 @@
 
 <div class="card">
 <table>
-<tr><th>#</th><th>İş</th><th>Kim</th></tr>
-<tr><td>1</td><td><b>K-30 müşteriler</b> bitir, push + CI</td><td>Claude Code</td></tr>
-<tr><td>2</td><td><b>Siyah ekran modu</b> — müşteri ekranı boşalır, sen kontrol edersin</td><td>Claude Code</td></tr>
-<tr><td>3</td><td><b>Otomatik güncelleme</b> — kullanıcı buton görmemeli</td><td>Claude Code</td></tr>
-<tr><td>4</td><td><b>3 yarım özelliği tamamla:</b> çoklu izleyici, cihaz envanteri, raporlama arayüzü</td><td>Claude Code</td></tr>
-<tr><td>5</td><td><b>Oturum kaydı</b></td><td>Claude Code</td></tr>
-<tr><td>6</td><td><b>Fiyat + plan arayüzü</b></td><td>Sen karar + Claude Code</td></tr>
-<tr><td>7</td><td><b>VPS + alan adı</b> → farklı ağdan test</td><td>Sen</td></tr>
-<tr><td>8</td><td><b>Kod imzası + KVKK</b></td><td>Sen</td></tr>
+<tr><th>#</th><th>İş</th><th>Kim</th><th>Durum</th></tr>
+<tr><td>1</td><td><b>6e oturum kaydı</b> — görüntüleyici kaydedici + konsol "Kayıtlar" sayfası</td>
+    <td>Claude Code</td><td class="warn2">Yarım</td></tr>
+<tr><td>2</td><td><b>CI'daki 2 kırık test</b> — güncelleme klasörü sahiplik kontrolü + dosya kanalı</td>
+    <td>Claude Code</td><td class="no">Kırık</td></tr>
+<tr><td>3</td><td><b>Siyah ekran</b> gerçek deneme (#16)</td><td>Sen</td>
+    <td class="warn2">Bekliyor</td></tr>
+<tr><td>4</td><td><b>Otomatik güncelleme</b> VM denemesi (#17)</td><td>Sen</td>
+    <td class="warn2">Bekliyor</td></tr>
+<tr><td>5</td><td><b>Çoklu izleyici</b> gözle kontrol (#18)</td><td>Sen</td>
+    <td class="warn2">Bekliyor</td></tr>
+<tr><td>6</td><td><b>6f canlı destek widget</b></td><td>Claude Code</td><td class="no">Bekliyor</td></tr>
+<tr><td>7</td><td><b>7. adım:</b> ses, cihaz sağlığı, webhook, Wake-on-LAN</td>
+    <td>Claude Code</td><td class="no">Bekliyor</td></tr>
+<tr><td>8</td><td><b>Fiyat + plan arayüzü</b></td><td>Sen karar + Claude Code</td>
+    <td class="no">Senin kararın</td></tr>
+<tr><td>9</td><td><b>VPS + alan adı</b> → farklı ağdan test</td><td>Sen</td>
+    <td class="no">Bekliyor</td></tr>
+<tr><td>10</td><td><b>Kod imzası + KVKK</b></td><td>Sen</td><td class="no">Bekliyor</td></tr>
 </table>
 <p style="font-size:13.5px;color:var(--fg2);margin-top:12px">
   Tam liste ve Alpemix karşılaştırması:
@@ -128,18 +138,24 @@
 <div class="card">
 <table>
 <tr><th>Tarih</th><th>Ne oldu</th></tr>
+<tr><td><b>21.10</b></td>
+    <td><b>Claude Code gece boyunca 6 adım özellik bitirdi</b> (59 commit) —
+        müşteriler rehberi (5e) · siyah ekran (5f) · otomatik güncelleme (6a) ·
+        çoklu izleyici (6b) · cihaz envanteri (6c) · raporlama (6d) ·
+        oturum kaydı (6e) yarım ·
+        <b>yeni kararlar: K-32…K-35</b> · <b>yeni açık konular: #16–#19</b></td></tr>
 <tr><td><b>20.10</b></td>
     <td>Uzaktan girdi çalışıyor (telefon, ikinci cihaz) ·
         yakınlaştırma/kaydırma eklendi · boşlukta çift yazım düzeltildi ·
         <b>DESKTOP_JOURNALPLAYBACK</b> hatası bulundu (girdi hiç çalışmıyordu) ·
-        müşteriler rehberi (5e) kodlandı · CI 4/4 yeşil</td></tr>
+        <b>plan denetimi</b>: 12 özellik sadece planda → hedef dosyası yazıldı</td></tr>
 <tr><td><b>19.10</b></td>
     <td>CI'daki iki testin kök nedeni bulundu (test düzeneği) ·
         <code class="mono">SEGNOX_ORIGINS</code> API'ye uygulandı ·
         H.264 gerçek masaüstünde 21 fps</td></tr>
 <tr><td><b>18.10</b></td>
     <td>5a–5d dalgası: servis, sessiz kurulum, yeniden başlat+devam, H.264 ·
-        güvenlik denetimi 4 tur · <b>plan denetimi</b>: 12 özellik sadece planda</td></tr>
+        güvenlik denetimi 4 tur</td></tr>
 </table>
 </div>
 
