@@ -918,6 +918,8 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
     <td class="no">Yeni — 7. adıma eklenecek</td></tr>
 <tr><td>Çevrimdışı mesaj / duyuru mesajı</td><td class="no">Yok</td><td class="yes2">Var</td>
     <td class="no">Yeni — 7. adıma eklenecek</td></tr>
+<tr><td>Grup sohbeti (çoklu yazışma)</td><td class="no">Yok</td><td class="yes2">Var</td>
+    <td class="no">Yeni — 7. adıma eklenecek</td></tr>
 <tr><td>Şirket dışı iletişim engeli</td><td class="no">Yok</td><td class="yes2">Var</td>
     <td class="no">6. adım — planlı (PLAN.md:92), kod yok</td></tr>
 <tr><td>Ekran üzerine mesaj bırakma</td><td class="no">Yok</td><td class="yes2">Var</td>
@@ -937,10 +939,10 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
   envanter, raporlama, siyah ekran, otomatik güncelleme, oturum kaydı) ve
   <b>1'i yolda</b> (canlı destek düğmesi).
   <br><br>
-  <b>Ama Alpemix'te var, bizde olmayan 10 madde kaldı:</b> sesli konuşma,
+  <b>Ama Alpemix'te var, bizde olmayan 11 madde kaldı:</b> sesli konuşma,
   bayi markası, ekranın belli bir bölümünü paylaşma, çevrimdışı/duyuru mesajı,
-  şirket dışı iletişim engeli, ekran üzerine işaretleme, mobil ajan, Linux ajanı,
-  Mac/iOS ajanı, fiyat/faturalama.
+  grup sohbeti, şirket dışı iletişim engeli, ekran üzerine işaretleme, mobil ajan,
+  Linux ajanı, Mac/iOS ajanı, fiyat/faturalama.
   <br><br>
   <b>Dürüst özet:</b> <b>Motor olarak Alpemix'ten iyiyiz</b> (DTLS + Ed25519
   güncelleme + RLS + silinemez denetim kaydı + parola sunucuya gitmiyor).
@@ -961,7 +963,9 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 <tr><td>RLS, hash zincirli denetim kaydı, hız sınırı, kota, CSRF</td>
     <td class="yes2">Tam</td></tr>
 <tr><td>Güvenlik denetimi</td><td class="yes2">4 tur</td></tr>
-<tr><td>CI</td><td class="yes2">Yeşil (20.10 akşam) — e2e 29 geçti / 3 atlandı / 0 kaldı</td></tr>
+<tr><td>CI</td><td class="warn2">e2e yeşil (29 geçti / 3 atlandı / 0 kaldı) · Go kapısı
+    <b>6f yarım sırasında kırık</b> — yeni migration'daki iki resolver için
+    izolasyon testinin sayacı güncellenmedi</td></tr>
 <tr><td>Gerçek sunucu + farklı ağ testi</td><td class="no">Yok — VPS</td></tr>
 <tr><td>Kod imzası</td><td class="no">Yok — sertifika</td></tr>
 <tr><td>KVKK metinleri (avukat)</td><td class="no">Yok</td></tr>
