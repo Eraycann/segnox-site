@@ -73,6 +73,7 @@
         destek kuyruğu · sohbet, ortak pano, dosya transferi ·
         <b>müşteriler rehberi</b> · <b>çoklu izleyici</b> ·
         <b>cihaz envanteri</b> · <b>raporlama (P2P/relay oranı, CSV)</b> ·
+        <b>oturum kaydı (video)</b> ·
         firma izolasyonu (RLS) · ICE restart · değiştirilemez işlem kaydı ·
         REST API + kota · yönetim paneli · Docker sunucu paketi ·
         yedekleme + geri yükleme</td></tr>
@@ -82,14 +83,14 @@
         <b>yeniden başlat + devam</b> · <b>Windows servisi</b> ·
         <b>siyah ekran (gizlilik)</b> · <b>otomatik güncelleme</b> ·
         sessiz kurulum · süreç ipc · UAC/kilit masaüstü takibi ·
-        <b>oturum kaydı</b> (yarım) ·
+        <b>canlı destek düğmesi</b> (6f — yazılıyor) ·
         güvenlik denetimi (4 tur, 19 bulgu kapandı)</td></tr>
 <tr><td><span class="badge b-bad">EKS&#304;K</span></td>
     <td><b>farklı ağdan bağlantı</b> (hiç test edilmedi) · <b>ses</b> ·
-        <b>kod imzası</b> · MSI/GPO/Intune · <b>oturum kaydı</b> (6e yarım) ·
-        <b>canlı destek widget</b> (6f) · <b>bayi markası</b> (6g) · <b>abonelik / faturalama</b> (6h) ·
+        <b>kod imzası</b> · MSI/GPO/Intune ·
+        <b>bayi markası</b> (6g) · <b>abonelik / faturalama</b> (6h) ·
         <b>cihaz sağlığı + alarm</b> · <b>webhook (ERP/PSA)</b> · <b>Wake-on-LAN</b> · <b>duyarlı izleme</b> ·
-        IP ile bağlantı · mobil ajan · Linux ajan</td></tr>
+        ekranın belli bir bölümünü paylaşma · IP ile bağlantı · mobil ajan · Linux ajan</td></tr>
 </table>
 </div>
 
@@ -235,14 +236,40 @@
 <div class="card">
 <pre><code>  Politika (kiracı ayarı): off │ optional │ required
       │
-      ├─ Görüntüleyici tarafında video kaydedilir (paralel yükleme)
-      ├─ Ajan müşteriyi bilgilendirir: onay penceresinde satır + "Kaydediliyor"
-      ├─ Sunucu kaydı kiracı anahtarıyla AES-GCM şifreler
-      ├─ Saklama süresi dolunca otomatik silinir
-      └─ Yeniden başlatmada yarım kalan kayıt "eksik" olarak işaretlenir</code></pre>
-  <div class="note bad">
-    <b>KVKK metni bekliyor</b> — kayıt alındığında müşteriye ne söyleneceği
+      ├─ Kayıt GÖRÜNTÜLEYİCİDE yapılır (MediaRecorder → WebM VP8/VP9, ses yok)
+      │    Sunucu görüntünün içeriğini görmez — akış uçtan uca DTLS ile
+      ├─ Parça parça yüklenir (≤ 4 MB/parça, kayıt ≤ 2 GB, kiracı kotası 20 GB)
+      ├─ Her parça AES-256-GCM ile şifrelenir (anahtar: HKDF(SEGNOX_DATA_KEY,
+      │    "record" || tenant_id); parça sırası + oturum kimliği ek veri olarak bağlanır)
+      ├─ Müşteriye bildirim: sunucu → ajan "record.notice" → kalıcı gösterge
+      │    ("Bu oturum kaydediliyor"), onay penceresi + oturum çubuğu
+      ├─ Saklama süresi 1–365 gün (varsayılan 30) → otomatik silinir
+      └─ Yeniden başlatmada yarım kalan kayıt "eksik" olarak işaretlenir;
+         diskte boş alan &lt; 5 GB ise yeni parça reddedilir</code></pre>
+  <table style="margin-top:12px">
+  <tr><th>Kim</th><th>Ne yapabilir</th></tr>
+  <tr><td>Yönetici</td><td>Tüm kayıtları görür, izler, indirir, siler</td></tr>
+  <tr><td>Teknisyen</td><td>Yalnız kendi kayıtları</td></tr>
+  <tr><td>İzleyici</td><td class="no">Hiçbir kayıta erişemez</td></tr>
+  <tr><td>API token</td><td class="no">Kayıt içeriği indirilemez (yalnız tarayıcı çerezi)</td></tr>
+  </table>
+  <div class="note warn">
+    <b>İki sınır, açıkça:</b>
+    <br>1) <b>Kayıt teknisyenin tarayıcısının dürüstlüğüne dayanır.</b> "Zorunlu"
+    kipte görüntüleyici kaydı başlatamazsa oturum kapanır (fail-closed) — ama
+    değiştirilmiş bir istemci kaydı atlayabilir. Bu <b>adli kayıt değil</b>,
+    kalite/eğitim kaydıdır.
+    <br>2) <b>Ses kaydedilmez</b> (WebM video, ses yok).
+    <br>3) <b>KVKK metni bekliyor</b> — kayıt alındığında müşteriye ne söyleneceği
     hukuk onayı gerektiriyor. <b>Açık konu #19.</b>
+  </div>
+  <div class="note ok">
+    <b>Müşteriye bildirim güvenliği:</b> Kayıt bildirimi <b>teknisyenin
+    isteğine değil, sunucunun kararına</b> bağlı. Sunucu kaydı açınca ajana
+    <span class="mono">record.notice</span> gönderir; <b>ajan bildirimi alamazsa
+    oturum 409 ile reddedilir</b> — yani "müşteri haberdar olmadan kayıt" durumu
+    oluşamaz. Ajan tarafında kalıcı gösterge kalır; görüntüleyici kapatmaya
+    çalışsa bile bildirim kaybolmaz.
   </div>
 </div>
 
@@ -544,6 +571,27 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 </table>
 </div>
 
+<div class="card">
+<h3>20.10 akşam — otomatik testlerin durumu</h3>
+<table>
+<tr><th>Kapı</th><th>Sonuç</th></tr>
+<tr><td>Go kapısı (build · vet · lint · test)</td><td class="yes2">Temiz</td></tr>
+<tr><td>Görüntüleyici testleri (TypeScript)</td><td class="yes2">163 / 163</td></tr>
+<tr><td>Uçtan uca (e2e)</td><td class="yes2">29 geçti · 3 atlandı · 0 kaldı</td></tr>
+</table>
+<div class="note warn">
+  <b>Atlanan 3 test — isimleriyle:</b>
+  <br>· <span class="mono">customers.spec</span> — "K-30 watch isteği rolü view olur"
+  (kalıcı olarak atlanıyor)
+  <br>· <span class="mono">demo.spec</span> — "monitör seçimi" (sentetik yakalamada
+  tek monitör var)
+  <br>· <span class="mono">real-input.spec</span> — "gerçek enjeksiyon"
+  (<span class="mono">SEGNOX_REAL_INPUT_TEST</span> tanımlı değil)
+  <br><br>
+  <b>Atlanan test "geçti" sayılmaz.</b> Bunlar hâlâ <b>doğrulanmamış</b> demektir.
+</div>
+</div>
+
 <div class="note">
   <b>Neden 7 numara kritik:</b> Aynı ağda çalışmak kolay — bilgisayarlar birbirini
   doğrudan görür. Gerçek hayatta müşterinin modemi arkasındadır ve bağlantı
@@ -787,6 +835,13 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 <tr><td class="yes2"><b>Raporlama</b></td><td>6d</td><td>K-34</td>
     <td><b>P2P/relay oranı</b> (oturum ve bayt), günlük seri grafiği,
         teknisyen/cihaz kırılımı, CSV (BOM + enjeksiyon kaçışı).</td></tr>
+<tr><td class="yes2"><b>Oturum kaydı (video)</b></td><td>6e</td><td>K-35</td>
+    <td>Görüntüleyicide kayıt (WebM, 5 sn parça, sıralı yükleme), kiracı
+        anahtarıyla AES-256-GCM, politika off/optional/required (oturum başında
+        sabitlenir), konsol "Kayıtlar" sayfası (izle/indir/sil), saklama süresi
+        + kısaltma, ajan tarafında kalıcı "kaydediliyor" bildirimi (gidemezse
+        oturum reddedilir). <b>Denetim: 4 orta + 4 düşük bulgu kapandı.</b>
+        <b>Adli kayıt değil</b> — kalite/eğitim kaydı. KVKK metni bekliyor (#19).</td></tr>
 </table>
 </div>
 
@@ -794,10 +849,10 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 <h3>Yarım kalan</h3>
 <table>
 <tr><th>Özellik</th><th>Adım</th><th>Karar</th><th>Durum</th></tr>
-<tr><td class="warn2"><b>Oturum kaydı (video)</b></td><td>6e</td><td>K-35</td>
-    <td>Sunucu tarafı + ajan bildirimi bitti. <b>Görüntüleyici kaydedici ve
-        konsol "Kayıtlar" sayfası yarım — commit edilmedi.</b>
-        Politika: off / optional / required. Kiracı anahtarıyla AES-GCM.</td></tr>
+<tr><td class="warn2"><b>Canlı destek düğmesi</b></td><td>6f</td><td>K-36</td>
+    <td>Siteye gömülen tek satır betik (Shadow DOM, çerez kullanmaz), ziyaretçi
+        kodu girer, talep konsolun "Siteden gelenler" listesine düşer, teknisyen
+        koduyla bağlanır. <b>Sunucu tarafı ve testler yazılıyor.</b></td></tr>
 </table>
 </div>
 
@@ -805,16 +860,26 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 <h3>Hâlâ lafta (kod yok)</h3>
 <table>
 <tr><th>Özellik</th><th>Plan</th><th>Alpemix'te</th></tr>
-<tr><td>Canlı destek widget</td><td>6f</td><td class="yes2">Var</td></tr>
+<tr><td>Bayi markası (CMX/CM)</td><td>6g</td><td class="yes2">Var</td></tr>
 <tr><td>Cihaz sağlığı (disk/RAM/CPU) + alarm</td><td>7</td><td>—</td></tr>
 <tr><td>Webhook (ERP/PSA)</td><td>7</td><td>—</td></tr>
 <tr><td>Sesli konuşma</td><td>7</td><td class="yes2">Var (yalnız Windows)</td></tr>
 <tr><td>Wake-on-LAN</td><td>7</td><td>—</td></tr>
 <tr><td>Duyarlı izleme</td><td>K-15</td><td>—</td></tr>
+<tr><td>Ekranın belli bir bölümünü paylaşma</td><td>—</td><td class="yes2">Var</td></tr>
+<tr><td>Çevrimdışı mesaj / duyuru mesajı</td><td>—</td><td class="yes2">Var</td></tr>
+<tr><td>Şirket dışı iletişim engeli (IP/iç-dış)</td><td>6</td><td class="yes2">Var</td></tr>
+<tr><td>Ekran üzerine mesaj bırakma (işaretleme)</td><td>—</td><td class="yes2">Var</td></tr>
 <tr><td><b>Abonelik / faturalama</b></td><td>—</td><td class="no"><b>Satış için kritik</b></td></tr>
 <tr><td>Linux ajanı</td><td>8</td><td class="warn2">Beta, X11</td></tr>
 <tr><td>Mobil izleme / kontrol</td><td>9 / 10</td><td class="warn2">Kontrol: elle APK</td></tr>
+<tr><td>Mac / iOS ajanı</td><td>—</td><td class="warn2">Var</td></tr>
 </table>
+<div class="note">
+  <b>Bu tablo 20.10'da kod taramasıyla yeniden yazıldı.</b> Alpemix'in özellik
+  sayfasındaki her madde için repoda karşılığı arandı; "yok" denilenler
+  <b>gerçekten kod dışı</b> — altyapı kalıntısı yok.
+</div>
 </div>
 
 <h3>Alpemix'le tek tek karşılaştırma — biz ne yapacağız</h3>
@@ -841,16 +906,26 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
     <td class="yes2">Var</td><td class="warn2">Bitti (5f) — #16</td></tr>
 <tr><td>Otomatik güncelleme</td><td class="warn2">Var, denenmedi</td>
     <td class="yes2">Var</td><td class="warn2">Bitti (6a) — #17</td></tr>
-<tr><td>Oturum kaydı</td><td class="warn2">Yarım</td>
-    <td class="yes2">Var</td><td class="warn2">6e — sürüyor</td></tr>
+<tr><td>Oturum kaydı</td><td class="yes2">Var</td>
+    <td class="yes2">Var</td><td class="yes2">Bitti (6e) — adli kayıt değil</td></tr>
 <tr><td>Sesli konuşma</td><td class="no">Yok</td><td class="yes2">Var (Windows)</td>
     <td class="no">7. adım</td></tr>
-<tr><td>Canlı destek widget</td><td class="no">Yok</td><td class="yes2">Var</td>
-    <td class="no">6f</td></tr>
+<tr><td>Canlı destek düğmesi</td><td class="warn2">Yazılıyor</td><td class="yes2">Var</td>
+    <td class="warn2">6f — K-36</td></tr>
 <tr><td>Bayi markası</td><td class="no">Yok</td><td class="yes2">CMX/CM modülleri</td>
-    <td class="no">6. adım</td></tr>
+    <td class="no">6g</td></tr>
+<tr><td>Ekranın belli bir bölümünü paylaşma</td><td class="no">Yok</td><td class="yes2">Var</td>
+    <td class="no">Yeni — 7. adıma eklenecek</td></tr>
+<tr><td>Çevrimdışı mesaj / duyuru mesajı</td><td class="no">Yok</td><td class="yes2">Var</td>
+    <td class="no">Yeni — 7. adıma eklenecek</td></tr>
+<tr><td>Şirket dışı iletişim engeli</td><td class="no">Yok</td><td class="yes2">Var</td>
+    <td class="no">6. adım — planlı (PLAN.md:92), kod yok</td></tr>
+<tr><td>Ekran üzerine mesaj bırakma</td><td class="no">Yok</td><td class="yes2">Var</td>
+    <td class="no">Yeni — 7. adıma eklenecek</td></tr>
 <tr><td>Android telefon kontrolü</td><td class="no">Yok</td>
     <td class="warn2">Var ama elle APK ile</td><td class="no">10. adım</td></tr>
+<tr><td>Mac / iOS ajanı</td><td class="no">Yok</td><td class="yes2">Var</td>
+    <td class="no">Planlanmadı</td></tr>
 <tr><td>Linux ajanı</td><td class="no">Yok</td><td class="warn2">Beta, X11</td>
     <td class="no">8. adım</td></tr>
 <tr><td>Fiyat</td><td class="no">Belirlenmedi</td>
@@ -858,9 +933,20 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 </table>
 <div class="note">
   <b>Durum değişti:</b> 20.10'da "motor olarak daha iyi, ürün olarak daha az"
-  diyorduk. Şu an <b>6 özellikte eşitlendik, 1'si yolda</b> (müşteriler, çoklu izleyici,
-  envanter, raporlama, siyah ekran, otomatik güncelleme + oturum kaydı yolda).
-  Kalan fark: sesli konuşma, canlı destek widget, bayi markası, mobil, Linux.
+  diyorduk. Şu an <b>7 özellikte eşitlendik</b> (müşteriler, çoklu izleyici,
+  envanter, raporlama, siyah ekran, otomatik güncelleme, oturum kaydı) ve
+  <b>1'i yolda</b> (canlı destek düğmesi).
+  <br><br>
+  <b>Ama Alpemix'te var, bizde olmayan 10 madde kaldı:</b> sesli konuşma,
+  bayi markası, ekranın belli bir bölümünü paylaşma, çevrimdışı/duyuru mesajı,
+  şirket dışı iletişim engeli, ekran üzerine işaretleme, mobil ajan, Linux ajanı,
+  Mac/iOS ajanı, fiyat/faturalama.
+  <br><br>
+  <b>Dürüst özet:</b> <b>Motor olarak Alpemix'ten iyiyiz</b> (DTLS + Ed25519
+  güncelleme + RLS + silinemez denetim kaydı + parola sunucuya gitmiyor).
+  <b>Ürün olarak Alpemix'in gerisindeyiz</b> — eşleşen özellikler tek tek
+  denenmemiş, iki platform eksik, fiyat yok. <b>Bugün satılabilir bir ürün
+  değiliz.</b>
 </div>
 </div>
 
@@ -875,7 +961,7 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 <tr><td>RLS, hash zincirli denetim kaydı, hız sınırı, kota, CSRF</td>
     <td class="yes2">Tam</td></tr>
 <tr><td>Güvenlik denetimi</td><td class="yes2">4 tur</td></tr>
-<tr><td>CI</td><td class="no">2 test kırık (20.10): güncelleme klasörü sahiplik kontrolü + dosya kanalı</td></tr>
+<tr><td>CI</td><td class="yes2">Yeşil (20.10 akşam) — e2e 29 geçti / 3 atlandı / 0 kaldı</td></tr>
 <tr><td>Gerçek sunucu + farklı ağ testi</td><td class="no">Yok — VPS</td></tr>
 <tr><td>Kod imzası</td><td class="no">Yok — sertifika</td></tr>
 <tr><td>KVKK metinleri (avukat)</td><td class="no">Yok</td></tr>
@@ -892,6 +978,15 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 
 <p style="color:var(--fg3);font-size:13px;margin-top:40px;padding-top:20px;border-top:1px solid var(--line)">
   Sıradaki iş için <a href="basla.html">Rehber</a>'e bak.
+</p>
+
+<p style="font-size:12.5px;color:var(--fg3);margin:14px 0 0">
+  <b>Son güncelleme: 20 Ekim 2026</b> &middot;
+  Kaynak: <span class="mono">Eraycann/segnox-uzaktan-erisim</span> @ <span class="mono">70ad56e</span>
+  &middot; Bu sayfadaki sayıların kaynağı: <span class="mono">PLAN.md</span>,
+  <span class="mono">docs/KARARLAR.md</span>, <span class="mono">docs/DEVAM.md</span>,
+  <span class="mono">docs/ACIK-KONULAR.md</span>
+  &middot; <a href="bilgi.html#yapilmayanlar">Yapılmayanlar</a>
 </p>
 
 </div>

@@ -36,8 +36,11 @@
 <div class="card" style="border-left:3px solid var(--acc);margin-top:22px">
   <h2 style="margin-top:0"><span class="badge b-info">&#351;UAN</span> Ne oluyor</h2>
   <p style="font-size:15px">
-    Claude Code 20.10'da 6 adım özellik bitirdi (6e oturum kaydı yarım). CI'da iki test kırık.
-    <b>Sıradaki iş: 6e'yi bitirmek, iki kırık testi onarmak, sonra senin VM denemelerin.</b>
+    Claude Code 20.10'da <b>6a–6e arası 6 özellik bitti</b> (otomatik güncelleme,
+    çoklu izleyici, cihaz envanteri, raporlama, oturum kaydı); <b>6f canlı destek
+    düğmesi yazılıyor</b>. e2e 29 geçti / 3 atlandı / 0 kaldı — CI'daki iki kırık
+    e2e testi onarıldı.
+    <b>Sıradaki iş: 6f'i bitirmek, sonra senin VM denemelerin.</b>
   </p>
   <p style="font-size:14px;color:var(--fg2)">
     <b>Senin sırada 5 iş var</b> (aşağıdaki tabloda): siyah ekran, otomatik
@@ -56,20 +59,21 @@
       <b>Bitti.</b></small>
   </div>
   <div class="ev done">
-    <b>5a–5f, 6a–6d · <span class="badge b-ok">BİTTİ</span></b>
+    <b>5a–5f, 6a–6e · <span class="badge b-ok">BİTTİ</span></b>
     <small>
       Gözetimsiz erişim (servis, sessiz kurulum, yardımcı, ipc), yeniden başlat
       + devam, H.264, <b>siyah ekran</b>, <b>otomatik güncelleme</b>,
       <b>çoklu izleyici</b>, <b>cihaz envanteri</b>, <b>raporlama</b>,
-      <b>müşteriler rehberi</b> (5e).
+      <b>müşteriler rehberi</b> (5e), <b>oturum kaydı</b> (6e).
       <b>Kod bitti. Gerçek makinede hiç denenmedi.</b>
     </small>
   </div>
   <div class="ev now">
-    <b>6e · Oturum kaydı <span class="badge b-warn">YARIM</span></b>
+    <b>6f · Canlı destek düğmesi <span class="badge b-warn">YAZILIYOR</span></b>
     <small>
-      Sunucu tarafı bitti, görüntüleyici kaydedici + konsol "Kayıtlar"
-      sayfası yarım. <b>Claude Code çalışıyor.</b>
+      Siteye gömülen tek satır betik → ziyaretçi "Destek al" der → kodu girer →
+      talep konsola düşer → teknisyen koduyla bağlanır. Karar: <b>K-36</b>.
+      <b>Claude Code çalışıyor.</b>
     </small>
   </div>
   <div class="ev now">
@@ -97,7 +101,7 @@
 <tr><td><b>Servis kipi (SYSTEM, UAC, kilit ekranı)</b></td>
     <td class="warn2">Kod var, denenmedi</td><td><b>Sanal makine</b></td></tr>
 <tr><td><b>CI'da 2 kırık test</b></td>
-    <td class="warn2">Claude Code'da</td><td>Claude Code</td></tr>
+    <td class="warn2">Düzeltildi (20.10) — e2e 29 geçti / 3 atlandı / 0 kaldı</td><td>—</td></tr>
 <tr><td><b>İkinci cihazdan giriş (403) — düzeltildi</b></td>
     <td class="warn2">Claude Code'da</td><td>Claude Code</td></tr>
 <tr><td><b>Fiyat, şirket, KVKK</b></td>
@@ -117,24 +121,23 @@
 <div class="card">
 <table>
 <tr><th>#</th><th>İş</th><th>Kim</th><th>Durum</th></tr>
-<tr><td>1</td><td><b>6e oturum kaydı</b> — görüntüleyici kaydedici + konsol "Kayıtlar" sayfası</td>
-    <td>Claude Code</td><td class="warn2">Yarım</td></tr>
-<tr><td>2</td><td><b>CI'daki 2 kırık test</b> — güncelleme klasörü sahiplik kontrolü + dosya kanalı</td>
-    <td>Claude Code</td><td class="no">Kırık</td></tr>
+<tr><td>1</td><td><b>6f canlı destek düğmesi</b> — widget betiği + konsol "Siteden gelenler" sayfası</td>
+    <td>Claude Code</td><td class="warn2">Yazılıyor</td></tr>
+<tr><td>2</td><td><b>6g bayi markası</b> — logo, marka adı, özel sözleşme metni</td>
+    <td>Claude Code</td><td class="no">Bekliyor</td></tr>
 <tr><td>3</td><td><b>Siyah ekran</b> gerçek deneme (#16)</td><td>Sen</td>
     <td class="warn2">Bekliyor</td></tr>
 <tr><td>4</td><td><b>Otomatik güncelleme</b> VM denemesi (#17)</td><td>Sen</td>
     <td class="warn2">Bekliyor</td></tr>
 <tr><td>5</td><td><b>Çoklu izleyici</b> gözle kontrol (#18)</td><td>Sen</td>
     <td class="warn2">Bekliyor</td></tr>
-<tr><td>6</td><td><b>6f canlı destek widget</b></td><td>Claude Code</td><td class="no">Bekliyor</td></tr>
-<tr><td>7</td><td><b>7. adım:</b> ses, cihaz sağlığı, webhook, Wake-on-LAN</td>
+<tr><td>6</td><td><b>7. adım:</b> ses, cihaz sağlığı, webhook, Wake-on-LAN</td>
     <td>Claude Code</td><td class="no">Bekliyor</td></tr>
-<tr><td>8</td><td><b>Fiyat + plan arayüzü</b></td><td>Sen karar + Claude Code</td>
+<tr><td>7</td><td><b>Fiyat + plan arayüzü</b></td><td>Sen karar + Claude Code</td>
     <td class="no">Senin kararın</td></tr>
-<tr><td>9</td><td><b>VPS + alan adı</b> → farklı ağdan test</td><td>Sen</td>
+<tr><td>8</td><td><b>VPS + alan adı</b> → farklı ağdan test</td><td>Sen</td>
     <td class="no">Bekliyor</td></tr>
-<tr><td>10</td><td><b>Kod imzası + KVKK</b></td><td>Sen</td><td class="no">Bekliyor</td></tr>
+<tr><td>9</td><td><b>Kod imzası + KVKK</b></td><td>Sen</td><td class="no">Bekliyor</td></tr>
 </table>
 <p style="font-size:13.5px;color:var(--fg2);margin-top:12px">
   Tam liste ve Alpemix karşılaştırması:
@@ -148,11 +151,16 @@
 <div class="card">
 <table>
 <tr><th>Tarih</th><th>Ne oldu</th></tr>
-<tr><td><b>21.10</b></td>
+<tr><td><b>20.10 akşam</b></td>
+    <td><b>6a–6e bitti, 6f yazılıyor</b> — otomatik güncelleme · çoklu izleyici ·
+        cihaz envanteri · raporlama · <b>oturum kaydı</b> ·
+        <b>canlı destek düğmesi</b> (K-36) · <b>e2e 29 geçti / 3 atlandı / 0 kaldı</b>
+        (CI'daki 2 kırık test onarıldı) · <b>yeni kararlar: K-32…K-36</b></td></tr>
+<tr><td><b>19–20.10</b></td>
     <td><b>Claude Code gece boyunca 6 adım özellik bitirdi</b> (59 commit) —
         müşteriler rehberi (5e) · siyah ekran (5f) · otomatik güncelleme (6a) ·
         çoklu izleyici (6b) · cihaz envanteri (6c) · raporlama (6d) ·
-        oturum kaydı (6e) yarım ·
+        oturum kaydı (6e) başladı ·
         <b>yeni kararlar: K-32…K-35</b> · <b>yeni açık konular: #16–#19</b></td></tr>
 <tr><td><b>20.10</b></td>
     <td>Uzaktan girdi çalışıyor (aynı bilgisayardan doğrulandı;
@@ -281,7 +289,7 @@
 <div class="wrap" style="margin-top:44px;padding-top:18px;border-top:1px solid var(--line)">
   <p style="font-size:12.5px;color:var(--fg3);margin:0">
     <b>Son güncelleme: 20 Ekim 2026</b> &middot;
-    Kaynak: <span class="mono">Eraycann/segnox-uzaktan-erisim</span> @ <span class="mono">e1b334b</span>
+    Kaynak: <span class="mono">Eraycann/segnox-uzaktan-erisim</span> @ <span class="mono">70ad56e</span>
     &middot; Bu sayfadaki sayıların kaynağı: <span class="mono">PLAN.md</span>,
     <span class="mono">docs/</span>, <span class="mono">docs/taslak/olcumler-*.md</span>
     &middot; <a href="bilgi.html#yapilmayanlar">Yapılmayanlar</a>
