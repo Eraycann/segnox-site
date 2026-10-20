@@ -22,7 +22,7 @@ silinemez denetim kaydı · cihaz parolası sunucuya gitmez.
 
 **Kural:** Aynı dosyaya ikimiz de dokunmayız. Kod = Claude Code, site = ben.
 
-## Adım durumu (20.10.2026)
+## Adım durumu (20.10.2026 akşam)
 
 | Adım | Özellik | Karar | Durum |
 |---|---|---|---|
@@ -36,15 +36,21 @@ silinemez denetim kaydı · cihaz parolası sunucuya gitmez.
 | 6b | Çoklu izleyici arayüzü | K-34 | ✅ |
 | 6c | Cihaz envanteri | — | ✅ |
 | 6d | Raporlama (P2P/relay oranı, CSV) | K-34 | ✅ |
-| **6e** | **Oturum kaydı (video)** | K-35 | 🔄 **devam ediyor** |
-| 6f | Canlı destek widget | K-36 (yazılacak) | ⬜ sırada |
-| 6g | Bayi markası | — | ⬜ |
+| **6e** | **Oturum kaydı (video)** | K-35 | ✅ **bitti** (denetim 4 orta + 4 düşük kapandı) |
+| **6f** | **Canlı destek düğmesi (widget)** | K-36 | 🔄 **yazılıyor** (W1 betik + W2 konsol commit'li, W3 sunucu + W4 e2e sürüyor) |
+| 6g | Bayi markası | K-37 (taslak) | ⬜ sırada |
 | 6h | Fiyat/plan arayüzü | — | ⬜ **kullanıcı kararı** |
 | 7 | Ses, cihaz sağlığı, webhook, Wake-on-LAN, duyarlı izleme | — | ⬜ |
 | 8 | Linux ajanı (X11) | — | ⬜ |
 | 9/10 | Mobil izleme (A) / Android kontrol (B) | K-29 | ⬜ |
 
-**Karar:** 1–4b + 5a–5f + 6a–6d = **36 özellik tamam**. Kalan 6f/6g/6h + 7 + 8 + 9/10.
+**Karar:** 1–4b + 5a–5f + 6a–6e = **37 özellik tamam**. Kalan 6f/6g/6h + 7 + 8 + 9/10.
+
+**20.10 akşam Alpemix karşılaştırması (kod taramasıyla doğrulandı):**
+7 özellikte eşitlendik · 1'i yolda (6f) · **Alpemix'te var, bizde olmayan 11 madde**
+(ses, bayi markası, bölge paylaşma, çevrimdışı/duyuru mesajı, grup sohbeti,
+şirket dışı iletişim engeli, ekran işaretleme, mobil, Linux, Mac/iOS, fiyat).
+→ **Motor olarak Alpemix'ten iyiyiz, ürün olarak gerideyiz.**
 
 ## Adım numarası tuzağı
 
@@ -142,16 +148,43 @@ cd C:\Users\Erayc\Desktop\segnox-uzaktan-erisim
 git push origin main
 gh run list --repo Eraycann/segnox-uzaktan-erisim --workflow ci --branch main --limit 1
 gh run view <id> --repo Eraycann/segnox-uzaktan-erisim --json jobs,conclusion
+gh run view <id> --repo Eraycann/segnox-uzaktan-erisim --log-failed
 ```
 
 **Claude Code'un push'u yok — ben yaparım.** CI 4 iş: windows · linux(-race) ·
 e2e · deploy(coturn-probe).
+
+### Ana dalda bilinen kırık testler (20.10 akşam)
+
+| Test | Nerede | Neden | Kim |
+|---|---|---|---|
+| `TestMigrateFromScratch` | internal/store | 6f migration 00006 iki yeni resolver ekledi; izolasyon testi 9 bekliyor (11 olmalı) | Claude Code (çalışma alanında) |
+| `TestPrepareUpdateDir` | internal/agent/svc (windows) | **CI ortamına bağlı** — "foreign-owner policy accepted the user's file". Yerelde geçiyor, CI'da hep kırık. **Kimse farkında değilmiş.** | Claude Code |
+| e2e "Güncelle düğmesi" | e2e/tests/update.spec.ts | Playwright `res.json()` protocol hatası (CI'da aralıklı) | Claude Code |
+
+**Ders:** Push, adım ortasında değil **ağaç kendi kendine yeterliyken** yapılmalı.
+6f W1/W2 commit'liyken sunucu ucu yoktu → 3 iş kırık. Push'u "commit'li = hazır"
+diye değil, "CI yeşil" diye yap.
 
 ## Site güncelleme kuralı
 
 Claude Code her adım sonunda **"yapılmayanlar" raporu** veriyor (HEDEF dosyasındaki
 kural). Ben onu siteye işliyorum. Ayda 1 denetim (subagent) ile tutarlılığı
 kontrol ediyorum — **kendi gözüme güvenme**.
+
+**20.10 akşam site durumu:** `42a1ce3` push edildi, Pages canlı
+(https://eraycann.github.io/segnox-site/). 6e "Bitenler"e alındı, 6f "Yarım
+kalan"a, Alpemix karşılaştırma tablosu **kod taramasıyla** yeniden yazıldı
+(7 eşit + 1 yolda + 11 eksik), El Kitabi'ne "atlanan 3 testin adı" ve kayıt
+şemasının gerçek hali girdi, CI satırı gerçeğe çekildi.
+
+**Kural:** 4 sayfada da damga var (`Son güncelleme: <tarih> · Kaynak: repo @ <hash>`).
+bilgi.html'de damga **yoktu** → eklendi. Yeni sayfa/kolon açarken damgayı unutma.
+
+## Araştırma (benim alanım)
+
+- `.tools/ARASTIRMA-6F-CANLI-DESTEK.md` — Alpemix'in canlı destek widget'ının
+  10 davranışı + bize çıkarımları + K-36 için açık karar noktaları.
 
 ## VPS / para (bilgi)
 
