@@ -34,6 +34,67 @@
 
 <section>
   <div class="wrap">
+    <h2><span class="n">00</span>Sistemde ne var</h2>
+    <p class="sub">Üç parça, iki ayrı kanal. Ayrıntılı akış şemaları →
+      <a href="bilgi.html#akis">El Kitabı → 2 · Nasıl çalışır</a></p>
+
+    <div class="card">
+<pre><code>  MÜŞTERİNİN BİLGİSAYARI            SUNUCU (VPS)              TEKNİSYENİN CİHAZI
+  ┌────────────────────┐             ┌──────────────┐          ┌──────────────┐
+  │ segnox-agent(.exe) │             │ segnox-server│          │  Tarayıcı    │
+  │  ├ DXGI yakalama    │             │  ├ sinyal WS │          │  (WebRTC)    │
+  │  ├ H.264 (MF)      │             │  ├ REST API  │          │  kurulum yok │
+  │  ├ SendInput       │             │  └ konsol    │          └──────┬───────┘
+  │  └ onay penceresi  │             │              │                 │
+  └─────────┬──────────┘             │  PostgreSQL  │                 │ ③ WebRTC
+             │ ① sinyal (WebSocket)  │  (RLS)       │                 │   (veri)
+             └──────────────────────►│              │◄────────────────┘
+                                        │  coturn     │ ② TURN relay
+                                        │  Caddy      │  (yol kurulamazsa)
+                                        └──────────────┘</code></pre>
+    </div>
+
+    <div class="grid g3">
+      <div class="card">
+        <h4>Güvenlik modeli</h4>
+        <ul class="chk">
+          <li><b>DTLS/SRTP</b> — görüntü uçtan uca şifreli, <b>sunucu göremez</b></li>
+          <li><b>Cihaz parolası sunucuya gitmez</b> — ajan kendi doğrular</li>
+          <li><b>HMAC</b> — TURN kimliği ağda dolaşmaz</li>
+          <li><b>RLS</b> — veritabanı başka firmanın satırını vermeyi reddeder</li>
+          <li><b>Hash zincirli denetim kaydı</b> — silinemez</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Video yolu</h4>
+        <ul class="chk">
+          <li><b>DXGI</b> — ekran yakalama (hızlı, ~15 ms)</li>
+          <li><b>Media Foundation</b> — H.264 kodlama (donanım varsa GPU)</li>
+          <li><b>JPEG karo</b> — yedek, codec yoksa otomatik düşer</li>
+          <li><b>Pion</b> — WebRTC kütüphanesi (saf Go, MIT)</li>
+        </ul>
+        <p style="font-size:13.5px;color:var(--fg2);margin-top:10px">
+          Bant: H.264 <b>1518</b> vs JPEG karo <b>3225</b> kbit/s.
+        </p>
+      </div>
+      <div class="card">
+        <h4>Ağ yolu</h4>
+        <ul class="chk">
+          <li><b>STUN</b> — genel IP öğrenme (ücretsiz)</li>
+          <li><b>TURN</b> — veri taşıma (para)</li>
+          <li><b>ICE</b> — otomatik: host → srflx → relay</li>
+          <li><b>coturn</b> — kendi TURN/STUN sunucumuz</li>
+        </ul>
+        <p style="font-size:13.5px;color:var(--fg2);margin-top:10px">
+          <b>⚠️ Farklı ağdan hiç test edilmedi.</b>
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
     <h2><span class="n">01</span>Bir bağlantının tamamı</h2>
     <p class="sub">Teknik personelin "bağlan" dediği andan ekranın görünmesine kadar.</p>
 
@@ -334,7 +395,12 @@
   <div class="wrap">
     <div class="grid g2">
       <div><b>Segnox</b> — mimari ve sunucu<br>
-        <span style="color:var(--fg3)">Pilot sürümü · satılabilir ürün değildir.</span></div>
+        <span style="color:var(--fg3)">Pilot sürümü · satılabilir ürün değildir.</span>
+      <p style="font-size:12.5px;color:var(--fg3);margin:14px 0 0">
+        <b>Son güncelleme: 20 Ekim 2026</b> &middot;
+        Kaynak: <span class="mono">Eraycann/segnox-uzaktan-erisim</span> @ <span class="mono">e1b334b</span>
+        &middot; <a href="bilgi.html#yapilmayanlar">Yapılmayanlar</a>
+      </p></div>
       <div><a href="basla.html">Rehber</a> &middot; <a href="bilgi.html">El Kitab&#305;</a></div>
     </div>
   </div>
