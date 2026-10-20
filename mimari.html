@@ -95,7 +95,8 @@
           <tr><td>Hız</td><td>En yüksek — arada sunucu yok</td></tr>
           <tr><td>Sunucu yükü</td><td>Sıfır</td></tr>
           <tr><td>Ne zaman</td><td>Aynı ağ, veya karşılıklı port açık (nadir)</td></tr>
-          <tr><td>Sektör oranı</td><td>%75–90 arası</td></tr>
+          <tr><td>Sektör oranı</td>
+              <td class="warn2"><b>Henüz ölçülmedi.</b> Bizim ölçümümüz yok.</td></tr>
         </table>
       </div>
       <div class="card">
@@ -106,16 +107,19 @@
           <tr><td>Hız</td><td>Daha yavaş, çift yol</td></tr>
           <tr><td>Sunucu yükü</td><td>Bant genişliği</td></tr>
           <tr><td>Ne zaman</td><td>Doğrudan yol kurulamadığında</td></tr>
-          <tr><td>Sektör oranı</td><td>%10–25 (kurumsal ağda daha yüksek)</td></tr>
+          <tr><td>Sektör oranı</td>
+              <td class="warn2"><b>Henüz ölçülmedi.</b> Sektör tahminleri
+                  (%10–25) bizim ölçümümüz değil, kaynağı yok.</td></tr>
         </table>
       </div>
     </div>
 
-    <div class="note ok">
+    <div class="note">
       <b>Bilinen bir uyarı:</b> Bazı kurumsal ağlar gereğinden fazla engelleyici
       olabiliyor — VPN yönlendirmeleri, çift NAT, güvenlik duvarı politikaları.
-      Kurumsal ağda aktarım oranı %50'yi bulabiliyor. Bu yüzden gerçek oran
-      ölçülüyor, tahmin edilmiyor.
+      Bu durumda aktarım oranı yükselir. <b>Gerçek oran ancak gerçek sunucuda
+      ölçülecek</b> — tahmin edilmiyor. (Raporlama ekranı 6d adımıyla bu ölçümü
+      yapacak.)
     </div>
 
     <h3>Neden iki IP adresi</h3>
@@ -141,7 +145,9 @@
         <p class="mono" style="color:var(--fg3)">reddedildi — "deneysel" uyarısı</p>
       </div>
     </div>
-    <p>İki IP almanın maliyeti aylık ~€1–2 ve sorunu tamamen ortadan kaldırıyor.</p>
+    <p>İki IP almanın maliyeti aylık ~€1–2. <b>Plan — hiç kurulmadı.</b>
+      (Sektör oranı ölçülmediği için "sorunu tamamen ortadan kaldırır"
+      denemez; ölçümle doğrulanacak.)</p>
   </div>
 </section>
 
@@ -214,8 +220,14 @@
     <h2><span class="n">04</span>Yalınlık ve süreklilik</h2>
     <p class="sub">
       Ürün satın alan bir şirketin sorusu: "sunucunuz çökerse ne olur?"
-      Bu sorunun cevabı yazılı, testli.
+      <b>Bu bölüm bir plandır — sunucu henüz devrede değil, hiçbir sayı
+      ölçülmedi.</b> Betikler hazır, kurulduğunda prova edilecek.
     </p>
+
+    <div class="note warn" style="margin:14px 0">
+      <b>Hedefler (ölçülmüş değil):</b> RPO 5 dk · RTO 2 saat ·
+      %99,5 erişilebilirlik · aylık otomatik geri yükleme testi.
+    </div>
 
     <div class="metrics">
       <div class="metric"><div class="v">5 dk</div><div class="l">en çok veri kaybı<br>(RPO)</div></div>
@@ -288,17 +300,20 @@
     <h2><span class="n">05</span>KVKK ve veri konumu</h2>
 
     <div class="note warn">
-      <b>Sunucu Almanya'da.</b> Bu, KVKK açısından "yurt dışı veri aktarımı"
-      anlamına geliyor. K-07 kararı: standart sözleşme + imzadan sonra 5 iş günü
-      içinde KVKK'ya bildirim. <b>Avukat onayı bekleniyor</b> — adım 6'dan önce.
+      <b>Plan — avukat onayı bekleniyor.</b> Sunucu Almanya'da olacak; bu KVKK
+      açısından "yurt dışı veri aktarımı" demek. K-07 kararı: standart sözleşme +
+      imzadan sonra KVKK'ya bildirim. <b>Adım 6'dan önce hukuk onayı alınmalı.</b>
+      Aşağıdaki maddeler <b>plan</b>dır, henüz hukuk onayı yoktur.
     </div>
 
     <dl class="kv">
-      <dt>Veritabanı</dt><dd>Hetzner, Almanya</dd>
-      <dt>Yedekler</dt><dd>Hetzner nesne deposu, farklı lokasyon</dd>
-      <dt>SMTP</dt><dd>Amazon SES / Postmark / Brevo</dd>
-      <dt>Rol</dt><dd>Bayi ve müşteri = veri sorumlusu, Segnox = veri işleyen</dd>
-      <dt>Yerleşiklik zorunluluğu</dt><dd>Türkiye'de veri tutma zorunluluğu bulunamadı</dd>
+      <dt>Veritabanı</dt><dd>Hetzner, Almanya (plan)</dd>
+      <dt>Yedekler</dt><dd>Hetzner nesne deposu, farklı lokasyon (plan)</dd>
+      <dt>SMTP</dt><dd>Seçilmedi — adaylar: Amazon SES / Postmark / Brevo</dd>
+      <dt>Rol</dt><dd>Bayi ve müşteri = veri sorumlusu, Segnox = veri işleyen
+        (avukat onayı bekliyor)</dd>
+      <dt>Yerleşiklik</dt><dd>Araştırıldı, zorunluluk bulunamadı —
+        <b>teyit avukattan</b></dd>
     </dl>
 
     <div class="note ok">
@@ -320,7 +335,7 @@
     <div class="grid g2">
       <div><b>Segnox</b> — mimari ve sunucu<br>
         <span style="color:var(--fg3)">Pilot sürümü · satılabilir ürün değildir.</span></div>
-      <div><a href="basla.html">← Başla</a> · <a href="gelistirici.html">Geliştirici →</a></div>
+      <div><a href="basla.html">Rehber</a> &middot; <a href="bilgi.html">El Kitab&#305;</a></div>
     </div>
   </div>
 </footer>

@@ -54,11 +54,11 @@
   <div class="wrap">
     <div class="statusbar">
       <div class="sbox ok"><div class="n">MVP</div><div class="v">Tamamlandı</div>
-        <div class="s">5 adım bitti, testler geçti</div></div>
-      <div class="sbox next"><div class="n">Sıradaki</div><div class="v">Adım 5</div>
-        <div class="s">Gözetimsiz erişim + akıcı video</div></div>
-      <div class="sbox"><div class="n">Kod</div><div class="v">39.958 satır</div>
-        <div class="s">Go 204 dosya · TypeScript 7.024</div></div>
+<div class="s">1–4b adımları bitti, testler geçti</div></div>
+      <div class="sbox next"><div class="n">Sıradaki</div><div class="v">Adım 6</div>
+<div class="s">Gerçek sunucu + farklı ağdan test + fiyat</div></div>
+      <div class="sbox"><div class="n">Kod</div><div class="v">83.854 satır</div>
+        <div class="s">Go 370 dosya · TypeScript 68</div></div>
       <div class="sbox"><div class="n">Bağımlılık</div><div class="v">0 cgo</div>
         <div class="s">Tümü saf Go, çapraz derlenebilir</div></div>
       <div class="sbox"><div class="n">Güvenlik</div><div class="v">0 yüksek bulgu</div>
@@ -81,41 +81,29 @@
     <p class="sub">Karıştırmamak için: amacına göre bir sayfa seç.</p>
 
     <div class="grid g2">
-      <a class="role" href="nasil.html">
-        <div class="ic">🔧</div>
-        <b>Nasıl çalışır? <span style="color:var(--acc);font-size:13px">→ buradan başla</span></b>
-        <small>İki taraf ne, nerede çalışıyor, veri nereden geçiyor, para ne kadar,
-        kod imzalama şart mı. Teknik bilgi yoksa önce burayı oku.</small>
-      </a>
-      <a class="role" href="simulator.html" style="border-color:var(--acc);background:rgba(62,166,255,.06)">
-        <div class="ic">▶️</div>
-        <b>UX Simülatörü</b>
-        <small><b style="color:var(--acc)">Tıkla ve oyna.</b> Üç akışı ekran ekran yaşa.
-        Müşteri rolüyle de teknisyen rolüyle de dene.</small>
+      <a class="role" href="bilgi.html" style="border-color:var(--acc);background:rgba(62,166,255,.06)">
+        <div class="ic">📘</div>
+        <b>El Kitabı <span style="color:var(--acc);font-size:13px">→ her şey burada</span></b>
+        <small>Durum, sözlük, ağ (STUN/TURN), test matrisi, riskler, pazar,
+        kararlar, <b>ne yapıldı / ne yapılmadı</b>.</small>
       </a>
       <a class="role" href="basla.html" style="border-color:var(--ok)">
         <div class="ic">⚡</div>
-        <b>Başla <span style="color:var(--ok);font-size:13px">→ çalışan kod</span></b>
-        <small>MVP tamamlandı. Bilgisayarında çalıştır, gerçek masaüstüne bağlan,
-        Türkçe harf yaz. Adım adım komutlar burada.</small>
+        <b>Rehber <span style="color:var(--ok);font-size:13px">→ sıradaki iş</span></b>
+        <small>Sıradaki adım ne, bekleyen engeller, kendi testini nasıl
+        yaparsın, hareket günlüğü.</small>
       </a>
-      <a class="role" href="musteri.html">
+      <a class="role" href="mimari.html">
+        <div class="ic">🔧</div>
+        <b>Mimari</b>
+        <small>Üç parça, veri akışı, güvenlik modeli, protokol, operasyon
+        planı.</small>
+      </a>
+      <a class="role" href="index.html#durum">
         <div class="ic">🖥️</div>
-        <b>Müşteri</b>
-        <small>Destek alıyorum. Ekranımda ne görünür, nasıl güvende olurum,
-        nasıl iptal ederim?</small>
-      </a>
-      <a class="role" href="bayi.html">
-        <div class="ic">🏢</div>
-        <b>Bayi / Teknisyen</b>
-        <small>Kendi markamla satmak istiyorum. Firma izolasyonu, rol sistemi,
-        raporlama, dağıtım.</small>
-      </a>
-      <a class="role" href="gelistirici.html">
-        <div class="ic">⚙️</div>
-        <b>Geliştirici</b>
-        <small>Teknoloji seçimleri ve gerekçeleri, protokol, güvenlik modeli,
-        REST API, test sonuçları, karar kayıtları.</small>
+        <b>Mevcut durum</b>
+        <small>Çalışan / yazılı-ama denenmemiş / eksik olan ne? Bu sayfanın
+        2. bölümü.</small>
       </a>
     </div>
   </div>
@@ -153,8 +141,22 @@
 
         <h3 style="margin-top:22px"><span class="badge b-warn">YAZILDI, DENENMEDİ</span> Yeni yazılan</h3>
         <ul class="chk">
+          <li><b>Müşteriler rehberi</b> — müşteri kaydı, cihaz bağlama,
+              belirtçekte müşteri, "sadece izle" isteği
+              <span class="mono">5e</span></li>
+          <li><b>Siyah ekran (gizlilik)</b> — müşterinin ekranı boşalır,
+              sen kontrol edersin <span class="mono">5f</span></li>
+          <li><b>Otomatik güncelleme</b> — imzalı manifest, konsoldan "Güncelle"
+              <span class="mono">6a</span></li>
+          <li><b>Çoklu izleyici</b> — "N kişi bağlı (M izliyor)"
+              <span class="mono">6b</span></li>
+          <li><b>Cihaz envanteri</b> — durum, OS, sürüm, "Güncel değil"
+              <span class="mono">6c</span></li>
+          <li><b>Raporlama</b> — P2P/relay oranı, günlük grafik, CSV
+              <span class="mono">6d</span></li>
+          <li><b>Oturum kaydı</b> — <b>yarım</b> <span class="mono">6e</span></li>
           <li><b>H.264 akıcı video</b> — Windows'un kendi kodlayıcısı, WebRTC
-              kanalından. Bant <b>%57 düştü</b> (1450 → 3392 kbit/s)
+              kanalından. Bant <b>%53 düştü</b> (3225 → 1518 kbit/s)
               <span class="mono">2af392c</span></li>
           <li><b>Yeniden başlat + devam</b> — bilgisayar açılınca oturum,
               müşteriden yeniden onay istemeden sürüyor
@@ -196,14 +198,15 @@
               <span class="badge b-mut">6. adım</span></li>
           <li><b>Kod imzası</b> — antivirüs "tanımayan yayımcı" diyebilir
               <span class="badge b-mut">6. adım</span></li>
-          <li><b>Otomatik güncelleme</b></li>
-          <li><b>Çoklu izleyici</b> — altyapı hazır, panelde açılacak</li>
-          <li><b>Oturum video kaydı</b></li>
           <li><b>Cihaz sağlığı ve alarm</b> <span class="badge b-mut">7. adım</span></li>
           <li><b>Linux ajanı</b> <span class="badge b-mut">8. adım</span></li>
           <li><b>Sesli konuşma</b> <span class="badge b-mut">7. adım</span></li>
+          <li><b>Canlı destek widget</b> <span class="badge b-mut">6f</span></li>
+          <li><b>Bayi markası</b> <span class="badge b-mut">6g</span></li>
+          <li><b>Abonelik / faturalama</b> <span class="badge b-mut">6h</span></li>
+          <li><b>Webhook (ERP/PSA)</b> <span class="badge b-mut">7. adım</span></li>
+          <li><b>Mobil ajan</b> (izleme → kontrol) <span class="badge b-mut">9–10. adım</span></li>
           <li><b>Wake-on-LAN</b> <span class="badge b-mut">7. adım</span></li>
-          <li><b>Canlı destek widget'ı</b> <span class="badge b-mut">6. adım</span></li>
           <li><b>Yapay zekâ</b> özeti</li>
           <li><b>Kendi sunucusuna kurulum</b></li>
         </ul>
@@ -240,11 +243,11 @@
     </div>
 
     <div class="flow">
-      <div class="step next"><div class="k">5 · SIRADA</div><b>Gözetimsiz + H.264</b>
-        <small>Kur ve unut, yönetici parolası, akıcı video.
-        <b>Burada ürün doğuyor.</b></small></div>
-      <div class="step late"><div class="k">6</div><b>Satılabilir sürüm</b>
-        <small>Toplu kurulum, imza, panel, çoklu izleyici, kayıt.
+      <div class="step done"><div class="k">5 &#10003;</div><b>Gözetimsiz + H.264</b>
+        <small>Kur ve unut, yönetici parolası, akıcı video, siyah ekran,
+        otomatik güncelleme. <b>Kod bitti, gerçek makinede denenmedi.</b></small></div>
+      <div class="step next"><div class="k">6 · SIRADA</div><b>Prod</b>
+        <small>Gerçek sunucu, farklı ağdan test, fiyat, kod imzası, KVKK.
         <b>Satış burada başlar.</b></small></div>
       <div class="step late"><div class="k">7</div><b>Fark yaratanlar</b>
         <small>Cihaz sağlığı, alarm, ses, uyandırma, webhook</small></div>
@@ -305,7 +308,7 @@
           <li>S&#246;zl&#252;k &#8212; ICE, TURN, RLS, SYSTEM</li>
           <li>Test matrisi ve &#246;l&#uuml;&#287;&#252;mler</li>
           <li>Riskler, pazar, rakipler</li>
-          <li>Karar kay&#305;t&#305; (K-01&#8230;K-28)</li>
+          <li>Karar kay&#305;t&#305; (K-01&#8230;K-35)</li>
         </ul>
         <p style="margin-top:10px"><a class="btn" href="bilgi.html">El Kitab&#305;n&#305; a&#231;</a></p>
       </div>

@@ -58,7 +58,7 @@
 
 <!-- ============ 1 DURUM ============ -->
 <h2 id="durum">1 · Durum</h2>
-<p class="sub">Son güncelleme: 18 Ekim 2026. Her satır gerçek koddan ve gerçek testten.</p>
+<p class="sub">Son güncelleme: 20 Ekim 2026. Her satır gerçek koddan ve gerçek testten.</p>
 
 <div class="card">
 <table>
@@ -75,7 +75,8 @@
         REST API + kota · yönetim paneli · Docker sunucu paketi ·
         yedekleme + geri yükleme</td></tr>
 <tr><td><span class="badge b-warn">YAZILDI</span></td>
-    <td><b>H.264 video</b> (bant %57 azaldı, gerçek ekranda 21 fps) ·
+    <td><b>H.264 video</b> (bant %53 azaldı; gerçek masaüstünde 21 fps ölçüldü,
+        sentetik ekranda 24,6 fps) ·
         <b>yeniden başlat + devam</b> · <b>Windows servisi</b> ·
         <b>siyah ekran (gizlilik)</b> · <b>otomatik güncelleme</b> ·
         sessiz kurulum · süreç ipc · UAC/kilit masaüstü takibi ·
@@ -128,16 +129,20 @@
   </div>
 </div>
 
-<h3>H.264 ölçümü — gerçek masaüstü</h3>
+<h3>H.264 ölçümü — sentetik ekran</h3>
 <div class="card">
 <table>
 <tr><th>Kip</th><th>FPS</th><th>Bant</th><th>İlk kare</th></tr>
-<tr><td class="yes2"><b>H.264</b></td><td>24,0</td><td class="yes2"><b>1450 kbit/s</b></td><td>622 ms</td></tr>
-<tr><td>JPEG karo</td><td>26,4</td><td>3392 kbit/s</td><td>1042 ms</td></tr>
+<tr><td class="yes2"><b>H.264</b></td><td>24,6</td><td class="yes2"><b>1518 kbit/s</b></td><td>804 ms</td></tr>
+<tr><td>JPEG karo</td><td>25,0</td><td>3225 kbit/s</td><td>665 ms</td></tr>
 </table>
 <p style="font-size:14px;color:var(--fg2);margin-top:10px">
-  <b>%57 daha az bant.</b> Relay ücreti çıkış trafiğine göre ödendiği için bu
-  doğrudan sunucu maliyetini belirler: 1 saat relay ≈ 2,7 GB yerine ≈ 1,2 GB.
+  <b>%53 daha az bant.</b> Relay ücreti çıkış trafiğine göre ödendiği için bu
+  doğrudan sunucu maliyetini belirler: 1 saat relay ≈ 1,45 GB yerine ≈ 0,68 GB.
+  <br>
+  <span style="color:var(--fg3)"><b>Sentetik 1920×1080 desen</b>, yalnız 127.0.0.1.
+  Gerçek masaüstünde sonuç farklı olur. Kaynak:
+  <span class="mono">docs/taslak/olcumler-adim5d.md</span></span>
 </p>
 <div class="note bad">
   <b>Açık sorun:</b> 1 piksel genişliğinde <b>renkli çizgiler bulanıklaşıyor</b>
@@ -296,8 +301,9 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 <tr><td class="no"><b>YÜKSEK</b></td>
     <td><b>Servis kipi gerçek makinede denenmedi.</b> Hata olursa bilgisayar açılmaz.</td></tr>
 <tr><td class="warn2"><b>ORTA</b></td>
-    <td><b>İkinci cihazdan giriş 403 alıyor</b> — <code class="i">SEGNOX_ORIGINS</code>
-        API'ye uygulanmıyor. Bu yüzden fare/klavye gerçek testi yapılamıyor.</td></tr>
+    <td><b>İkinci cihazdan giriş 403 alıyordu</b> — <code class="i">SEGNOX_ORIGINS</code>
+        API'ye uygulanmıyordu. 19.10'da düzeltildi, ikinci cihazdan test
+        hâlâ yapılmadı.</td></tr>
 <tr><td class="warn2"><b>ORTA</b></td>
     <td><b>İmzasız EXE</b> — antivirüs "tanımayan yayımcı" der. Kurumsal alıcı reddeder.</td></tr>
 <tr><td class="warn2"><b>ORTA</b></td>
@@ -407,80 +413,6 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 <!-- ============ 7 KAYITLAR ============ -->
 <h2 id="kayit" style="margin-top:44px">7 · Kayıtlar</h2>
 
-<h3>Alpemix'te var, bizde yok</h3>
-<div class="card">
-  <p style="font-size:14px;color:var(--fg2)">
-    18.10.2026'da Alpemix'in kendi özellik sayfasından çıkarıldı.
-    <b>İyi haber: hepsi bizim planımızda zaten var</b> — sorun plana eklemek
-    değil, sırasını geldiğinde yapmak. Aşağıdaki "Adım" sütunu PLAN.md'deki
-    gerçek adım numarasıdır.
-  </p>
-  <table>
-  <tr><th>Özellik</th><th>Alpemix'te</th><th>Bizde</th><th>Plan</th></tr>
-  <tr><td><b>Siyah ekran modu</b></td><td class="yes2">✅</td>
-      <td class="no">Yok</td>
-      <td class="yes2"><b>5. adım</b></td></tr>
-  <tr><td><b>Sürekli erişim parolası</b></td><td class="yes2">✅</td>
-      <td class="warn2">Kısmi</td>
-      <td class="yes2"><b>5. adım</b></td></tr>
-  <tr><td><b>Müşteriler rehberi</b></td><td class="yes2">✅</td>
-      <td class="no">Yok</td>
-      <td class="yes2"><b>5e</b> (K-30)</td></tr>
-  <tr><td><b>"Sadece izle" istek türü</b></td><td class="yes2">✅</td>
-      <td class="no">Yok</td>
-      <td class="yes2"><b>5e</b> (K-30)</td></tr>
-  <tr><td><b>Otomatik güncelleme</b></td><td class="yes2">✅</td>
-      <td class="no">Yok</td>
-      <td class="yes2"><b>6. adım</b></td></tr>
-  <tr><td><b>Oturum kaydı</b></td><td class="yes2">✅</td>
-      <td class="no">Yok</td>
-      <td class="yes2"><b>6. adım</b> (şifreli)</td></tr>
-  <tr><td><b>Raporlama</b></td><td class="yes2">✅</td>
-      <td class="no">Yok</td>
-      <td class="yes2"><b>6. adım</b></td></tr>
-  <tr><td><b>Çoklu izleyici</b> (2 ücretsiz / 8 pro)</td>
-      <td class="yes2">✅</td><td class="no">Yok</td>
-      <td class="yes2"><b>6. adım</b> — altyapı hazır</td></tr>
-  <tr><td><b>Sesli iletişim</b></td><td class="yes2">✅ (yalnız Windows)</td>
-      <td class="no">Yok</td>
-      <td class="yes2"><b>7. adım</b></td></tr>
-  <tr><td>Cihaz sağlığı + alarm</td><td class="yes2">✅</td>
-      <td class="no">Yok</td>
-      <td class="yes2"><b>7. adım</b></td></tr>
-  <tr><td>Şirket dışı iletişim engeli</td><td class="yes2">✅</td>
-      <td class="no">Yok</td>
-      <td style="color:var(--fg3)"><b>Bize uygun görünmüyor</b> — müşteri
-          firmasının kendi müşterisini engellemesi istenebilir.</td></tr>
-  </table>
-  <div class="note">
-    <b>Sonuç:</b> Rakip özellik listeleri bizi ürkütmüyor. <b>%90'ı zaten
-    planımızda</b>, doğru sırada. Fark yaratan şey sıra ve kalite olacak.
-  </div>
-</div>
-
-<h3>Neyi eksik bulduğumuz</h3>
-<div class="card">
-<table>
-<tr><th>#</th><th>Özellik</th><th>Durum</th><th>Adım</th></tr>
-<tr><td>1</td><td><b>Müşteriler rehberi + istek türü</b></td>
-    <td>Yeni karar, kod yok</td><td class="yes2"><b>5e</b></td></tr>
-<tr><td>2</td><td><b>Siyah ekran modu</b></td>
-    <td>Planda yazılı, kod yok</td><td class="yes2"><b>5</b></td></tr>
-<tr><td>3</td><td><b>Çoklu izleyici</b></td>
-    <td>Altyapı hazır, panelde açılacak</td><td class="yes2"><b>6</b></td></tr>
-<tr><td>4</td><td><b>Oturum kaydı</b></td>
-    <td>Yok</td><td class="yes2"><b>6</b></td></tr>
-<tr><td>5</td><td><b>Otomatik güncelleme</b></td>
-    <td>İskelet var (imzalı manifest), etkin değil</td>
-      <td class="yes2"><b>6</b></td></tr>
-<tr><td>6</td><td><b>Raporlama</b></td>
-    <td>Temel ölçüm verisi toplanıyor, rapor yok</td>
-      <td class="yes2"><b>6</b></td></tr>
-<tr><td>7</td><td><b>Sesli konuşma</b></td>
-    <td>Protokolde hiç yok</td><td class="yes2"><b>7</b></td></tr>
-</table>
-</div>
-
 <h3>Alpemix Linux'ta ne yapıyor</h3>
 <div class="card">
   <p style="font-size:14px;color:var(--fg2)">
@@ -542,8 +474,8 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 <div class="card">
 <table>
 <tr><th>Dosya</th><th>Ne</th></tr>
-<tr><td class="mono">docs/KARARLAR.md</td><td>28 karar. "Neden böyle?" sorusunun cevabı.</td></tr>
-<tr><td class="mono">docs/ACIK-KONULAR.md</td><td>14 açık soru. <b>Senin kararını bekleyen işler.</b></td></tr>
+<tr><td class="mono">docs/KARARLAR.md</td><td>35 karar (K-01…K-35). "Neden böyle?" sorusunun cevabı.</td></tr>
+<tr><td class="mono">docs/ACIK-KONULAR.md</td><td>19 açık soru. <b>Senin kararını bekleyen işler.</b></td></tr>
 <tr><td class="mono">PLAN.md</td><td>Adım tablosu, mimari, test matrisi.</td></tr>
 <tr><td class="mono">docs/DEVAM.md</td><td>Claude Code'un kaldığı yer.</td></tr>
 <tr><td class="mono">cmd/segnox-server/config.go</td>
@@ -557,13 +489,13 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 
 <h2 id="yapilmayanlar" style="margin-top:44px">8 · Yapılmayanlar</h2>
 <p class="sub">
-  <b>21.10.2026'da yapılan denetim.</b> PLAN.md'deki her madde kodda arandı.
+  <b>20.10.2026'da yapılan denetim.</b> PLAN.md'deki her madde kodda arandı.
   <b>Plan yazılı olmak, yapılmış olmak demek değil.</b> Aşağıdaki liste
   bu farkı gösteriyor.
 </p>
 
 <div class="note ok">
-  <b>20.10 gece boyunca 6 adım özellik bitti.</b> Hedef dosyası
+  <b>20.10 gece boyunca 6 adım özellik bitti (94 commit, 3 günde).</b> Hedef dosyası
   (<span class="mono">HEDEF-ALPEMIX-ESITLAMA.md</span>) işe yaradı — Claude Code
   artık her adım sonunda "yapılmayanlar" raporu veriyor.
 </div>
@@ -660,7 +592,7 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 </table>
 <div class="note">
   <b>Durum değişti:</b> 20.10'da "motor olarak daha iyi, ürün olarak daha az"
-  diyorduk. Şu an <b>8 özellikte eşitlendik</b> (müşteriler, çoklu izleyici,
+  diyorduk. Şu an <b>6 özellikte eşitlendik, 1'si yolda</b> (müşteriler, çoklu izleyici,
   envanter, raporlama, siyah ekran, otomatik güncelleme + oturum kaydı yolda).
   Kalan fark: sesli konuşma, canlı destek widget, bayi markası, mobil, Linux.
 </div>
@@ -677,7 +609,7 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 <tr><td>RLS, hash zincirli denetim kaydı, hız sınırı, kota, CSRF</td>
     <td class="yes2">Tam</td></tr>
 <tr><td>Güvenlik denetimi</td><td class="yes2">4 tur</td></tr>
-<tr><td>CI</td><td class="yes2">4/4 yeşil</td></tr>
+<tr><td>CI</td><td class="no">2 test kırık (20.10): güncelleme klasörü sahiplik kontrolü + dosya kanalı</td></tr>
 <tr><td>Gerçek sunucu + farklı ağ testi</td><td class="no">Yok — VPS</td></tr>
 <tr><td>Kod imzası</td><td class="no">Yok — sertifika</td></tr>
 <tr><td>KVKK metinleri (avukat)</td><td class="no">Yok</td></tr>
@@ -688,7 +620,7 @@ SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<s
 <div class="note bad">
   <b>Sonuç: prod'a hazır değil.</b> Kod tarafı büyük ölçüde hazır; eksiğin
   çoğu <b>senin kararların</b> (fiyat, sertifika, KVKK, sunucu, alan adı).
-  12 özellik ise sadece planda yazılı.
+  9 özellik ise sadece planda yazılı.
 </div>
 </div>
 

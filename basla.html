@@ -36,12 +36,13 @@
 <div class="card" style="border-left:3px solid var(--acc);margin-top:22px">
   <h2 style="margin-top:0"><span class="badge b-info">&#351;UAN</span> Ne oluyor</h2>
   <p style="font-size:15px">
-    Claude Code 5. adımın son paketini bitirdi. Kod hazır, CI'da iki test kırık.
-    <b>Sıradaki iş: Claude Code'un onarıp push etmesi, sonra telefondan gerçek
-    fare testi.</b>
+    Claude Code 20.10'da 6 adım özellik bitirdi (6e oturum kaydı yarım). CI'da iki test kırık.
+    <b>Sıradaki iş: 6e'yi bitirmek, iki kırık testi onarmak, sonra senin VM denemelerin.</b>
   </p>
   <p style="font-size:14px;color:var(--fg2)">
-    Senin yapacağın bir şey yok. Claude Code bitince haber ver.
+    <b>Senin sırada 5 iş var</b> (aşağıdaki tabloda): siyah ekran, otomatik
+    güncelleme ve çoklu izleyici denemeleri — hepsi VM'de. Kod işleri Claude
+    Code'da.
   </p>
 </div>
 
@@ -51,28 +52,37 @@
 <div class="tl">
   <div class="ev done">
     <b>1–4b · MVP</b>
-    <small>Sinyal, ekran, fare/klavye, hesap, rol, destek kuyruğu, onay penceresi,
-      H.264, yeniden başlat+devam. <b>Bitti.</b></small>
+    <small>Sinyal, ekran, fare/klavye, hesap, rol, destek kuyruğu, onay penceresi.
+      <b>Bitti.</b></small>
   </div>
-  <div class="ev now">
-    <b>5a–5d · Gözetimsiz erişim <span class="badge b-warn">YAZILDI</span></b>
+  <div class="ev done">
+    <b>5a–5f, 6a–6d · <span class="badge b-ok">BİTTİ</span></b>
     <small>
-      Servis, sessiz kurulum, yardımcı süreç, ipc, yeniden başlatma, H.264.
-      <b>Kod tamam. Gerçek makinede hiç denenmedi.</b><br>
-      ⏳ Bekleyen: iki kırık CI testi, sonra <b>sanal makine denemesi</b>.
+      Gözetimsiz erişim (servis, sessiz kurulum, yardımcı, ipc), yeniden başlat
+      + devam, H.264, <b>siyah ekran</b>, <b>otomatik güncelleme</b>,
+      <b>çoklu izleyici</b>, <b>cihaz envanteri</b>, <b>raporlama</b>,
+      <b>müşteriler rehberi</b> (5e).
+      <b>Kod bitti. Gerçek makinede hiç denenmedi.</b>
     </small>
   </div>
-  <div class="ev">
-    <b>6 · Gerçek sunucu <span class="badge b-bad">ASIL ADIM</span></b>
-    <small>Hetzner sunucu, TURN, alan adı, KVKK metinleri, fiyat, kod imzası,
+  <div class="ev now">
+    <b>6e · Oturum kaydı <span class="badge b-warn">YARIM</span></b>
+    <small>
+      Sunucu tarafı bitti, görüntüleyici kaydedici + konsol "Kayıtlar"
+      sayfası yarım. <b>Claude Code çalışıyor.</b>
+    </small>
+  </div>
+  <div class="ev now">
+    <b>6 · Prod <span class="badge b-bad">ASIL ADIM</span></b>
+    <small>Gerçek sunucu, TURN, alan adı, KVKK metinleri, fiyat, kod imzası,
       toplu kurulum. <b>Farklı ağdan test de burada yapılacak.</b><br>
       💰 Burada ilk para harcanır (~€10/ay).
     </small>
   </div>
   <div class="ev">
     <b>7–8 · Sonra</b>
-    <small>Linux ajanı, mobil ajan (izleme → kontrol), cihaz sağlığı,
-      sesli konuşma.</small>
+    <small>Ses, cihaz sağlığı, webhook, Wake-on-LAN, Linux ajanı,
+      mobil ajan (izleme → kontrol).</small>
   </div>
 </div>
 
@@ -88,7 +98,7 @@
     <td class="warn2">Kod var, denenmedi</td><td><b>Sanal makine</b></td></tr>
 <tr><td><b>CI'da 2 kırık test</b></td>
     <td class="warn2">Claude Code'da</td><td>Claude Code</td></tr>
-<tr><td><b>İkinci cihazdan giriş (403)</b></td>
+<tr><td><b>İkinci cihazdan giriş (403) — düzeltildi</b></td>
     <td class="warn2">Claude Code'da</td><td>Claude Code</td></tr>
 <tr><td><b>Fiyat, şirket, KVKK</b></td>
     <td class="no">Belirlenmedi</td><td><b>Sen</b></td></tr>
@@ -145,7 +155,8 @@
         oturum kaydı (6e) yarım ·
         <b>yeni kararlar: K-32…K-35</b> · <b>yeni açık konular: #16–#19</b></td></tr>
 <tr><td><b>20.10</b></td>
-    <td>Uzaktan girdi çalışıyor (telefon, ikinci cihaz) ·
+    <td>Uzaktan girdi çalışıyor (aynı bilgisayardan doğrulandı;
+        <b>ikinci cihazdan henüz denenmedi</b>) ·
         yakınlaştırma/kaydırma eklendi · boşlukta çift yazım düzeltildi ·
         <b>DESKTOP_JOURNALPLAYBACK</b> hatası bulundu (girdi hiç çalışmıyordu) ·
         <b>plan denetimi</b>: 12 özellik sadece planda → hedef dosyası yazıldı</td></tr>
@@ -216,9 +227,10 @@
 
 <div class="card">
   <div class="note ok" style="margin-top:12px">
-    <b>Son yapılan testler:</b> uzaktan fare + klavye + yazı (telefondan, ikinci
-    cihazdan) ✅ · H.264 gerçek masaüstünde 21 fps, %57 daha az bant ✅ ·
-    sohbet, ortak pano, dosya transferi ✅ · aynı ağda 15–22 fps ✅
+    <b>Son yapılan testler:</b> uzaktan fare + klavye + yazı (aynı bilgisayardan
+    doğrulandı) ✅ · H.264 sentetik ekranda 24,6 fps, %53 daha az bant ✅ ·
+    sohbet, ortak pano, dosya transferi ✅ · e2e 14 geçti 1 atlandı (sentetik
+    tek monitör) ✅
   </div>
 </div>
 
