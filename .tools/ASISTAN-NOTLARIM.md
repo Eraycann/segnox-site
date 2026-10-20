@@ -37,7 +37,7 @@ silinemez denetim kaydı · cihaz parolası sunucuya gitmez.
 | 6c | Cihaz envanteri | — | ✅ |
 | 6d | Raporlama (P2P/relay oranı, CSV) | K-34 | ✅ |
 | **6e** | **Oturum kaydı (video)** | K-35 | ✅ **bitti** (denetim 4 orta + 4 düşük kapandı) |
-| **6f** | **Canlı destek düğmesi (widget)** | K-36 | 🔄 **yazılıyor** (W1 betik + W2 konsol commit'li, W3 sunucu + W4 e2e sürüyor) |
+| **6f** | **Canlı destek düğmesi (widget)** | K-36 | 🔄 **W3 sunucu bitti (a4815ee)** — W4 e2e + Tur B denetimi sürüyor |
 | 6g | Bayi markası | K-37 (taslak) | ⬜ sırada |
 | 6h | Fiyat/plan arayüzü | — | ⬜ **kullanıcı kararı** |
 | 7 | Ses, cihaz sağlığı, webhook, Wake-on-LAN, duyarlı izleme | — | ⬜ |
@@ -154,17 +154,24 @@ gh run view <id> --repo Eraycann/segnox-uzaktan-erisim --log-failed
 **Claude Code'un push'u yok — ben yaparım.** CI 4 iş: windows · linux(-race) ·
 e2e · deploy(coturn-probe).
 
-### Ana dalda bilinen kırık testler (20.10 akşam)
+### Ana dalda bilinen kırık testler (20.10 akşam, a4815ee sonrası)
 
 | Test | Nerede | Neden | Kim |
 |---|---|---|---|
-| `TestMigrateFromScratch` | internal/store | 6f migration 00006 iki yeni resolver ekledi; izolasyon testi 9 bekliyor (11 olmalı) | Claude Code (çalışma alanında) |
-| `TestPrepareUpdateDir` | internal/agent/svc (windows) | **CI ortamına bağlı** — "foreign-owner policy accepted the user's file". Yerelde geçiyor, CI'da hep kırık. **Kimse farkında değilmiş.** | Claude Code |
+| `TestPrepareUpdateDir` | internal/agent/svc (windows) | **CI ortamına bağlı** — "foreign-owner policy accepted the user's file". Yerelde geçiyor, CI'da 3+ koşudur kırık. **Kimse farkında değilmiş.** | Claude Code |
+| rtc testi | internal/agent/rtc (`rtc_test.go:65`) | `t.Errorf`, test bittikten sonra gelen pion goroutine'inde → "Fail in goroutine after TestVideoNoVideoOffer has completed" + DATA RACE. Yerelde 3× geçiyor | Claude Code |
 | e2e "Güncelle düğmesi" | e2e/tests/update.spec.ts | Playwright `res.json()` protocol hatası (CI'da aralıklı) | Claude Code |
+| ~~`TestMigrateFromScratch`~~ | internal/store | ✅ **düzeldi** — 6f migration'ı 2 resolver ekledi, sayaç 9→11 |
 
 **Ders:** Push, adım ortasında değil **ağaç kendi kendine yeterliyken** yapılmalı.
 6f W1/W2 commit'liyken sunucu ucu yoktu → 3 iş kırık. Push'u "commit'li = hazır"
 diye değil, "CI yeşil" diye yap.
+
+**Claude Code onay denetimi takıldı (20.10 17:30):** komut koşmadan önceki
+otomatik güvenlik onayı yanıt vermiyor; ajan W3'ü bitirdi ama commit atamadı.
+**Çözüm: ben kalite kapısını koşup commit'ledim** (`bash scripts/kapi.sh go` →
+yeşil) ve görev dosyasını sildim. Aynı tuzağa düşmemek için: Claude Code
+beklerken ben `kapi.sh go` koşup yeşilse WIP'i ben commit'leyebilirim.
 
 ## Site güncelleme kuralı
 
