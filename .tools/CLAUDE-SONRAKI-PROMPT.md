@@ -113,46 +113,32 @@ logo + ad + renk + alan adı; ajan EXE'de marka) → sonra 7. adım.
 
 ---
 
-## 5 · Windows 11 VM testi — artık tam otomatik
+## 5 · Windows 11 VM ortam bilgisi
 
-Kullanıcı "VM'de denenmedi" olan her şeyi gerçek makinede denemek istiyor.
-**Sen kod yazma; test betiklerini yaz.** Altyapı hazır:
+Kullanici "VM'de denenmedi" olan her seyi gercek makinede denemek istiyor
+(servis kipi/SYSTEM, siyah ekran, coklu izleyici, otomatik guncelleme,
+yeniden baslat+devam). Altyapi asistan tarafindan kuruldu:
 
-- VM: VMware Workstation Pro 26.0.1 · Windows 11 x64 · 4 GB RAM · 4 vCPU ·
-  NAT (VMnet8) · konuk IP `192.168.79.129` · host `192.168.79.1`
-- **VM şifreleme parolası: `windows11`** · `vmrun -T ws -vp windows11 <vmx> ...`
-- Konuk kullanıcı: `Eraycansivri@hotmail.com` (Microsoft hesabı) — **parola
-  bilinmiyor, Guest Operations (vmrun -gu/-gp) ÇALIŞMIYOR.** Bu yüzden
-  otomasyon **paylaşımlı klasör + SYSTEM zamanlanmış görev** üzerinden:
-  - Paylaşım: `\\vmware-host\Shared Folders\segnox-calisma` (yazılabilir) ve
-    `\\vmware-host\Shared Folders\segnox-paket` (salt okunur) — **HGFS çalışıyor**
-  - Konukta `C:\segnox-test\poller.ps1` → `SegnoxVMTest` zamanlanmış görevi
-    (SYSTEM, 1 dakika) paylaşımdaki `calis.ps1`'i alıp çalıştırır, çıktıyı
-    `...\segnox-calisma\sonuc\calis.log`'a yazar
-  - Host tarafı: `.tools/vm-test.ps1` (sunucu + DB + katılım kodu üretir, betiği
-    paylaşıma yazar, sonucu bekler)
-- Kopyala-yapıştır **çalışıyor** (yeniden başlatmadan sonra).
+- VM: Workstation Pro 26.0.1, Win11 x64, 4 GB/4 vCPU, NAT, konuk 192.168.79.129
+  **Sifreleme parolasi: `windows11`** (`vmrun -T ws -vp windows11 ...`) —
+  betiğe gömme, parametre/ortam degiskeni al.
+- Konuk kullanici: MSA (Eraycansivri@hotmail.com), parola bilinmiyor →
+  **Guest Operations (vmrun -gu/-gp) CALISMIYOR.** Otomasyon paylasim
+  klasoru uzerinden: `\\vmware-host\Shared Folders\segnox-calisma` (yazilabilir,
+  host: `.tools\vm-paylasim`), `segnox-paket` (salt okunur, `.tools\vm-paket`).
+  Konukta `C:\segnox-test\poller.ps1` → `SegnoxVMTest` zamanlanmis gorevi
+  (SYSTEM, 1 dk) paylasimdaki `calis.ps1`'i alip calistirir; cikti
+  `sonuc\calis.log`'a yazilir. Host: `.tools\vm-test.ps1` (sunucu+DB+katilim
+  kodu hazirlar, `calis.ps1` yazar, sonucu bekler).
+- Kopyala-yapistir calisiyor.
 
-**Senden istenen:** test senaryolarını `calis.ps1` olarak yaz (konukta SYSTEM
-olarak çalışacak, `ProgramData\Segnox` ve ajan loglarını okuyup paylaşıma
-yazacak). Sıralı adımlar:
-1. `servis` — ajanı `/S /TOKEN=...` ile **servis olarak** kur, **SYSTEM olarak
-   çalıştığını kanıtla** (`Get-Process -IncludeUserName`), `ProgramData\Segnox`
-   ACL'sinin yalnız SY/BA/Administrators olduğunu göster (K-26).
-2. `siyah` — siyah ekran kipinin gerçek masaüstünde çalıştığı (#16, K-32) —
-   **gözle kontrol gerekir**, otomatik kısım + ekran görüntüsü.
-3. `izleyici` — çoklu izleyici (#18, K-34) — gözle kontrol.
-4. `guncelleme` — otomatik güncelleme (#17, K-33): host'ta `segnox-release`
-   ile imzalı manifest yayınla, konukta ajanın güncellemesini bekle, geri alma
-   yolunu doğrula.
-5. `devam` — yeniden başlat + devam (K-27, #14): konuğu yeniden başlat, oturumun
-   müşteri onayı sormadan sürdüğünü doğrula.
-
-**Kural:** Windows Update'i ve otomatik yeniden başlatmayı **önce** kapat
-(VM kendini yeniden başlatıyordu — `wuauserv`, `UsoSvc`, `WaaSMedicSvc`).
-Konuk betiği `C:\segnox-test\` altında çalışmalı, çıktıyı
-`\\vmware-host\Shared Folders\segnox-calisma\sonuc\` altına yazmalı.
-
+**Sorumluluk:** senin "VM senaryolari" ajanin betikleri yaziyor
+(`docs/gorevler/vm-senaryolar.md`): hazirlik · servis · siyah · izleyici ·
+guncelleme · devam. Asistan bunlari commit'ler ve **gercek VM kosusunu
+kullaniciyla birlikte yurutur** — sen yalniz kod tarafini kapat.
+Isler icin senin tarafindan **kod** gerekiyorsa (orn. siyah ekran gozle kontrol
+senaryosu ajan tarafinda bir komut gerektiriyorsa) yaz; asistan istegi yazar,
+sen kodu yazarsin.
 ---
 
 ## 6 · Kurallar (değişmedi)
