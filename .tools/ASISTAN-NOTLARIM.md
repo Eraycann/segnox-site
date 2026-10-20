@@ -22,7 +22,7 @@ silinemez denetim kaydı · cihaz parolası sunucuya gitmez.
 
 **Kural:** Aynı dosyaya ikimiz de dokunmayız. Kod = Claude Code, site = ben.
 
-## Adım durumu (20.10.2026 akşam)
+## Adım durumu (21.10.2026)
 
 | Adım | Özellik | Karar | Durum |
 |---|---|---|---|
@@ -36,22 +36,24 @@ silinemez denetim kaydı · cihaz parolası sunucuya gitmez.
 | 6b | Çoklu izleyici arayüzü | K-34 | ✅ |
 | 6c | Cihaz envanteri | — | ✅ |
 | 6d | Raporlama (P2P/relay oranı, CSV) | K-34 | ✅ |
-| **6e** | **Oturum kaydı (video)** | K-35 | ✅ **bitti** (denetim 4 orta + 4 düşük kapandı) |
-| **6f** | **Canlı destek düğmesi (widget)** | K-36 | 🔄 **W3 sunucu bitti (a4815ee)** — W4 e2e + Tur B denetimi sürüyor |
-| 6g | Bayi markası | K-37 (taslak) | ⬜ sırada |
-| 6h | Fiyat/plan arayüzü | — | ⬜ **kullanıcı kararı** |
+| 6e | Oturum kaydı (video) | K-35 | ✅ bitti (denetim 4 orta + 4 düşük kapandı) |
+| 6f | Canlı destek düğmesi (widget) | K-36 | ✅ bitti (e2e 6 senaryo) |
+| 6g | Bayi markası | K-37 | ✅ bitti (denetim 3 orta kapandı) |
+| 6h | Fiyat/plan | — | ⬜ **KULLANICI KARARI (ACIK #8)** |
 | 7 | Ses, cihaz sağlığı, webhook, Wake-on-LAN, duyarlı izleme | — | ⬜ |
 | 8 | Linux ajanı (X11) | — | ⬜ |
 | 9/10 | Mobil izleme (A) / Android kontrol (B) | K-29 | ⬜ |
 
-**Karar:** 1–4b + 5a–5f + 6a–6e = **37 özellik tamam**. Kalan 6f/6g/6h + 7 + 8 + 9/10.
+**Karar:** 1–4b + 5a–5f + 6a–6g = **39 özellik tamam**. Kalan 6h + 7 + 8 + 9/10.
 
-**20.10 akşam Alpemix karşılaştırması (kod taramasıyla doğrulandı):**
-7 özellikte eşitlendik · 1'i yolda (6f) · **Alpemix'te var, bizde olmayan 11 madde**
-(ses, bayi markası, bölge paylaşma, çevrimdışı/duyuru mesajı, grup sohbeti,
-şirket dışı iletişim engeli, ekran işaretleme, mobil, Linux, Mac/iOS, fiyat).
-→ **Motor olarak Alpemix'ten iyiyiz, ürün olarak gerideyiz.**
+**Alpemix karşılaştırması (21.10):** **9 özellikte eşitlendik** (5e, 5f, 6a,
+6b, 6c, 6d, 6e, 6f, 6g). **Alpemix'te var bizde olmayan 10 madde:** sesli konuşma ·
+bölge paylaşma · çevrimdışı/duyuru mesajı · grup sohbeti · şirket dışı iletişim
+engeli · ekran işaretleme · mobil ajan · Linux ajanı · Mac/iOS ajanı · fiyat.
+→ **Motor olarak iyiyiz, ürün olarak 10 özellik gerideyiz.**
 
+**Satılabilirlik için iki şey gerekiyor:** (1) fiyat senin kararın,
+(2) dört özelliğin gerçek makinede doğrulanması (ben + sen).
 ## Adım numarası tuzağı
 
 `PLAN.md` adım numaraları **adım = bir özellik grubu**, eski tabloda 6 = "prod
@@ -79,8 +81,9 @@ altyapısı" idi, **artık 6a–6h = ayrı adımlar**. Sayıları karıştırma.
 
 #13 servis kipi VM · #14 5c/5d VM · #15 telefon · #16 siyah ekran ·
 #17 otomatik güncelleme VM · #18 çoklu izleyici gözle · #19 KVKK kayıt metni ·
-**#4 Hetzner + DNS** · **#6 kod imzası** · **#7 KVKK avukat** · **#8 fiyat** ·
-**#5 SMTP**
+**#4 Hetzner + DNS** · **#6 kod imzası** · **#7 KVKK avukat** · **#8 fiyat (6h)** ·
+**#21 marka içerik onayı (6g)** · **#5 SMTP**
+**#20 VM betikleri hazır → benim işim (senin gözün gereken 4 adım).**
 
 ## Site (benim alanım)
 
