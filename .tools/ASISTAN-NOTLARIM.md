@@ -119,10 +119,30 @@ damgası. Ölçüm sayıları kaynak dosyasına atıflı. Mükerrer tablo yok.
 **Temiz build worktree:** `C:\Users\Erayc\Desktop\segnox-test-build`
 (Claude Code'un WIP'inden bağımsız derleme yapmak için — `git worktree add`)
 
-**VM:** VMware Pro, Windows 11 x64, 4 GB RAM, 4 CPU, NAT (VMnet8)
+**VM:** VMware Pro 26.0.1 · Windows 11 x64 · 4 GB RAM · 4 vCPU · NAT (VMnet8)
 - VM IP: `192.168.79.129` · host: `192.168.79.1` (VMnet8) / `192.168.1.26` (Wi-Fi)
-- **Host→VM yerine VM→host** bağlantısı kurulur (dosya sunucusu)
-- Tools ISO: `C:\Program Files\VMware\VMware Workstation\windows.iso`
+- **VM şifreleme parolası: `windows11`** → `vmrun -T ws -vp windows11 <vmx>`
+- Konuk Microsoft hesabı: `Eraycansivri@hotmail.com`, parola **bilinmiyor** →
+  **Guest Operations (vmrun -gu/-gp) ÇALIŞMIYOR.** Parolasız yol: HTTP.
+- **Konukta VMware Tools çalışıyor** (13.1.5) ama **HGFS/paylaşımlı klasör
+  çalışmıyor** (yarım kalan kurulumdan) → `\\vmware-host\...` erişilemiyor.
+- Kopyala-yapıştır **çalışıyor** (VM yeniden başlatılınca).
+- `.vmx` yolları boşluklu → **8.3 kısa yol** şart: `C:\Users\Erayc\DOCUME~1\VIRTUA~1\WINDOW~1\WINDOW~1.VMX`
+
+**VM test betikleri (benim alanım, `.tools/`):**
+| Dosya | Ne |
+|---|---|
+| `vm-prep.ps1` | .vmx ayarları (copy-paste/DnD/HGFS, 2 paylaşım) + VM açma (kapalıyken yazılır) |
+| `vm-test.ps1` | **6 senaryo**: hazirlik · servis · siyah · izleyici · guncelleme · devam |
+| `vm-tls-proxy.go` | TLS sonlandırıcı reverse proxy (ajan https zorunlu) |
+| `host-dosya-sunucu.py` | Host HTTP sunucusu: dosya verir, konuk sonucu POST eder |
+| `vm-paylasim/poller-http.ps1` | Konukta SYSTEM görev: calis.ps1 indirir, çalıştırır, sonucu POST eder |
+| `vm-paylasim/bootstrap-http.ps1` | Konukta TEK yapıştırma: görevi kurar |
+| `host-ekran.ps1` | Host ekranını PNG alır (görmek için) |
+
+**Çalışma akışı:** konukta 1 kez bootstrap yapıştırılır → sonra her senaryo
+host'tan `.\vm-test.ps1 -Senaryo <ad>` ile otomatik koşar.
+**Ajan ancak `https://` ile bağlanabilir** (K-21) → testte TLS proxy + CA.
 - VM'de PowerShell politikası "Restricted" → `Set-ExecutionPolicy Bypass -Scope CurrentUser -Force`
 - **VM kendini yeniden başlatıyordu** → `kur.ps1` artık güncelleme servislerini kapatıyor
 
@@ -211,3 +231,29 @@ bilgi.html'de damga **yoktu** → eklendi. Yeni sayfa/kolon açarken damgayı un
 - Kod imzası yok → kurumsal alıcı reddeder
 - Abonelik/faturalama yok → satış için kritik
 - CI'da 2 test kırık olabilir (Claude Code WIP)
+
+## 21.10 — VM'de bulunan GERÇEK ÜRÜN HATALARI (Claude Code'a verilecek)
+
+**1) Onay penceresi (ui-host) servis kipinde anında düşüyor — EN KRİTİK**
+```
+"ui-host started" (pid 9504) → "ui-host attached" → "ui-host connection lost, restarting" (ipc: connection closed)
+```
+3 kez tekrar ediyor (backoff 1s/2s/4s). Yardımcı SYSTEM, oturum 1, ui_host:true.
+Sonuç: **müşteri onay penceresi çalışmıyor** → onaysız bağlantı yapılamıyor.
+K-26 zincirinin son halkası kırık. e2e'de görünmüyor (orada ui-host yok).
+
+**2) `SEGNOX_PUBLIC_URL` yanlışsa TÜM cihazlar "revoked" diye reddediliyor**
+Cihaz imzası sunucu host'unu içerir (K-21). `SEGNOX_PUBLIC_URL` farklıysa
+(imza başarısız) sunucu `unauthorized` döner, ajan da
+"server refused the device identity; **it may have been revoked**" yazar.
+→ Yanıltıcı hata + deploy'da doğrulama yok. `deploy/.env.example` PUBLIC_URL
+içermiyor (kontrol edilecek).
+
+**3) Ajan loopback dışındaki düz HTTP sunucuyu reddediyor (K-21)**
+`device: https required for a non-loopback server` → çıkış kodu 2.
+"**Kendi sunucusuna kurulum**" özelliği olan bir üründe, LAN'daki kendi
+sunucusuna düz HTTP ile bağlanamamak sorun. Seçenek: açık/opt-in bir bayrak
+(örn. /INSECURE) veya kendi CA'sını yükleyebilme.
+
+**4) Test notu:** e2e testleri bu 3 noktayı yakalayamıyor — sunucuları
+127.0.0.1'de (loopback) çalıştırıyorlar ve ui-host yok.
