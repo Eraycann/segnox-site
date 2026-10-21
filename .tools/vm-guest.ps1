@@ -18,7 +18,14 @@
 $ErrorActionPreference = 'Stop'
 
 $vmrun = 'C:\Program Files\VMware\VMware Workstation\vmrun.exe'
-$vmx   = 'C:\Users\Erayc\Documents\Virtual Machines\Windows 11 x64\Windows 11 x64.vmx'
+$vmxLong = 'C:\Users\Erayc\Documents\Virtual Machines\Windows 11 x64\Windows 11 x64.vmx'
+# vmrun bosluklu yollari boluyor -> 8.3 kisa yol kullanilir
+Add-Type -Namespace W32 -Name N -MemberDefinition @'
+[DllImport("kernel32.dll", CharSet=CharSet.Auto)]
+public static extern int GetShortPathName(string l, System.Text.StringBuilder s, int c);
+'@ -ErrorAction SilentlyContinue
+$sb = New-Object System.Text.StringBuilder 260
+if ([W32.N]::GetShortPathName($vmxLong, $sb, 260) -gt 0) { $vmx = $sb.ToString() } else { $vmx = $vmxLong }
 $credF = 'C:\Users\Erayc\Desktop\segnox-site\.tools\vm-cred.txt'
 $outD  = 'C:\Users\Erayc\Desktop\segnox-site\.tools\vm-paylasim'
 $konukD = 'C:\segnox-test'

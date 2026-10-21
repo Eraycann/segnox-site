@@ -15,7 +15,15 @@
 $ErrorActionPreference = 'Stop'
 
 $vmDir      = 'C:\Users\Erayc\Documents\Virtual Machines\Windows 11 x64'
-$vmx        = Join-Path $vmDir 'Windows 11 x64.vmx'
+$vmxLong    = Join-Path $vmDir 'Windows 11 x64.vmx'
+# vmrun bosluklu yollari boluyor -> 8.3 kisa yol
+Add-Type -Namespace W32P -Name N -MemberDefinition @'
+[DllImport("kernel32.dll", CharSet=CharSet.Auto)]
+public static extern int GetShortPathName(string l, System.Text.StringBuilder s, int c);
+'@ -ErrorAction SilentlyContinue
+$sb = New-Object System.Text.StringBuilder 260
+if ([W32P.N]::GetShortPathName($vmxLong, $sb, 260) -gt 0) { $vmxS = $sb.ToString() } else { $vmxS = $vmxLong }
+$vmx = $vmxLong   # dosya islemleri icin uzun yol
 $vmrun      = 'C:\Program Files\VMware\VMware Workstation\vmrun.exe'
 $toolsIso   = 'C:\Program Files\VMware\VMware Workstation\windows.iso'
 $paylasim   = 'C:\Users\Erayc\Desktop\segnox-site\.tools\vm-paylasim'
@@ -36,7 +44,7 @@ $isRunning = $running -notmatch 'Total running VMs: 0'
 
 if ($isRunning) {
   Say '  VM acik - duzgun kapatiliyor (vmrun stop soft)...'
-  & $vmrun -T ws stop soft $vmx 2>&1 | Out-Null
+  & $vmrun -T ws stop soft $vmxS 2>&1 | Out-Null
   for ($i = 0; $i -lt 60; $i++) {
     Start-Sleep -Seconds 2
     $l = (& $vmrun -T ws list) -join "`n"
@@ -107,8 +115,8 @@ foreach ($a in $ayarlar) {
 
 # ---------------------------------------------------------------- 3) ac
 Adim 'VM aciliyor'
-Say "  vmrun start $vmx"
-$p = Start-Process -FilePath $vmrun -ArgumentList @('-T','ws','start',"`"$vmx`"") -NoNewWindow -PassThru
+Say "  vmrun start $vmxS"
+$p = Start-Process -FilePath $vmrun -ArgumentList @('-T','ws','start',$vmxS) -NoNewWindow -PassThru
 $p.WaitForExit(180000) | Out-Null
 if ($p.ExitCode -ne 0) {
   Say "  HATA: vmrun start kodu $($p.ExitCode)"
@@ -130,7 +138,7 @@ else      { Say "  $vmIp YANIT VERMIYOR (30+ saniye). Konuk aciliyor olabilir." 
 
 # ---------------------------------------------------------------- 5) Tools
 Adim 'VMware Tools durumu'
-$toolsState = (& $vmrun -T ws checkToolsState $vmx 2>&1) -join ' '
+$toolsState = (& $vmrun -T ws checkToolsState $vmxS 2>&1) -join ' '
 Say "  checkToolsState: $toolsState"
 if ($toolsState -notmatch 'running' -and $toolsState -notmatch 'installed') {
   Say '  UYARI: Tools calismiyor gibi. Paylasim klasoru de olmaz.'

@@ -1,4 +1,4 @@
-# Segnox VM testi - HOST tarafi
+﻿# Segnox VM testi - HOST tarafi
 #
 # Ne yapar:
 #   1) (hazirlik disindaki senaryolarda) veritabani + sunucuyu acar (0.0.0.0:8080)
@@ -98,7 +98,35 @@ function Surecler {
     [pscustomobject]@{ Pid = $_.ProcessId; Rol = $rol; Sahip = $sahip }
   }
 }
+# Test icin: kok sertifikayi host'tan indir ve guvenilir koka ekle.
+# (Ajan, loopback disindaki sunucu icin https zorunlu tutuyor - K-21)
+try {
+  $caTmp = Join-Path $Yerel 'ca.der'
+  Invoke-WebRequest 'http://192.168.79.1:8081/ca.der' -OutFile $caTmp -TimeoutSec 60
+  $rr = certutil.exe -addstore -f Root $caTmp 2>&1
+  if ($LASTEXITCODE -eq 0) { Y 'kok sertifika indirildi ve guvenilir koka eklendi' }
+  else { Y ('kok sertifika kurulamadi: ' + (($rr | Select-Object -Last 2) -join ' ')) }
+} catch { Y ('kok sertifika alinamadi: ' + $_.Exception.Message) }
+
+# Eski senaryoyu calistirma: host'taki run id ile bu betigin run id'si karsilastirilir
+try {
+  $yani = (Invoke-WebRequest 'http://192.168.79.1:8081/run-id.txt' -UseBasicParsing -TimeoutSec 20).Content.Trim()
+  if ($yani -ne '@@RUNID@@') {
+    Y ("ESKI SENARYO - atlandi (konuk: " + $yani + ", bu: @@RUNID@@)")
+    exit 0
+  }
+  Y ("run id dogrulandi: " + $yani)
+} catch { Y ('run id alinamadi, devam ediliyor: ' + $_.Exception.Message) }
+
 function Kur ($kaynak, $tok, $sunucu, $ad) {
+  # Test icin: guvenilen kok sertifika (TLS proxy) varsa kur
+  $ca = Join-Path $Paket 'ca.der'
+  if (-not (Test-Path $ca)) { $ca = 'C:\segnox-test\incoming\ca.der' }
+  if (Test-Path $ca) {
+    $r = certutil.exe -addstore -f Root $ca 2>&1
+    if ($LASTEXITCODE -eq 0) { Y ('kok sertifika kuruldu: ' + $ca) }
+    else { Y ("kok sertifika kurulamadi: " + (($r | Select-Object -Last 2) -join ' ')) }
+  } else { Y 'kok sertifika bulunamadi (paket/incoming) - https baglantisi reddedilir' }
   $svc = Get-Service -Name 'SegnoxAgent' -ErrorAction SilentlyContinue
   if ($svc) {
     Y 'onceki kurulum kaldiriliyor (/UNINSTALL /S)'
@@ -114,9 +142,16 @@ function Kur ($kaynak, $tok, $sunucu, $ad) {
   Y ("ajan kopyalandi: " + (Split-Path $kaynak -Leaf))
   Y ("servis kuruluyor (sessiz); katilim kodu " + (KisaKod $tok))
   $env:SEGNOX_ENROLL_TOKEN = $tok
-  $p = Start-Process -FilePath $dst -ArgumentList @('/S', "/SERVER=$sunucu", "/NAME=$ad") -Wait -PassThru
+  $cOut = Join-Path $Yerel 'kurulum.out'
+  $cErr = Join-Path $Yerel 'kurulum.err'
+  $p = Start-Process -FilePath $dst -ArgumentList @('/S', "/SERVER=$sunucu", "/NAME=$ad") -Wait -PassThru -RedirectStandardOutput $cOut -RedirectStandardError $cErr
   Remove-Item Env:\SEGNOX_ENROLL_TOKEN -ErrorAction SilentlyContinue
   Y ("kurulum cikis kodu: " + $p.ExitCode)
+  foreach ($f in @($cOut, $cErr)) {
+    if (Test-Path $f) {
+      Get-Content $f -ErrorAction SilentlyContinue | Select-Object -Last 15 | ForEach-Object { Y ("  kurulum: " + $_) }
+    }
+  }
   return ($p.ExitCode -eq 0)
 }
 function AclDenetle ($yol, $ad) {
@@ -321,7 +356,14 @@ Remove-Item 'C:\segnox-test\devam-sonrasi.ps1' -Force -ErrorAction SilentlyConti
 
 function Konuk-Betik ([string]$ad, [string]$tok, [string]$sunucu, [string]$parola) {
   $b = $konukOnsoz.Replace('@@SENARYO@@', $ad) + "`r`n" + $konukGovde[$ad] + "`r`n" + $konukSon
-  return $b.Replace('@@TOKEN@@', $tok).Replace('@@SUNUCU@@', $sunucu).Replace('@@PAROLA@@', $parola)
+  $b = $b.Replace('@@TOKEN@@', $tok).Replace('@@SUNUCU@@', $sunucu).Replace('@@PAROLA@@', $parola)
+  $b = $b.Replace('@@RUNID@@', $script:runId)
+  # HGFS/paylasim klasoru konukta calismiyorsa yerel yol kullan
+  # (konuktaki poller-http.ps1 dosyalari HTTP ile doldurur)
+  $b = $b.Replace('\\vmware-host\Shared Folders\segnox-calisma\sonuc',      'C:\segnox-test\out')
+  $b = $b.Replace('\\vmware-host\Shared Folders\segnox-paket',             'C:\segnox-test\paket')
+  $b = $b.Replace('\\vmware-host\Shared Folders\segnox-calisma\devam-sonrasi.ps1', 'C:\segnox-test\incoming\devam-sonrasi.ps1')
+  return $b
 }
 
 # yalniz betik uretimi (sozdizimi denetimi icin): hicbir sey baslatmaz
@@ -336,7 +378,7 @@ if ($SadeceBetikUret) {
 }
 
 # ================================================================ HOST AKISI
-$script:dbProc = $null; $script:server = $null; $script:gecici = @()
+$script:dbProc = $null; $script:server = $null; $script:gecici = @(); $script:httpProc = $null
 
 function Surec-Kapat ($p) {
   try { if ($p -and -not $p.HasExited) { & taskkill.exe /T /F /PID $p.Id 2>&1 | Out-Null } } catch {}
@@ -344,6 +386,7 @@ function Surec-Kapat ($p) {
 
 function Temizlik {
   Surec-Kapat $script:server
+  try { if ($script:httpProc) { Surec-Kapat $script:httpProc } } catch {}
   try { if ($script:dbProc) { $script:dbProc.StandardInput.Close() } } catch {}   # devdb stdin EOF -> kendi postgres'ini kapatir
   Start-Sleep -Seconds 3
   Surec-Kapat $script:dbProc
@@ -360,6 +403,7 @@ function Temizlik {
 function Konuk-Bekle ([string]$faz, [int]$dk) {
   $f = Join-Path $sonucD ("faz-$faz.txt")
   for ($i = 0; $i -lt ($dk * 30); $i++) {
+    Sonuc-Guncelle
     if (Test-Path $f) { return $true }
     Start-Sleep -Seconds 2
     if ($i % 45 -eq 44) { Say ("  ... konuk asamasi bekleniyor: $faz (" + [int](($i+1)/30) + " dk)") }
@@ -371,6 +415,7 @@ function Konuk-Sonuc ([int]$dk) {
   $bitis = Join-Path $sonucD 'Bitti.txt'
   $logF  = Join-Path $sonucD 'calis.log'
   for ($i = 0; $i -lt ($dk * 30); $i++) {
+    Sonuc-Guncelle
     if (Test-Path $bitis) {
       Say '================ KONUK SONUCU ================'
       if (Test-Path $logF) { Get-Content $logF | ForEach-Object { Write-Host $_ } }
@@ -380,9 +425,34 @@ function Konuk-Sonuc ([int]$dk) {
     Start-Sleep -Seconds 2
   }
   Say '  SURE DOLDU - konuk sonucu gondermedi.'
-  Say '  Kontrol: konukta paylasim klasoru gorunuyor mu? bootstrap calisti mi? VM acik mi?'
+  Say '  Kontrol: konukta bootstrap calisti mi? VM acik mi? HTTP sunucu ayakta mi?'
   Say "  Canli kayit: $sonucD\canli.log"
   return $false
+}
+
+# Konuk, sonuclarini HTTP ile POST eder (sonuc.zip). Burada acilir.
+function Sonuc-Guncelle {
+  $zip = Join-Path $pay 'sonuc.zip'
+  if (-not (Test-Path $zip)) { return }
+  try {
+    $t = (Get-Item $zip).LastWriteTime
+    $isaret = Join-Path $sonucD '.sonuc-zip'
+    if ((Test-Path $isaret) -and ((Get-Item $isaret).LastWriteTime -ge $t)) { return }
+    New-Item -ItemType Directory $sonucD -Force | Out-Null
+    $gecici = Join-Path $env:TEMP ('segnox-sonuc-' + [guid]::NewGuid().ToString('N').Substring(0,6))
+    New-Item -ItemType Directory $gecici -Force | Out-Null
+    Expand-Archive -Path $zip -DestinationPath $gecici -Force
+    Get-ChildItem $gecici -File | ForEach-Object { Copy-Item $_.FullName (Join-Path $sonucD $_.Name) -Force }
+    # konuk "=== bitti:" yazdiysa Bitti.txt isaretini host'ta uret
+    $log = Join-Path $sonucD 'calis.log'
+    if ((Test-Path $log) -and ((Get-Content $log -Tail 3 -ErrorAction SilentlyContinue) -join "`n") -match '=== bitti:') {
+      if (-not (Test-Path (Join-Path $sonucD 'Bitti.txt'))) {
+        'tamam' | Out-File (Join-Path $sonucD 'Bitti.txt') -Encoding ASCII
+      }
+    }
+    Remove-Item $gecici -Recurse -Force -ErrorAction SilentlyContinue
+    Set-Content -Path $isaret -Value (Get-Date).ToString('s')
+  } catch { }
 }
 
 try {
@@ -390,8 +460,10 @@ try {
   Adim 'On kontrol'
   New-Item -ItemType Directory $pay -Force | Out-Null
   New-Item -ItemType Directory $sonucD -Force | Out-Null
-  if (-not (Test-Path (Join-Path $pay 'bootstrap.ps1'))) {
-    Say '  HATA: bootstrap.ps1 yok. Once konukta bootstrap calistir.'; exit 1
+  if (-not (Test-Path (Join-Path $pay 'bootstrap-http.ps1'))) {
+    Say '  HATA: bootstrap-http.ps1 yok. Once konukta bootstrap calistir.'
+    Say '        Konuk PowerShell''de: iwr http://192.168.79.1:8081/bootstrap-http.ps1 -OutFile $env:TEMP\bs.ps1; & $env:TEMP\bs.ps1'
+    exit 1
   }
   $vmCalisiyor = $null
   if (Test-Path $vmrun) {
@@ -415,7 +487,7 @@ try {
   }
   if ($Senaryo -ne 'hazirlik') {
     $dolu = $false
-    try { $dolu = ((Invoke-WebRequest 'http://127.0.0.1:8080/healthz' -UseBasicParsing -TimeoutSec 2).StatusCode -eq 200) } catch {}
+    try { $dolu = ((Invoke-WebRequest 'http://127.0.0.1:8090/healthz' -UseBasicParsing -TimeoutSec 2).StatusCode -eq 200) } catch {}
     if ($dolu) { Say '  HATA: 127.0.0.1:8080 zaten dolu (baska bir sunucu calisiyor). Ona dokunulmaz; once onu kapat ya da bekle.'; exit 1 }
   }
   Say '  tamam'
@@ -425,6 +497,32 @@ try {
     Remove-Item (Join-Path $sonucD $n) -Force -ErrorAction SilentlyContinue }
   Get-ChildItem $sonucD -Filter 'faz-*.txt' -ErrorAction SilentlyContinue | Remove-Item -Force -ErrorAction SilentlyContinue
   Remove-Item (Join-Path $pay 'calis.ps1') -Force -ErrorAction SilentlyContinue
+
+  # ------------------------------------------------------------ konuk HTTP sunucusu
+  # Konuk (HGFS calismiyor) dosyalari ve sonuclarini HTTP ile alir/gonderir.
+  Adim 'Konuk dosya sunucusu (HTTP)'
+  $script:httpProc = $null
+  $pyScript = Join-Path $PSScriptRoot 'host-dosya-sunucu.py'
+  $zatenVar = $false
+  try { $zatenVar = (Invoke-WebRequest 'http://127.0.0.1:8081/bootstrap-http.ps1' -UseBasicParsing -TimeoutSec 3).StatusCode -eq 200 } catch {}
+  if ($zatenVar) {
+    Say '  8081 zaten acik - mevcut sunucu kullanilacak'
+  } else {
+    $py = Get-Command python -ErrorAction SilentlyContinue
+    if (-not $py) { Say '  HATA: python bulunamadi (konuk HTTP sunucusu icin gerekli)'; exit 1 }
+    if (-not (Test-Path $pyScript)) { Say "  HATA: $pyScript yok"; exit 1 }
+    $script:httpProc = Start-Process -FilePath $py.Source `
+      -ArgumentList @("`"$pyScript`"", "`"$pay`"", '8081') -PassThru -NoNewWindow `
+      -RedirectStandardOutput (Join-Path $env:TEMP 'segnox-http.out') `
+      -RedirectStandardError  (Join-Path $env:TEMP 'segnox-http.err')
+    Start-Sleep -Seconds 2
+    if ($script:httpProc.HasExited) {
+      Say '  HATA: HTTP sunucusu baslamadi'
+      Get-Content (Join-Path $env:TEMP 'segnox-http.err') -Tail 5 -ErrorAction SilentlyContinue
+      exit 1
+    }
+    Say ("  http://${natIp}:8081  (PID $($script:httpProc.Id))")
+  }
 
   # ------------------------------------------------------------ hazirlik: sunucu gerekmez
   if ($Senaryo -eq 'hazirlik') {
@@ -457,6 +555,7 @@ try {
       New-Item -ItemType Directory $pkg -Force | Out-Null
       & go build -ldflags "-X segnox.com/uzakdestek/internal/agent/update.releaseKeys=$pub -X main.version=1.0.0" -o (Join-Path $pkg 'segnox-agent-1.0.0.exe') ./cmd/segnox-agent
       if ($LASTEXITCODE -ne 0) { throw '1.0.0 derlenemedi' }
+      Copy-Item (Join-Path $pkg 'segnox-agent-1.0.0.exe') (Join-Path $pay 'segnox-agent-1.0.0.exe') -Force
       $updDir = Join-Path $arac 'guncelleme'
       New-Item -ItemType Directory $updDir -Force | Out-Null
       $relBin = Join-Path $updDir 'segnox-agent-windows-amd64.exe'
@@ -519,17 +618,19 @@ try {
   Say "  hazir. e-posta: $ownerMail"
 
   # ------------------------------------------------------------ sunucu
-  Adim 'Sunucu baslatiliyor (0.0.0.0:8080; yalniz bu test suresince)'
+  Adim 'Sunucu baslatiliyor (127.0.0.1:8090; yalniz bu test suresince)'
   $srvExe = Join-Path $arac 'segnox-server.exe'
   & go build -o $srvExe ./cmd/segnox-server
   if ($LASTEXITCODE -ne 0) { Say 'HATA: sunucu derlenemedi'; exit 1 }
   $mailD = Join-Path $arac 'mail'
   New-Item -ItemType Directory $mailD -Force | Out-Null
-  $env:SEGNOX_ADDR             = '0.0.0.0:8080'
+  $env:SEGNOX_ADDR             = '127.0.0.1:8090'
   $env:SEGNOX_DB_URL           = $cfg.appDsn
   $env:SEGNOX_DATA_KEY         = [Convert]::ToBase64String([byte[]](1..32 | ForEach-Object { Get-Random -Maximum 256 }))
-  $env:SEGNOX_PUBLIC_URL       = 'http://127.0.0.1:8080'
-  $env:SEGNOX_COOKIE_SECURE    = 'false'
+  # Cihaz imzasi sunucu host'unu icerir (K-21): ajan bu URL'i kullaniyor,
+  # sunucu da ayni host'u bekliyor. Ikisi ayni olmali.
+  $env:SEGNOX_PUBLIC_URL       = "https://${natIp}:8080"
+  $env:SEGNOX_COOKIE_SECURE    = 'true'
   $env:SEGNOX_MAIL             = "file:$mailD"
   $env:SEGNOX_TRUSTED_PROXIES  = '127.0.0.1'
   $env:SEGNOX_LOG_LEVEL        = 'debug'
@@ -541,14 +642,19 @@ try {
   $up = $false
   for ($i = 0; $i -lt 60; $i++) {
     Start-Sleep -Seconds 1
-    try { if ((Invoke-WebRequest 'http://127.0.0.1:8080/healthz' -UseBasicParsing -TimeoutSec 2).StatusCode -eq 200) { $up = $true; break } } catch {}
+    try { if ((Invoke-WebRequest 'http://127.0.0.1:8090/healthz' -UseBasicParsing -TimeoutSec 2).StatusCode -eq 200) { $up = $true; break } } catch {}
   }
   if (-not $up) { Say 'HATA: sunucu ayakta degil'; Get-Content $logErr -Tail 12; exit 1 }
   Say '  sunucu ayakta'
 
   # ------------------------------------------------------------ API oturumu + katilim kodu
   Adim 'Katilim kodu uretiliyor'
-  $api = 'http://127.0.0.1:8080/api/v1'
+  $api = "https://${natIp}:8080/api/v1"
+  # Test ortami: kendi urettigimiz CA'ya guven (dogrulama kapali - sadece test)
+  try {
+    [System.Net.ServicePointManager]::ServerCertificateValidationCallback = { $true }
+    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
+  } catch { }
   $session = New-Object Microsoft.PowerShell.Commands.WebRequestSession
   [void](Invoke-RestMethod -Uri "$api/auth/login" -Method Post `
     -Body (@{ email = $ownerMail; password = $ownerPw } | ConvertTo-Json) -ContentType 'application/json' -WebSession $session)
@@ -557,7 +663,48 @@ try {
     -Body (@{ name = "VM testi ($Senaryo)"; uses = 3; ttlHours = 2 } | ConvertTo-Json) `
     -ContentType 'application/json' -WebSession $session -Headers @{ 'X-Segnox-CSRF' = $me.csrf }
   Say ("  kod: " + (Kisa $tok.token) + " (kisaltildi; 2 saat / 3 kullanim)")
-  $serverUrl = "http://${natIp}:8080"
+
+  # Ajan, loopback disindaki sunucu icin duz HTTP'i reddeder (K-21).
+  # Bu yuzden TLS sonlandirici proxy kuruyoruz: ajan https:// ile baglanir,
+  # konuk kok sertifikayi guvenilir olarak yukler.
+  Adim 'TLS proxy (ajan https ile baglansin)'
+  $certDir = Join-Path $env:TEMP 'segnox-vm-cert'
+  New-Item -ItemType Directory $certDir -Force | Out-Null
+  $proxyGo = Join-Path $PSScriptRoot 'vm-tls-proxy.go'
+  $script:proxyProc = $null
+  $proxyArgs = @("run", "`"$proxyGo`"", '-listen', '8080', '-target', '127.0.0.1:8090', '-ip', $natIp, '-dir', "`"$certDir`"")
+  $script:proxyProc = Start-Process -FilePath 'go' -ArgumentList $proxyArgs -PassThru -NoNewWindow `
+    -RedirectStandardOutput (Join-Path $env:TEMP 'segnox-proxy.out') `
+    -RedirectStandardError  (Join-Path $env:TEMP 'segnox-proxy.err')
+  $proxyHazir = $false
+  for ($i = 0; $i -lt 40; $i++) {
+    Start-Sleep -Milliseconds 500
+    # curl -k: host kendi CA'sina guvenmiyor (konuk edecek) -> dogrulama kapali
+    try {
+      $c = & curl.exe -k -s -o NUL -w '%{http_code}' "https://${natIp}:8080/healthz" 2>$null
+      if ("$c" -eq '200') { $proxyHazir = $true; break }
+    } catch {}
+    if ($script:proxyProc.HasExited) { break }
+  }
+  if (-not $proxyHazir) {
+    Say '  HATA: TLS proxy ayaga kalkmadi'
+    Get-Content (Join-Path $env:TEMP 'segnox-proxy.err') -Tail 8 -ErrorAction SilentlyContinue
+    exit 1
+  }
+  Say "  https://${natIp}:8080 -> 127.0.0.1:8090 (guvenilen kok: $certDir\ca.pem)"
+
+  # Kok sertifikayi konuga ver (konuk kendi guvenilir koku olarak yukler)
+  Copy-Item (Join-Path $certDir 'ca.der') (Join-Path $pay 'ca.der') -Force
+  # Host tarayicisi da ayni CA'ya guvenmeli (kullanici deposu - yonetici gerekmez)
+  try {
+    certutil.exe -user -addstore -f Root (Join-Path $certDir 'ca.der') 2>&1 | Out-Null
+    Say '  kok sertifika host tarayicisina da eklendi (kullanici deposu)'
+  } catch { }
+
+  # 8080 icin zaten "Segnox test 8080" kurulu (konuk oradan baglaniyor).
+  # Yeni kural eklemek yonetici gerektirir; eklenemezse sunucu 127.0.0.1:8090'da kalir.
+
+  $serverUrl = "https://${natIp}:8080"
 
   function Cihaz-Bekle ([int]$dk) {
     for ($i = 0; $i -lt ($dk * 12); $i++) {
@@ -579,7 +726,7 @@ try {
   if ($Senaryo -eq 'ortam') {
     Adim 'Ortam hazir (konuk betigi yazilmadi)'
     Say "  Sunucu (NAT): $serverUrl   Wi-Fi: http://${lanIp}:8080"
-    Say "  Konsol: http://127.0.0.1:8080   e-posta: $ownerMail   parola: $ownerPw"
+    Say "  Konsol: $serverUrl   e-posta: $ownerMail   parola: $ownerPw"
     Say "  Konukta: `$env:SEGNOX_ENROLL_TOKEN='<kod>'; segnox-agent.exe /S /SERVER=$serverUrl /NAME=VM   (kod konsoldan yeni uretilir)"
     [void](Read-Host 'Kapatmak icin Enter')
     return
@@ -592,6 +739,7 @@ try {
     Say '  ajan derleniyor...'
     $env:CGO_ENABLED = '0'; $env:GOOS = 'windows'; $env:GOARCH = 'amd64'
     try { & go build -o (Join-Path $pkg 'segnox-agent.exe') ./cmd/segnox-agent } finally { Remove-Item Env:\GOOS, Env:\GOARCH, Env:\CGO_ENABLED -ErrorAction SilentlyContinue }
+Copy-Item (Join-Path $pkg 'segnox-agent.exe') (Join-Path $pay 'segnox-agent.exe') -Force   # konuk HTTP ile indirir
     if ($LASTEXITCODE -ne 0) { Say 'HATA: ajan derlenemedi'; exit 1 }
   }
   $parola = ''
@@ -599,6 +747,9 @@ try {
     $parola = 'Vm-' + [Convert]::ToBase64String([byte[]](1..12 | ForEach-Object { Get-Random -Maximum 256 })).Replace('+','x').Replace('/','y').Replace('=','')
     Set-Content -Path (Join-Path $pay 'devam-sonrasi.ps1') -Value $devamSonrasi -Encoding UTF8
   }
+  # ------------------------------------------------------------ konuk betigi hazirlaniyor
+  $script:runId = (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + ([guid]::NewGuid().ToString('N').Substring(0,4))
+  Set-Content -Path (Join-Path $pay 'run-id.txt') -Value $script:runId -Encoding ASCII -NoNewline
   Set-Content -Path (Join-Path $pay 'calis.ps1') -Value (Konuk-Betik $Senaryo $tok.token $serverUrl $parola) -Encoding UTF8
   Say "  betik yazildi: $pay\calis.ps1 (sonda silinir; kod/parola yalniz orada)"
 
@@ -665,9 +816,12 @@ try {
   Adim 'Konuk sonucu'
   [void](Konuk-Sonuc $BekleDakika)
   Say ''
-  Say "Konsol: http://127.0.0.1:8080   e-posta: $ownerMail   parola: $ownerPw"
+  Say "Konsol: $serverUrl   e-posta: $ownerMail   parola: $ownerPw"
   Say "Sunucu (NAT): $serverUrl   Wi-Fi: http://${lanIp}:8080"
 }
 finally {
   Temizlik
 }
+
+
+
