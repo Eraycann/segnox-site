@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Segnox — El Kitabı</title>
-<meta name="description" content="Segnox: durum, desteklenenler, özellikler, satışa kalanlar, test, çalışma şekli, riskler, pazar.">
+<meta name="description" content="Segnox El Kitabı: durum, panelin adım adım kullanımı, kavramlar, rakip karşılaştırması, sık sorulan sorular, test durumu.">
 <link rel="stylesheet" href="assets/style.css">
 <style>
   .toc { position:sticky; top:64px; z-index:5; background:var(--bg); padding:14px 0 12px;
@@ -19,6 +19,9 @@
   code.i { background:var(--bg3); border:1px solid var(--line2); border-radius:5px;
            padding:1px 6px; font-family:var(--mono); font-size:13px; color:var(--acc) }
   .no { color:var(--bad) } .yes2 { color:var(--ok) } .warn2 { color:var(--warn) }
+  ol.adim { margin:6px 0 4px; padding-left:22px; font-size:14.5px }
+  ol.adim li { margin:3px 0 }
+  .dv { color:var(--fg3); font-size:12.5px }
 </style>
 </head>
 <body>
@@ -38,24 +41,36 @@
 <div class="toc">
   <div class="wrap">
     <a href="#durum">1 · Durum</a>
-    <a href="#destek">2 · Desteklenenler</a>
-    <a href="#ozellik">3 · Özellikler</a>
-    <a href="#satis">4 · Satışa kalanlar</a>
-    <a href="#test">5 · Nasıl test edilir</a>
-    <a href="#akis">6 · Nasıl çalışır</a>
-    <a href="#risk">7 · Riskler</a>
-    <a href="#pazar">8 · Pazar</a>
+    <a href="#panel">2 · Panel nasıl kullanılır</a>
+    <a href="#kavram">3 · Kavramlar</a>
+    <a href="#destek">4 · Desteklenenler</a>
+    <a href="#ozellik">5 · Alpemix ile karşılaştırma</a>
+    <a href="#sss">6 · Sık sorulan sorular</a>
+    <a href="#test">7 · Test durumu</a>
+    <a href="#yapilanlar">8 · Yapılanlar / eksikler</a>
+    <a href="#akis">9 · Nasıl çalışır</a>
+    <a href="#risk">· Riskler</a>
+    <a href="#pazar">· Pazar</a>
   </div>
 </div>
 
 <div class="wrap">
 
 <h1 style="margin-top:0">El Kitabı</h1>
-<p class="sub">Net ve güncel bilgi. Sıradaki iş için <a href="basla.html">Rehber</a>'e bak. Geçmiş git'te.</p>
+<p class="sub"><b>Son güncelleme: 24.10.2026.</b> Sıradaki iş için <a href="basla.html">Rehber</a>'e bak. Geçmiş git'te.</p>
+
+<div class="note">
+  <b>Şu an ne oluyor</b>
+  <ul class="chk">
+    <li>Ürün <b>teknik pilot</b>; satılabilir değil. Windows tarafı büyük ölçüde hazır, gerçek makinede denemeler sürüyor.</li>
+    <li>24.10.2026'da sanal makinede (VM) servis kipi kurulumu ve anlık destek bağlantısı çalıştı; <b>çoklu izleme hatalı</b>, düzeltiliyor.</li>
+    <li>Sırada: kalan VM denemeleri (bölüm 7), sonra senin kararların: fiyat, sunucu, kod imzası (bölüm 8).</li>
+  </ul>
+</div>
 
 <!-- ============ 1 DURUM ============ -->
 <h2 id="durum">1 · Durum</h2>
-<p class="sub">Son güncelleme: 24 Ekim 2026. Kaynak: <span class="mono">PLAN.md</span>, <span class="mono">docs/TEST-REHBERI.md</span>, <span class="mono">docs/ACIK-KONULAR.md</span>.</p>
+<p class="sub">Kaynak: <span class="mono">PLAN.md</span>, <span class="mono">docs/TEST-REHBERI.md</span>, <span class="mono">docs/ACIK-KONULAR.md</span>. Durum sözcükleri: <b class="yes2">var</b> · <b class="warn2">gözle deneme bekliyor</b> · <b class="no">yok</b> · <b class="no">hatalı</b>.</p>
 
 <div class="note bad">
   <b>Teknik pilot — henüz satılabilir değil.</b>
@@ -63,59 +78,208 @@
 
 <div class="card">
 <ul class="chk">
-  <li><span class="yes2"><b>Çalışıyor (otomatik testle):</b></span> ekran aktarımı, uzaktan fare/klavye, 9 haneli kod, hesap + 2FA,
-      onay penceresi, çoklu kiracı (RLS), sohbet/pano/dosya, envanter, raporlama, oturum kaydı, canlı destek düğmesi, bayi markası.
+  <li><span class="yes2"><b>Otomatik testle çalışıyor:</b></span> ekran aktarımı, uzaktan fare/klavye, 9 haneli kod, hesap + 2FA,
+      onay penceresi, çoklu kiracı (RLS), sohbet/pano/dosya, envanter, raporlama, oturum kaydı, destek düğmesi, bayi markası.
       Go kapısı 36 paket, e2e 36 geçti / 3 atlandı.</li>
-  <li><span class="yes2"><b>Gerçek makinede (Win11 VM) doğrulandı:</b></span> servis kipi kurulumu, cihaz kaydı, ui-host ayakta (24.10).</li>
+  <li><b>VM sonuçları (24.10.2026):</b>
+      <span class="yes2">servis kipi kurulumu ✔</span> ·
+      <span class="yes2">anlık destek bağlantısı ✔ (TURN ile)</span> ·
+      <span class="no">çoklu izleme ✘ (ajan ikinci oturumda hata veriyor, düzeltiliyor)</span> ·
+      diğerleri denenmedi.</li>
   <li><span class="warn2"><b>Gözle deneme bekliyor:</b></span> UAC/kilit ekranı, yeniden başlat + devam, H.264 gerçek masaüstünde,
-      siyah ekran, otomatik güncelleme, çoklu izleyici, telefon görüntüleyici (#13–#18).</li>
+      siyah ekran, otomatik güncelleme, telefon görüntüleyici (#13–#18).</li>
   <li><span class="no"><b>Eksik:</b></span> farklı ağdan gerçek bağlantı denemesi (#2), kod imzası, abonelik/ödeme, canlı sunucu.</li>
-  <li><span class="no"><b>Kullanıma hazır değil:</b></span> servis kipi (PLAN 5a/5b notu).</li>
 </ul>
 </div>
 
-<!-- ============ 2 DESTEK ============ -->
-<h2 id="destek" style="margin-top:44px">2 · Desteklenen / desteklenmeyen</h2>
+<!-- ============ 2 PANEL ============ -->
+<h2 id="panel" style="margin-top:44px">2 · Panel nasıl kullanılır (adım adım)</h2>
+<p class="sub">Panel = <b>konsol</b> (tarayıcıda açılan yönetim sayfası). Ekran ve düğme adları konsoldaki metinlerle aynıdır; menüde:
+<b>Cihazlar, Müşteriler, Kullanıcılar, Gruplar, Katılım, API token'ları, Destek düğmesi, Marka, Raporlar, Kayıtlar, Denetim kaydı, Hesabım</b>.
+Göremediğin bir menü, rolünün yetkisi olmadığı içindir. Doğrulanamayan yer <span class="dv">(ekran adı doğrulanmadı)</span> diye işaretli.</p>
+
+<h3>2.a · Giriş ve iki adımlı doğrulama (2FA)</h3>
+<div class="card">
+<ol class="adim">
+  <li>Konsol adresini aç. <b>Giriş yap</b> sayfasında <b>E-posta</b> ve <b>Parola</b> yaz, <b>Giriş yap</b>'a bas. Art arda 5 hatalı denemede hesap 15 dakika kilitlenir.</li>
+  <li>Parolanı unuttuysan <b>Parolamı unuttum</b> → e-postanı yaz → <b>Bağlantı gönder</b>. Bağlantı 30 dakika geçerlidir.</li>
+  <li>2FA'yı açmak için <b>Hesabım</b> → <b>İki adımlı doğrulama (TOTP)</b> → <b>Kurulumu başlat</b>.</li>
+  <li>Telefonundaki doğrulama uygulamasıyla (Google Authenticator, Microsoft Authenticator) QR kodu okut, uygulamanın verdiği 6 haneli kodu yaz, <b>Etkinleştir</b>.</li>
+  <li><b>Kurtarma kodları</b> yalnız bir kez gösterilir: <b>Kodları indir</b>, güvenli yere koy, <b>Kodları kaydettim</b>'e bas. Telefonuna erişemezsen girişte <b>Kurtarma kodu kullan</b> dersin; her kod bir kez geçerlidir.</li>
+  <li>Sonraki girişlerde parolandan sonra <b>İki adımlı doğrulama</b> ekranı çıkar: kodu yaz, <b>Doğrula</b>.</li>
+</ol>
+</div>
+
+<h3>2.b · Kullanıcı davet etme ve roller</h3>
+<div class="card">
+<ol class="adim">
+  <li><b>Kullanıcılar</b> sayfasını aç (yalnız yönetici ve sahip görür).</li>
+  <li><b>Kullanıcı davet et</b> bölümünde <b>E-posta</b>, <b>Ad</b>, <b>Rol</b> seç, <b>Davet gönder</b>.</li>
+  <li>Davetli e-postadaki bağlantıyı açar (<b>Daveti kabul edin</b>), bir parola belirler (en az 10 karakter), giriş yapar.</li>
+  <li>Listede <b>Rol</b>, <b>2FA</b>, <b>E-posta doğrulandı</b> sütunları görünür. İşten ayrılanı <b>Devre dışı bırak</b> ile kapat (açık oturumları kapanır). Telefonunu kaybedenin 2FA'sını <b>2FA sıfırla</b> ile sıfırla.</li>
+  <li>Teknisyenleri belli müşteri gruplarıyla sınırlamak için <b>Gruplar</b> → <b>Yeni grup</b> → <b>Üyeleri düzenle</b>. Teknisyen yalnız üyesi olduğu grupların ve grupsuz cihazları görür.</li>
+</ol>
+<table>
+<tr><th>Rol</th><th>Ne yapabilir</th></tr>
+<tr><td><b>Sahip</b></td><td>Her şey. Rol olarak davetle verilemez; hesabın ilk sahibidir. Son sahip düşürülemez.</td></tr>
+<tr><td><b>Yönetici</b></td><td>Kullanıcı, katılım, API token, destek düğmesi, marka, kayıt politikası yönetimi; yalnız Teknisyen ve İzleyici davet eder; bağlanır.</td></tr>
+<tr><td><b>Teknisyen</b></td><td>Cihazlara bağlanır, destek isteklerini üstlenir; kendi oturum raporu ve kayıtlarını görür.</td></tr>
+<tr><td><b>İzleyici</b></td><td>Salt okunur; müşteri verisi görmez. (Oturumda "Yalnız izleme" rolü ayrıdır, bkz. 2.d.)</td></tr>
+</table>
+<p class="dv">Kaynak: docs/API.md rol tablosu; her ekranın tam yetki ayrıntısı panelde elle doğrulanmadı.</p>
+</div>
+
+<h3>2.c · Müşteri bilgisayarını ekleme</h3>
+<div class="card">
+<p style="font-size:14.5px">İki yol var. Hangisi? <b>Bir kerelik yardım</b> → anlık destek. <b>Bilgisayara sürekli, kodsuz erişim</b> → kalıcı kurulum.</p>
+<p style="font-size:14.5px"><b>Anlık destek</b> (müşteri programı açar, 9 haneli kod):</p>
+<ol class="adim">
+  <li>Müşteri destek programını (<span class="mono">segnox-destek.exe</span>) senin verdiğin indirme bağlantısından indirip açar. Bağlantıyı <b>Marka</b> sayfasındaki <b>İndirme bağlantısı</b>'ndan alırsın.</li>
+  <li>Programın ekranında 9 haneli kod görünür; müşteri bunu telefonla sana söyler.</li>
+  <li>Sen <b>Cihazlar</b> → <b>Kodla bağlan</b> kutusuna kodu yazıp <b>Bağlan</b>'a basarsın (bölüm 2.d). Müşterinin ekranına onay penceresi gelir; kabul etmezse bağlanılmaz.</li>
+</ol>
+<p style="font-size:14.5px"><b>Kalıcı kurulum</b> (gözetimsiz erişim = kodsuz bağlanma; bilgisayar listede kalır):</p>
+<ol class="adim">
+  <li>Önce <b>Müşteriler</b> → <b>Yeni müşteri</b> ile müşteriyi kaydet (<b>Müşteri adı</b>, <b>Kişi</b>, <b>Telefon</b>).</li>
+  <li>Müşteri sayfasında <b>Kurulum bağlantısı</b> → <b>Kurulum bağlantısı oluştur</b>: tek kullanımlık <b>katılım belirteci</b> (katılım kodu) üretir; katılan cihaz bu müşteriye bağlanır. Müşterisiz kurmak için <b>Katılım</b> → <b>Yeni katılım token'ı</b> (<b>Ad</b>, <b>Kullanım hakkı (1–1000)</b>, <b>Geçerlilik (saat, 1–720)</b>). Token yalnız bir kez gösterilir, <b>Kopyala</b>.</li>
+  <li>Müşteri bilgisayarında kurulumu token ile çalıştır. Sessiz kurulum (toplu dağıtım): <code class="i">segnox-agent /S /TOKEN=...</code>; elle: ekranda gösterilen <b>Cihazda çalıştırılacak komut</b> (<code class="i">segnox-agent enroll -server ... -token ...</code>).</li>
+  <li>Cihaz birkaç saniye içinde <b>Cihazlar</b> listesinde <b>Çevrim içi</b> görünür. Görünmezse listede boş-durum metni "Henüz kayıtlı cihaz yok…" kalır.</li>
+  <li><b>Cihaz parolası:</b> bu bilgisayara bağlanırken sorulan ek parola; ajan kendi makinesinde doğrular, sunucuya gitmez. Yeniden başlat + devam için gereklidir. Parolayı tanımlayan ekran: <span class="dv">(ekran adı doğrulanmadı)</span>; bağlanırken görüntüleyicide <b>Cihaz parolası ile bağlan</b> / <b>Cihaz parolası</b> alanı çıkar.</li>
+  <li>Yanlış cihazı kaldırmak için <b>Cihazlar</b> → <b>İptal et</b>; cihaz yeniden katılım yapmadan bağlanamaz.</li>
+</ol>
+<p class="dv">Not: servis kipi (kalıcı kurulum) VM'de kuruldu ve çalıştı; kilit ekranı/UAC gözle denenmedi.</p>
+</div>
+
+<h3>2.d · Bağlanma ve görüntüleyici düğmeleri</h3>
+<div class="card">
+<ol class="adim">
+  <li><b>Kodla:</b> <b>Cihazlar</b> → <b>Kodla bağlan</b>: <b>Bağlantı kodu</b> alanına 9 haneyi (<b>123 456 789</b> biçimi) yaz, <b>Bağlan</b>. Görüntüleyici yeni sekmede açılır.</li>
+  <li><b>Listeden:</b> kayıtlı cihazın satırında <b>Bağlan</b> (kontrol) ya da <b>İzle</b> (yalnız izleme; fare/klavye gitmez). Cihaz <b>Çevrim dışı</b>ysa bağlanılamaz.</li>
+  <li>Karşı tarafın onayı beklenir (<b>Karşı tarafın onayı bekleniyor…</b>); gözetimsiz kurulu cihazda onay istenmez. Cihaz parolası varsa sorar.</li>
+  <li>Bağlanınca <b>Bağlandı.</b> yazar; ekran görünür. Birden çok kişi bağlıysa "Bu cihaza şu an N kişi bağlı (M izliyor)" çıkar.</li>
+  <li>Görüntüleyici düğmeleri: <b>Tam ekran</b>, <b>Yakınlaştır</b> / <b>Uzaklaştır</b> / <b>Sığdır</b>, <b>Ekran</b> (monitör seçimi), <b>Sohbet</b> (<b>Gönder</b>), <b>Pano</b> (<b>Panomu gönder</b>, <b>Uzak pano</b>), <b>Dosyalar</b> (<b>İndir</b>, <b>Bu klasöre yükle</b>), <b>Ekranı karart</b> (siyah ekran; <b>Karartmayı kaldır</b>), <b>Yeniden başlat</b>, <b>Kaydı başlat</b> / <b>Kaydı durdur</b>, <b>Bağlantıyı kes</b> (oturumu bitirir).</li>
+  <li><b>Yeniden başlat</b>: onay kutusu çıkar; cihaz dönünce oturum parolasız devam eder. Yalnız servis kipinde ve cihaz parolası tanımlıyken çalışır. Servis kipinde dosya aktarımı kapalıdır.</li>
+</ol>
+</div>
+
+<h3>2.e · Destek istekleri ve Siteden gelenler</h3>
+<div class="card">
+<ol class="adim">
+  <li><b>Cihazlar</b> sayfasındaki <b>Destek istekleri</b> kutusu, müşterinin kendi programında <b>Destek İste</b>'ye basması ile dolar. Satırda <b>Yardım</b> ya da <b>İzleme</b> türü ve müşterinin mesajı görünür.</li>
+  <li>İşi alan <b>İlgilen</b>'e basar ("İstek üstlenildi."); sonra o cihaza <b>Bağlan</b>.</li>
+  <li><b>Siteden gelenler</b>: kendi web sitene koyduğun destek düğmesinden gelen ziyaretçi istekleri. Düğmeyi <b>Destek düğmesi</b> → <b>Yeni destek düğmesi</b> ile oluştur: <b>Ad</b>, <b>İzinli kökenler</b> (ör. https://www.ornek.com), isteğe bağlı <b>Gizlilik URL'si</b>; çıkan <b>Gömme kodu</b>'nu <b>Kopyala</b>, sitene yapıştır. İzinli köken eklemezsen düğme hiçbir sitede çalışmaz.</li>
+  <li>İstekte <b>Kod</b> ziyaretçinin yazdığıdır, doğrulanmamıştır: önce müşteriyle telefonla doğrula, bağlanınca makine adına bak. İşi bitince <b>Kapat</b>.</li>
+</ol>
+</div>
+
+<h3>2.f · Cihaz envanteri ve güncelleme</h3>
+<div class="card">
+<ol class="adim">
+  <li><b>Cihazlar</b> tablosu: <b>Ad, Grup, İşletim sistemi, Ajan sürümü, Son görülme, Durum</b>. Üstte özet: <b>Toplam cihaz, Çevrim içi, Güncel olmayan, Son sürüm</b>.</li>
+  <li>Süzmek için <b>Ara (ad, müşteri, işletim sistemi)</b>, <b>Yalnız çevrim içi</b>, <b>Yalnız güncel olmayanlar</b>.</li>
+  <li>Eski sürümlü cihazda <b>Güncel değil</b> rozeti çıkar; satırdaki <b>Güncelle</b> tek cihaza istek yollar.</li>
+  <li>Toplu: <b>Tümünü güncelle (N)</b> → onayda <b>Evet, gönder</b>. Tek seferde en çok 500 cihaz; sonuç "Güncelleme isteği N cihaza gönderildi." Çevrim dışı cihaza istek gitmez.</li>
+</ol>
+</div>
+
+<h3>2.g · Raporlar ve CSV</h3>
+<div class="card">
+<ol class="adim">
+  <li><b>Raporlar</b>'ı aç. <b>Tarih aralığı</b>: <b>Bugün</b>, <b>Son 7 gün</b>, <b>Son 30 gün</b> ya da <b>Özel</b> (<b>Başlangıç</b>, <b>Bitiş</b>, <b>Uygula</b>; en çok 366 gün).</li>
+  <li>Süzgeç: <b>Teknisyen</b> ve <b>Cihaz</b>. Teknisyen rolü yalnız kendi oturumlarını görür.</li>
+  <li>Kutular: <b>Oturum</b>, <b>Toplam süre</b>, <b>Veri</b>, <b>Bağlantı yolu</b> (<b>P2P</b> / <b>Relay</b> / <b>Bilinmeyen</b>). Relay oranı yüksekse trafik maliyeti artar.</li>
+  <li>Altta <b>Günlük oturumlar</b>, <b>Teknisyenlere göre</b>, <b>Cihazlara göre</b>. Dışa almak için <b>CSV indir</b>.</li>
+</ol>
+</div>
+
+<h3>2.h · Bayi markası</h3>
+<div class="card">
+<ol class="adim">
+  <li><b>Marka</b> sayfası: müşterinin gördüğü destek penceresine senin adın, logon, rengin gelir. Yalnız Pro planda gösterilir.</li>
+  <li><b>Marka kodu</b> (4–12 küçük harf/rakam), <b>Görünen ad</b>, <b>Ana renk</b>, <b>Karşılama mesajı</b>, <b>Destek telefonu</b>, <b>Web adresi</b> yaz; <b>Logo (PNG)</b> yükle (en çok 256 KB). <b>Kaydet</b>.</li>
+  <li>Sağdaki <b>Önizleme</b>'de müşterinin göreceği pencereyi kontrol et. Güvenlik uyarısı ve "Segnox altyapısı" satırı marka ile değişmez.</li>
+  <li>Müşteriye <b>İndirme bağlantısı</b>'nı ver; indirdiği program senin markanla açılır. İstersen <b>Markayı sil</b>.</li>
+</ol>
+</div>
+
+<h3>2.i · Oturum kaydı politikası</h3>
+<div class="card">
+<ol class="adim">
+  <li><b>Kayıtlar</b> sayfasında <b>Oturum kaydı</b> ayarı: <b>Kayıt politikası</b> = <b>Kapalı</b>, <b>İsteğe bağlı</b> ya da <b>Zorunlu</b>. Ayarı yalnız yöneticiler değiştirir.</li>
+  <li><b>Saklama süresi (gün)</b> 1–365; dolunca kayıt silinir. <b>Kaydet</b>.</li>
+  <li>Kayıt teknisyenin tarayıcısında yapılır; müşteriye kayıt bildirimi gösterilir. <b>Zorunlu</b> kipte kayıt başlatılamazsa oturum biter.</li>
+  <li>İsteğe bağlı kipte teknisyen görüntüleyicide <b>Kaydı başlat</b> der. Sonra <b>Kayıtlar</b> listesinde <b>İzle</b>, <b>İndir</b>, <b>Sil</b> düğmeleri olur.</li>
+  <li>Hukuk: müşteriye aydınlatma metni gerekir (#19, onayın sende).</li>
+</ol>
+</div>
+
+<!-- ============ 3 KAVRAM ============ -->
+<h2 id="kavram" style="margin-top:44px">3 · Kavramlar (kısa sözlük)</h2>
+<div class="card">
+<div class="term"><b>Sinyal sunucusu</b><div class="d">İki tarafı tanıştıran aracı: "şu cihaza bağlanmak istiyorum" mesajlarını iletir. Ekran görüntüsü ondan geçmez.</div></div>
+<div class="term"><b>WebRTC</b><div class="d">Tarayıcıların ve programların şifreli, doğrudan görüntü/veri alışverişi için kullandığı standart. Teknisyen tarafında kurulum gerekmemesinin nedeni.</div></div>
+<div class="term"><b>P2P</b><div class="d">İki bilgisayarın birbirine doğrudan bağlanması. Hızlı ve ucuz; mümkünse hep bu denenir.</div></div>
+<div class="term"><b>STUN</b><div class="d">Bilgisayara "internetten dış adresin şu" diyen küçük hizmet; doğrudan bağlantıyı mümkün kılar. Veri taşımaz.</div></div>
+<div class="term"><b>TURN / relay</b><div class="d">Doğrudan yol kapalıysa (şirket ağı, güvenlik duvarı) veriyi sunucunun taşıması. Her yerde çalışır, yavaştır, trafik maliyeti olur. Raporlarda "Relay".</div></div>
+<div class="term"><b>Servis kipi</b><div class="d">Ajanın Windows hizmeti olarak, bilgisayar açılınca kendiliğinden çalışması. Kullanıcı girmese, ekran kilitli olsa da bağlanılabilir.</div></div>
+<div class="term"><b>Gözetimsiz erişim (= kodsuz bağlanma)</b><div class="d">Müşteri başında olmadan, kod sormadan bağlanmak. Servis kipi + cihaz parolası ile olur.</div></div>
+<div class="term"><b>Katılım kodu (katılım token'ı)</b><div class="d">Yeni bir bilgisayarın hesabına kaydolmasını sağlayan tek seferlik anahtar. Panelde "Katılım" sayfasından üretilir.</div></div>
+<div class="term"><b>Cihaz parolası</b><div class="d">O bilgisayar için ek parola; bağlanırken sorulur. Bilgisayarın kendisinde doğrulanır, sunucuya gitmez.</div></div>
+<div class="term"><b>Kiracı / bayi</b><div class="d">Kiracı = bir firmanın kendi verisi. Sıra: platform → bayi → müşteri firma. Bayi, kendi müşterilerine kendi markasıyla hizmet verir; veriler birbirinden ayrıdır.</div></div>
+</div>
+
+<!-- ============ 4 DESTEK ============ -->
+<h2 id="destek" style="margin-top:44px">4 · Desteklenen / desteklenmeyen</h2>
 <div class="card">
 <table>
 <tr><th>Taraf</th><th>Durum</th></tr>
 <tr><td>Müşteri: Windows 10/11 ajanı</td><td class="yes2">Var</td></tr>
 <tr><td>Teknisyen: tarayıcıdan (kurulum yok)</td><td class="yes2">Var</td></tr>
-<tr><td>Telefondan izleme/kontrol görüntüleyicisi</td><td class="warn2">Var, gözle deneme bekliyor (#15)</td></tr>
+<tr><td>Telefondan izleme/kontrol (tarayıcıda görüntüleyici)</td><td class="warn2">Gözle deneme bekliyor (#15)</td></tr>
 <tr><td>Linux ajanı</td><td class="no">Yok — adım 8</td></tr>
-<tr><td>macOS</td><td class="no">Planda yok</td></tr>
+<tr><td>macOS ajanı</td><td class="no">Yok — planda yoktu, eklenecek</td></tr>
 <tr><td>Mobil cihaza bağlanma (Android/iOS ajanı)</td><td class="no">Yok — adım 9–10</td></tr>
+<tr><td>Mobil uygulama (mağazadan)</td><td class="no">Yok — şimdilik tarayıcıdan</td></tr>
 </table>
 </div>
 
-<!-- ============ 3 OZELLIK ============ -->
+<!-- ============ 5 KARSILASTIRMA ============ -->
 <span id="yapilmayanlar"></span>
-<h2 id="ozellik" style="margin-top:44px">3 · Özellikler — Alpemix'e göre</h2>
+<h2 id="ozellik" style="margin-top:44px">5 · Alpemix ile karşılaştırma</h2>
+<p class="sub">Alpemix bilgileri 24.10.2026'da alpemix.com/tr sayfalarından alındı (<span class="mono">docs/arastirma/alpemix-ozellikler.md</span>); ikinci kaynak bulunamadı.</p>
 <div class="card">
 <table>
-<tr><th>Özellik</th><th>Bizde</th><th>Durum</th></tr>
-<tr><td>Anlık destek kodu + "Destek İste"</td><td>9 haneli kod, müşteriden istek</td><td class="yes2">Var</td></tr>
-<tr><td>Onay penceresi + kapatılamayan çubuk</td><td>Dolandırıcılık uyarılı</td><td class="yes2">Var</td></tr>
-<tr><td>Gözetimsiz erişim (servis)</td><td>SYSTEM servis, sessiz kurulum</td><td class="warn2">Gözle deneme bekliyor (#13)</td></tr>
-<tr><td>Yeniden başlat + devam</td><td>Parola şartlı, tek kullanımlık anahtar</td><td class="warn2">Gözle deneme bekliyor (#14)</td></tr>
-<tr><td>H.264 video</td><td>JPEG karoya otomatik düşüş</td><td class="warn2">Gözle deneme bekliyor (#14)</td></tr>
-<tr><td>Siyah ekran (gizlilik)</td><td>Yakalamaya girmeyen kaplama</td><td class="warn2">Gözle deneme bekliyor (#16)</td></tr>
-<tr><td>Otomatik güncelleme</td><td>İmzalı manifest, geri alma</td><td class="warn2">Gözle deneme bekliyor (#17)</td></tr>
-<tr><td>Çoklu izleyici</td><td>"N kişi bağlı (M izliyor)"</td><td class="warn2">Gözle deneme bekliyor (#18)</td></tr>
-<tr><td>Cihaz envanteri</td><td>Durum, OS, sürüm, toplu güncelle</td><td class="yes2">Var</td></tr>
-<tr><td>Raporlama</td><td>P2P/relay oranı, CSV</td><td class="yes2">Var</td></tr>
-<tr><td>Oturum kaydı</td><td>WebM, şifreli, politika</td><td class="yes2">Var (KVKK metni #19)</td></tr>
-<tr><td>Canlı destek widget</td><td>Siteye gömülen düğme</td><td class="yes2">Var</td></tr>
-<tr><td>Bayi markası</td><td>Ad, renk, logo, karşılama</td><td class="yes2">Var (içerik onayı #21)</td></tr>
-<tr><td>Müşteri rehberi</td><td>Müşteriler sayfası</td><td class="yes2">Var</td></tr>
-<tr><td>Dosya aktarımı, sohbet, ortak pano</td><td>Servis kipinde dosya aktarımı kapalı</td><td class="yes2">Var</td></tr>
-<tr><td>Sesli konuşma</td><td>—</td><td class="no">Yok (adım 7)</td></tr>
-<tr><td>Wake-on-LAN</td><td>—</td><td class="no">Yok (adım 7)</td></tr>
-<tr><td>Webhook</td><td>—</td><td class="no">Yok (adım 7)</td></tr>
-<tr><td>Cihaz sağlığı + alarm</td><td>—</td><td class="no">Yok (adım 7)</td></tr>
-<tr><td>Abonelik / ödeme</td><td>Plan/limit tablosu kodda, satış yok</td><td class="no">Yok (6h)</td></tr>
-<tr><td>Linux / mobil ajan</td><td>—</td><td class="no">Yok (adım 8–10)</td></tr>
+<tr><th>Özellik</th><th>Alpemix</th><th>Biz</th><th>Not</th></tr>
+<tr><td>Anlık destek kodu</td><td class="yes2">Var (ID + parola)</td><td class="yes2">Var (9 haneli kod)</td><td>Bizde müşteri onay penceresi dolandırıcılık uyarılı</td></tr>
+<tr><td>Gözetimsiz erişim</td><td class="yes2">Var (servis / sürekli parola)</td><td class="warn2">Gözle deneme bekliyor (#13)</td><td>Bizde servis kipi + cihaz parolası</td></tr>
+<tr><td>Dosya aktarımı</td><td class="yes2">Var, iki yönlü</td><td class="yes2">Var</td><td>Servis kipinde dosya aktarımı kapalı</td></tr>
+<tr><td>Sohbet</td><td class="yes2">Var (offline, oda, duyuru)</td><td class="yes2">Var</td><td>Çevrimdışı/duyuru mesajı bizde yok</td></tr>
+<tr><td>Pano</td><td class="yes2">Var (metin)</td><td class="yes2">Var (metin)</td><td>—</td></tr>
+<tr><td>Sesli konuşma</td><td class="yes2">Var (Windows)</td><td class="no">Yok (adım 7)</td><td>—</td></tr>
+<tr><td>Siyah ekran</td><td class="yes2">Var</td><td class="warn2">Gözle deneme bekliyor (#16)</td><td>—</td></tr>
+<tr><td>Yeniden başlat + devam</td><td class="yes2">Var (Pro)</td><td class="warn2">Gözle deneme bekliyor (#14)</td><td>Bizde parola şartlı, tek kullanımlık anahtar</td></tr>
+<tr><td>Oturum kaydı</td><td class="yes2">Var (Pro)</td><td class="yes2">Var (KVKK metni #19)</td><td>Bizde WebM, şifreli, politika ayarlı</td></tr>
+<tr><td>Çoklu monitör</td><td class="no">Bulunamadı (yalnız bölge paylaşımı)</td><td class="warn2">Var, gözle deneme bekliyor</td><td>Ekranın bir bölümünü paylaşma bizde yok</td></tr>
+<tr><td>Çoklu izleyici</td><td class="yes2">Standart 2, Pro 8</td><td class="no">Hatalı (24.10.2026, düzeltiliyor)</td><td>Bizde "N kişi bağlı (M izliyor)"</td></tr>
+<tr><td>Bayi markası</td><td class="yes2">Logo + karşılama (Pro)</td><td class="yes2">Var (içerik onayı #21)</td><td>Bayi programı Alpemix'te bulunamadı</td></tr>
+<tr><td>Canlı destek widget</td><td class="yes2">Var</td><td class="yes2">Var</td><td>Bizde "Destek düğmesi"</td></tr>
+<tr><td>Raporlama</td><td class="yes2">Var (Pro)</td><td class="yes2">Var</td><td>P2P/relay oranı, CSV</td></tr>
+<tr><td>Cihaz envanteri / sağlık</td><td class="no">Bulunamadı</td><td class="yes2">Envanter var; sağlık + alarm yok</td><td>Güncel değil rozeti, toplu güncelle</td></tr>
+<tr><td>Wake-on-LAN, webhook</td><td class="no">Bulunamadı</td><td class="no">Yok (adım 7)</td><td>Alpemix'te "kendi yazılımınıza entegrasyon" (Pro) var</td></tr>
+<tr><td>2FA</td><td class="no">Bulunamadı</td><td class="yes2">Var</td><td>TOTP + kurtarma kodları</td></tr>
+<tr><td>Mobil uygulama</td><td class="yes2">Var (Android, iOS)</td><td class="no">Yok</td><td>Bizde tarayıcıdan telefon görüntüleyici (#15)</td></tr>
+<tr><td>Mac / Linux ajanı</td><td class="yes2">Mac var; Linux beta</td><td class="no">Yok</td><td>—</td></tr>
+<tr><td>Abonelik / ödeme</td><td class="yes2">Var</td><td class="no">Yok (6h)</td><td>Plan/limit tablosu kodda, satış yok</td></tr>
 </table>
+</div>
+
+<h3>Lisans karşılaştırması</h3>
+<div class="card">
+  <ul class="chk">
+    <li><b>Alpemix Standart (ücretsiz):</b> ayda 8 saat destek, oturum 45 dk, sürekli parola ayda 4 saat.</li>
+    <li><b>Alpemix Pro:</b> sınırsız; lisans kullanıcıya bağlı, 1 yıllık.</li>
+    <li><b>TL fiyatı Alpemix sitesinde yok (doğrulanamadı).</b> Bizim fiyatımız belirlenmedi (#8).</li>
+  </ul>
 </div>
 
 <h3>Alpemix'ten farkımız</h3>
@@ -123,13 +287,84 @@
   <ul class="chk">
     <li><b>Teknisyen hiçbir şey kurmaz</b> — tarayıcıdan bağlanır.</li>
     <li><b>Veri izolasyonu veritabanında</b> (RLS, FORCE) — kod hatası olsa bile firma verisi sızmaz.</li>
-    <li><b>Silinemez denetim kaydı</b> — hash zincirli.</li>
+    <li><b>Silinemez denetim kaydı</b> — hash zincirli (<b>Denetim kaydı</b> → <b>Zinciri doğrula</b>).</li>
     <li><b>Cihaz parolası sunucuya gitmez</b> — ajan kendi makinesinde doğrular.</li>
+    <li><b>2FA</b> ve <b>cihaz envanteri</b> (Alpemix'te bulunamadı).</li>
   </ul>
 </div>
 
-<!-- ============ 4 SATIS ============ -->
-<h2 id="satis" style="margin-top:44px">4 · Satışa çıkmak için kalanlar</h2>
+<div class="card">
+  <p><b class="yes2">İyi yanlarımız</b></p>
+  <ul class="chk">
+    <li>Güvenlik: 2FA, silinemez denetim kaydı, veritabanı seviyesinde izolasyon, sunucuya gitmeyen cihaz parolası.</li>
+    <li>Teknisyen için kurulumsuz, tarayıcıdan bağlantı; telefondan da açılır.</li>
+    <li>Bayi markası + envanter + raporlar tek panelde.</li>
+  </ul>
+  <p><b class="no">Zayıf yanlarımız</b></p>
+  <ul class="chk">
+    <li>İmzasız EXE (SmartScreen uyarısı), canlı sunucu yok.</li>
+    <li>Gerçek (farklı) ağda ölçüm yok; çoklu izleme şu an hatalı.</li>
+    <li>Mac, Linux, sesli konuşma ve mobil uygulama yok.</li>
+  </ul>
+</div>
+
+<!-- ============ 6 SSS ============ -->
+<h2 id="sss" style="margin-top:44px">6 · Sık sorulan sorular</h2>
+<div class="card">
+<div class="term"><b>Ürün satılabilir mi?</b><div class="d">Hayır, teknik pilot. Satıştan önce: kod imzası, canlı sunucu + alan adı, SMTP, ödeme/abonelik ekranı (6h), KVKK metinleri, farklı ağ testi.</div></div>
+<div class="term"><b>Windows destekliyor mu? Linux, Mac, mobil?</b><div class="d">Müşteri tarafı yalnız Windows 10/11. Teknisyen tarayıcıdan (telefon dahil, gözle deneme bekliyor). Linux, Mac ajanı ve mobil uygulama yok (bölüm 4).</div></div>
+<div class="term"><b>Sunucu Ubuntu VPS'te çalışır mı, kod değişir mi?</b><div class="d">Evet; <span class="mono">deploy/</span> paketi hazır (compose: sunucu, PostgreSQL + yedek, coturn, Caddy otomatik HTTPS, systemd, sağlık kontrolü). Kod değişmez, ayar girilir: alan adı, TURN sırrı, SMTP. Müşteri ajanı şimdilik yalnız Windows.</div></div>
+<div class="term"><b>Farklı ağ testi için VPS lazım mı?</b><div class="d">Evet. VM aynı bilgisayarın ağındadır, gerçek "farklı ağ" sayılmaz. Satışta kullanılacak sunucu aynı işi görür.</div></div>
+<div class="term"><b>VMware testini neden yapıyoruz, nasıl?</b><div class="d">Servis kipi, kilit ekranı, yeniden başlatma gibi şeyler gerçek Windows'ta denenmeden doğrulanamaz; senaryolar <span class="mono">vm-test.ps1</span> ile koşar. Bkz. <a href="#test">bölüm 7</a>.</div></div>
+<div class="term"><b>"Karşı tarafla bağlantı kurulamadı" neden olur?</b><div class="d">Doğrudan yol kapalı ve TURN yok. Canlıda kendi coturn sunucumuz çözer; testte geliştirme TURN'u eklendi (24.10.2026) ve anlık bağlantı çalıştı.</div></div>
+<div class="term"><b>Alpemix'ten ucuza tüm özelliklerle satmak mantıklı mı?</b><div class="d">Öneri: yalnız fiyatla yarışma; 4 farkı (tarayıcıdan kurulumsuz, veritabanı izolasyonu, silinemez denetim, 2FA) ve bayi markasını öne çıkar. Önce 3–5 tanıdık firmayla pilot. "Tüm özellikler" iddiası için ses, Mac, Linux gerekir. Fiyat kararı sende (#8); rakam önerilmiyor.</div></div>
+<div class="term"><b>İşlevsel / işlevsel olmayan yeterli mi?</b><div class="d">İşlevsel: Windows tarafı büyük ölçüde hazır. İşlevsel olmayan eksikler: imzalı dağıtım, canlı yedek/izleme/durum sayfası devrede değil, gerçek internette ölçüm yok, hukuk metinleri.</div></div>
+<div class="term"><b>Kodsuz bağlanma, karartma, yeniden başlatınca kopmama var mı?</b><div class="d">Var: servis kipi + cihaz parolası, <b>Ekranı karart</b>, <b>Yeniden başlat</b> (oturum devam eder). Kodu yazıldı, gözle deneme bekliyor (#13, #14, #16).</div></div>
+</div>
+
+<!-- ============ 7 TEST ============ -->
+<h2 id="test" style="margin-top:44px">7 · Test durumu ve sıradaki testler</h2>
+<p class="sub">VM betikleri: <span class="mono">.tools\vm-test.ps1</span> (yönetici PowerShell, VM açık). İlk kez: <code class="i">-Senaryo hazirlik</code>.
+VM açıkken host'ta ağır iş (derleme, test) koşma.</p>
+<div class="card">
+<table>
+<tr><th>#</th><th>Ne</th><th>Komut</th><th>Gözle bakacağın</th><th>Konu</th><th>Sonuç (24.10.2026)</th></tr>
+<tr><td>1</td><td>Servis kipi</td><td class="mono">servis</td><td>Kilit ekranı ve UAC tarayıcıda tıklanıyor mu; ui-host ölünce geri geliyor mu</td><td>#13</td><td><span class="yes2">kurulum ✔ (otomatik)</span>; kilit/UAC denenmedi</td></tr>
+<tr><td>—</td><td>Anlık destek bağlantısı</td><td class="mono">(senaryo içinde)</td><td>9 haneli kodla bağlanma</td><td>—</td><td class="yes2">✔ (TURN ile)</td></tr>
+<tr><td>2</td><td>Yeniden başlat + devam</td><td class="mono">devam</td><td>Cihaz dönünce oturum kendiliğinden sürüyor mu</td><td>#14</td><td>denenmedi</td></tr>
+<tr><td>3</td><td>Siyah ekran</td><td class="mono">siyah</td><td>Müşteri ekranı kararır, teknisyen görür; bitince geri gelir</td><td>#16</td><td>denenmedi</td></tr>
+<tr><td>4</td><td>Çoklu izleyici</td><td class="mono">izleyici</td><td>Kişi sayısı doğru, izleyici girdi gönderemiyor</td><td>#18</td><td class="no">✘ ajan ikinci oturumda hata veriyor, düzeltiliyor</td></tr>
+<tr><td>5</td><td>Otomatik güncelleme (~60 dk)</td><td class="mono">guncelleme</td><td>1.0.0 → 1.0.1, bozuk 1.0.2 geri alınır</td><td>#17</td><td>denenmedi</td></tr>
+<tr><td>6</td><td>Telefon</td><td>telefonda konsol adresi</td><td>Android Chrome + Gboard: yazma, Türkçe karakter, kaydırma, yakınlaştırma</td><td>#15</td><td>denenmedi</td></tr>
+<tr><td>7</td><td>Farklı ağ</td><td>başka evdeki / 4G'deki bilgisayar</td><td>Bağlanıyor mu; raporda P2P mi relay mi</td><td>#2</td><td>denenmedi</td></tr>
+</table>
+</div>
+<p style="font-size:14px;color:var(--fg2)">Bir deneme kalırsa: çıktı dosyası + gördüğün bir cümleyle; kök nedeni ben bulurum.
+Atlanan otomatik test "geçti" sayılmaz.</p>
+
+<!-- ============ 8 YAPILANLAR ============ -->
+<h2 id="yapilanlar" style="margin-top:44px">8 · Yapılanlar / eksikler / öneriler</h2>
+<div class="card">
+  <p><b class="yes2">Yapıldı (24.10.2026)</b></p>
+  <ul class="chk">
+    <li>ui-host servis kipinde düzeldi ve VM'de doğrulandı.</li>
+    <li>VM test betiğine TURN, doğru giriş adresi ve VM takılma düzeltmesi eklendi.</li>
+  </ul>
+  <p><b class="no">Eksik / bekleyen (kod)</b></p>
+  <ul class="chk">
+    <li>Çoklu izleme hatası (inceleniyor).</li>
+    <li>Sesli konuşma, Wake-on-LAN, webhook, cihaz sağlığı + alarm (adım 7).</li>
+    <li>Linux ajanı (adım 8), Mac ajanı (planda yoktu, eklenecek), mobil (adım 9–10).</li>
+  </ul>
+  <p><b>İyileştirme önerileri (henüz yapılmadı)</b></p>
+  <ul class="chk">
+    <li>Aynı ağda STUN'suz doğrudan bağlantı: ajanın tarayıcının mDNS adını çözmesi.</li>
+    <li>Ürünü adım adım anlatan müşteri sayfası.</li>
+  </ul>
+</div>
+
+<span id="satis"></span>
+<h3>Senin kararların ve hesapların</h3>
 <div class="card">
 <table>
 <tr><th>Kimde</th><th>İş</th><th>Açık konu</th></tr>
@@ -143,29 +378,11 @@
 </table>
 </div>
 
-<!-- ============ 5 TEST ============ -->
-<h2 id="test" style="margin-top:44px">5 · Nasıl test edilir</h2>
-<p class="sub">VM betikleri: <span class="mono">.tools\vm-test.ps1</span> (yönetici PowerShell, VM açık). İlk kez: <code class="i">-Senaryo hazirlik</code>.
-VM açıkken host'ta ağır iş (derleme, test) koşma.</p>
-<div class="card">
-<table>
-<tr><th>#</th><th>Ne</th><th>Komut</th><th>Gözle bakacağın</th><th>Konu</th></tr>
-<tr><td>1</td><td>Servis kipi</td><td class="mono">servis</td><td>Kilit ekranı ve UAC tarayıcıda tıklanıyor mu; ui-host ölünce geri geliyor mu</td><td>#13</td></tr>
-<tr><td>2</td><td>Yeniden başlat + devam</td><td class="mono">devam</td><td>Cihaz dönünce oturum kendiliğinden sürüyor mu</td><td>#14</td></tr>
-<tr><td>3</td><td>Siyah ekran</td><td class="mono">siyah</td><td>Müşteri ekranı kararır, teknisyen görür; bitince geri gelir</td><td>#16</td></tr>
-<tr><td>4</td><td>Çoklu izleyici</td><td class="mono">izleyici</td><td>Kişi sayısı doğru, izleyici girdi gönderemiyor</td><td>#18</td></tr>
-<tr><td>5</td><td>Otomatik güncelleme (~60 dk)</td><td class="mono">guncelleme</td><td>1.0.0 → 1.0.1, bozuk 1.0.2 geri alınır</td><td>#17</td></tr>
-<tr><td>6</td><td>Telefon</td><td>telefonda konsol adresi</td><td>Android Chrome + Gboard: yazma, Türkçe karakter, kaydırma, yakınlaştırma</td><td>#15</td></tr>
-<tr><td>7</td><td>Farklı ağ</td><td>başka evdeki / 4G'deki bilgisayar</td><td>Bağlanıyor mu; raporda P2P mi relay mi</td><td>#2</td></tr>
-</table>
-</div>
-<p style="font-size:14px;color:var(--fg2)">Bir deneme kalırsa: çıktı dosyası + gördüğün bir cümleyle; kök nedeni ben bulurum.
-Atlanan otomatik test "geçti" sayılmaz.</p>
-
+<!-- ============ 9 NASIL CALISIR ============ -->
 <!-- ============ 6 AKIS ============ -->
-<h2 id="akis" style="margin-top:44px">6 · Nasıl çalışır</h2>
+<h2 id="akis" style="margin-top:44px">9 · Nasıl çalışır</h2>
 
-<h3>6.1 · Sistemde ne var</h3>
+<h3>9.1 · Sistemde ne var</h3>
 <div class="card">
 <pre><code>  MÜŞTERİNİN BİLGİSAYARI              SUNUCU (VPS)            TEKNİSYENİN CİHAZI
   ┌──────────────────────┐            ┌──────────────┐        ┌──────────────┐
@@ -183,7 +400,7 @@ Atlanan otomatik test "geçti" sayılmaz.</p>
   </div>
 </div>
 
-<h3>6.2 · Giriş akışı</h3>
+<h3>9.2 · Giriş akışı</h3>
 <div class="card">
 <pre><code>  1. Müşteri ajanı çalıştırır → cihaz sunucuya kaydolur, 9 haneli kod alır
   2. Teknisyen tarayıcıda kodu girer → sunucu talebi müşterinin ekranına düşürür
@@ -194,7 +411,7 @@ Atlanan otomatik test "geçti" sayılmaz.</p>
   <div class="note ok">Onay penceresi açıkken uzaktan girdi engellenir; yoksa dolandırıcı müşterinin onayına kendisi tıklardı.</div>
 </div>
 
-<h3>6.3 · Gözetimsiz erişim (servis kipi, K-26)</h3>
+<h3>9.3 · Gözetimsiz erişim (servis kipi, K-26)</h3>
 <div class="card">
 <pre><code>  SYSTEM servisi (açılışta otomatik)
      └─► oturumda SYSTEM yardımcı  ← ekranı yakalar, tuş gönderir
@@ -203,14 +420,14 @@ Atlanan otomatik test "geçti" sayılmaz.</p>
   Kurulum ve ui-host VM'de doğrulandı; UAC/kilit gözle denenmedi.</p>
 </div>
 
-<h3>6.4 · Veri izolasyonu (RLS)</h3>
+<h3>9.4 · Veri izolasyonu (RLS)</h3>
 <div class="card">
 <pre><code>  platform → bayi → müşteri firma      (her tabloda tenant_id + RLS, FORCE)
   Uygulama segnox_app rolüyle bağlanır, BYPASSRLS yok; tek kapı: store.InTenantTx</code></pre>
   <p style="font-size:14px;color:var(--fg2)">Denetim ekibine cevap: "firma verisi başka firmaya sızar mı?" — veritabanının kendisi engeller.</p>
 </div>
 
-<h3>6.5 · Ağ (STUN / TURN / ICE)</h3>
+<h3>9.5 · Ağ (STUN / TURN / ICE)</h3>
 <div class="card">
   <p style="font-size:14.5px">Müşteri ve teknisyen farklı ağlarda; adresleri dışarıdan görünmez. <b>ICE</b> sırayla dener, kullanıcı ayar yapmaz:</p>
 <pre><code>  host   aynı ağ              en hızlı, ücretsiz
@@ -224,7 +441,7 @@ Atlanan otomatik test "geçti" sayılmaz.</p>
   </ul>
 </div>
 
-<h3>6.6 · Teknolojiler</h3>
+<h3>9.6 · Teknolojiler</h3>
 <div class="card">
 <table>
 <tr><th>Teknoloji</th><th>Ne için</th></tr>
@@ -239,7 +456,7 @@ Atlanan otomatik test "geçti" sayılmaz.</p>
 </table>
 </div>
 
-<h3>6.7 · Sözlük</h3>
+<h3>9.7 · Sözlük</h3>
 <div class="card">
 <div class="term"><b>Ajan</b><div class="d">Müşterinin bilgisayarındaki program; ekranı yakalar, tuş gönderir.</div></div>
 <div class="term"><b>Teknisyen</b><div class="d">Yardım eden kişi; tarayıcıdan bağlanır.</div></div>
@@ -252,7 +469,7 @@ Atlanan otomatik test "geçti" sayılmaz.</p>
 </div>
 
 <!-- ============ 7 RISK ============ -->
-<h2 id="risk" style="margin-top:44px">7 · Riskler</h2>
+<h2 id="risk" style="margin-top:44px">9 · Riskler</h2>
 <div class="card">
 <table>
 <tr><th>Risk</th><th>Not</th></tr>
@@ -265,7 +482,7 @@ Atlanan otomatik test "geçti" sayılmaz.</p>
 </div>
 
 <!-- ============ 8 PAZAR ============ -->
-<h2 id="pazar" style="margin-top:44px">8 · Pazar</h2>
+<h2 id="pazar" style="margin-top:44px">9 · Pazar</h2>
 <div class="card">
   <ul class="chk">
     <li><b>Hedef:</b> Alpemix kadar basit, daha güvenli, bayinin kendi markasıyla satabildiği ticari uzak destek (PLAN bağlam).</li>
@@ -277,7 +494,7 @@ Atlanan otomatik test "geçti" sayılmaz.</p>
 </div>
 
 <p style="font-size:12.5px;color:var(--fg3);margin:40px 0 0;padding-top:20px;border-top:1px solid var(--line)">
-  <b>Son güncelleme: 24 Ekim 2026</b> &middot;
+  <b>Son güncelleme: 24.10.2026</b> &middot;
   Kaynak: <span class="mono">PLAN.md</span>, <span class="mono">docs/TEST-REHBERI.md</span>,
   <span class="mono">docs/ACIK-KONULAR.md</span> &middot; <a href="basla.html">Rehber</a>
 </p>
