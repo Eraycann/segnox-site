@@ -647,26 +647,11 @@ try {
   if (-not $up) { Say 'HATA: sunucu ayakta degil'; Get-Content $logErr -Tail 12; exit 1 }
   Say '  sunucu ayakta'
 
-  # ------------------------------------------------------------ API oturumu + katilim kodu
-  Adim 'Katilim kodu uretiliyor'
-  $api = "https://${natIp}:8080/api/v1"
-  # Test ortami: kendi urettigimiz CA'ya guven (dogrulama kapali - sadece test)
-  try {
-    [System.Net.ServicePointManager]::ServerCertificateValidationCallback = { $true }
-    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
-  } catch { }
-  $session = New-Object Microsoft.PowerShell.Commands.WebRequestSession
-  [void](Invoke-RestMethod -Uri "$api/auth/login" -Method Post `
-    -Body (@{ email = $ownerMail; password = $ownerPw } | ConvertTo-Json) -ContentType 'application/json' -WebSession $session)
-  $me = Invoke-RestMethod -Uri "$api/auth/me" -WebSession $session
-  $tok = Invoke-RestMethod -Uri "$api/enrollment-tokens" -Method Post `
-    -Body (@{ name = "VM testi ($Senaryo)"; uses = 3; ttlHours = 2 } | ConvertTo-Json) `
-    -ContentType 'application/json' -WebSession $session -Headers @{ 'X-Segnox-CSRF' = $me.csrf }
-  Say ("  kod: " + (Kisa $tok.token) + " (kisaltildi; 2 saat / 3 kullanim)")
-
   # Ajan, loopback disindaki sunucu icin duz HTTP'i reddeder (K-21).
   # Bu yuzden TLS sonlandirici proxy kuruyoruz: ajan https:// ile baglanir,
   # konuk kok sertifikayi guvenilir olarak yukler.
+  # NOT: host'un API cagrilari da PUBLIC_URL ile ayni https adrese gittigi icin
+  # proxy, giris yapmadan ONCE ayaga kalkmali.
   Adim 'TLS proxy (ajan https ile baglansin)'
   $certDir = Join-Path $env:TEMP 'segnox-vm-cert'
   New-Item -ItemType Directory $certDir -Force | Out-Null
@@ -705,6 +690,23 @@ try {
   # Yeni kural eklemek yonetici gerektirir; eklenemezse sunucu 127.0.0.1:8090'da kalir.
 
   $serverUrl = "https://${natIp}:8080"
+
+  # ------------------------------------------------------------ API oturumu + katilim kodu
+  Adim 'Katilim kodu uretiliyor'
+  $api = "https://${natIp}:8080/api/v1"
+  # Test ortami: kendi urettigimiz CA'ya guven (dogrulama kapali - sadece test)
+  try {
+    [System.Net.ServicePointManager]::ServerCertificateValidationCallback = { $true }
+    [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.SecurityProtocolType]::Tls12
+  } catch { }
+  $session = New-Object Microsoft.PowerShell.Commands.WebRequestSession
+  [void](Invoke-RestMethod -Uri "$api/auth/login" -Method Post `
+    -Body (@{ email = $ownerMail; password = $ownerPw } | ConvertTo-Json) -ContentType 'application/json' -WebSession $session)
+  $me = Invoke-RestMethod -Uri "$api/auth/me" -WebSession $session
+  $tok = Invoke-RestMethod -Uri "$api/enrollment-tokens" -Method Post `
+    -Body (@{ name = "VM testi ($Senaryo)"; uses = 3; ttlHours = 2 } | ConvertTo-Json) `
+    -ContentType 'application/json' -WebSession $session -Headers @{ 'X-Segnox-CSRF' = $me.csrf }
+  Say ("  kod: " + (Kisa $tok.token) + " (kisaltildi; 2 saat / 3 kullanim)")
 
   function Cihaz-Bekle ([int]$dk) {
     for ($i = 0; $i -lt ($dk * 12); $i++) {
