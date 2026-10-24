@@ -57,38 +57,31 @@
 <div class="wrap">
 
 <h1 style="margin-top:0">El Kitabı</h1>
-<p class="sub"><b>Son güncelleme: 24.10.2026.</b> Sıradaki iş için <a href="basla.html">Rehber</a>'e bak. Geçmiş git'te.</p>
+<p class="sub"><b>Son güncelleme: 25.10.2026.</b> Sıradaki iş için <a href="basla.html">Rehber</a>'e bak. Geçmiş git'te.</p>
 
 <div class="note">
   <b>Şu an ne oluyor</b>
   <ul class="chk">
-    <li>Ürün <b>teknik pilot</b>; satılabilir değil. Windows tarafı büyük ölçüde hazır, gerçek makinede denemeler sürüyor.</li>
-    <li>24.10.2026'da sanal makinede (VM) servis kipi kurulumu ve anlık destek bağlantısı çalıştı; <b>çoklu izleme hatalı</b>, düzeltiliyor.</li>
-    <li>Sırada: kalan VM denemeleri (bölüm 7), sonra senin kararların: fiyat, sunucu, kod imzası (bölüm 8).</li>
+    <li>Ürün <b>pilot öncesi</b>: Windows tarafı çalışıyor, VM'de gerçek hatalar bulunup düzeltiliyor.</li>
+    <li>Sırada: panel sadeleştirme, Ücretsiz/Pro planı, açılışta pencere açılmaması; sonra VPS'e geçiş ve 3–5 firmayla pilot.</li>
+    <li>Senden: VPS + e-posta hesabı ve Pro fiyatı (bölüm 8). Kod imzası ve avukat pilotta gerekmiyor.</li>
   </ul>
 </div>
 
 <!-- ============ 1 DURUM ============ -->
 <h2 id="durum">1 · Durum</h2>
-<p class="sub">Kaynak: <span class="mono">PLAN.md</span>, <span class="mono">docs/TEST-REHBERI.md</span>, <span class="mono">docs/ACIK-KONULAR.md</span>. Durum sözcükleri: <b class="yes2">var</b> · <b class="warn2">gözle deneme bekliyor</b> · <b class="no">yok</b> · <b class="no">hatalı</b>.</p>
-
-<div class="note bad">
-  <b>Teknik pilot — henüz satılabilir değil.</b>
-</div>
+<p class="sub">Durum sözcükleri: <b class="yes2">var</b> · <b class="warn2">gözle deneme bekliyor</b> · <b class="no">yok</b> · <b class="no">hatalı</b>.</p>
 
 <div class="card">
 <ul class="chk">
-  <li><span class="yes2"><b>Otomatik testle çalışıyor:</b></span> ekran aktarımı, uzaktan fare/klavye, 9 haneli kod, hesap + 2FA,
-      onay penceresi, çoklu kiracı (RLS), sohbet/pano/dosya, envanter, raporlama, oturum kaydı, destek düğmesi, bayi markası.
-      Go kapısı 36 paket, e2e 36 geçti / 3 atlandı.</li>
-  <li><b>VM sonuçları (24.10.2026):</b>
-      <span class="yes2">servis kipi kurulumu ✔</span> ·
-      <span class="yes2">anlık destek bağlantısı ✔ (TURN ile)</span> ·
-      <span class="no">çoklu izleme ✘ (ajan ikinci oturumda hata veriyor, düzeltiliyor)</span> ·
-      diğerleri denenmedi.</li>
-  <li><span class="warn2"><b>Gözle deneme bekliyor:</b></span> UAC/kilit ekranı, yeniden başlat + devam, H.264 gerçek masaüstünde,
-      siyah ekran, otomatik güncelleme, telefon görüntüleyici (#13–#18).</li>
-  <li><span class="no"><b>Eksik:</b></span> farklı ağdan gerçek bağlantı denemesi (#2), kod imzası, abonelik/ödeme, canlı sunucu.</li>
+  <li><span class="yes2"><b>Otomatik testle çalışıyor:</b></span> ekran, fare/klavye, 9 haneli kod, hesap + 2FA, onay penceresi, çoklu firma (RLS),
+      sohbet/pano/dosya, envanter, raporlar, oturum kaydı, destek düğmesi, bayi markası. e2e 36 geçti / 3 atlandı.</li>
+  <li><b>VM'de gözle (24–25.10.2026):</b>
+      <span class="yes2">servis kurulumu ✔</span> · <span class="yes2">anlık destek ✔</span> · <span class="yes2">görüntü/fare/Türkçe ✔</span> ·
+      <span class="yes2">sohbet ✔</span> · <span class="yes2">çoklu izleme ✔ (düzeltildi)</span> · <span class="yes2">ekranı karart ✔</span> ·
+      <span class="yes2">kilit ekranında dosya ✔</span> · <span class="warn2">yeniden başlat + devam: 2 hata düzeltildi, tekrar denenecek</span> ·
+      <span class="warn2">kodsuz bağlanma: arayüz düzeltildi, denenecek</span> · <span class="warn2">servis kipinde dosya: yeni, denenecek</span>.</li>
+  <li><span class="no"><b>Eksik:</b></span> canlı sunucu (VPS), farklı ağ denemesi, otomatik güncelleme denemesi, sesli konuşma, Ctrl+Alt+Del düğmesi, Mac/Linux/mobil.</li>
 </ul>
 </div>
 
@@ -311,32 +304,42 @@ Göremediğin bir menü, rolünün yetkisi olmadığı içindir. Doğrulanamayan
 <!-- ============ 6 SSS ============ -->
 <h2 id="sss" style="margin-top:44px">6 · Sık sorulan sorular</h2>
 <div class="card">
-<div class="term"><b>Ürün satılabilir mi?</b><div class="d">Hayır, teknik pilot. Satıştan önce: kod imzası, canlı sunucu + alan adı, SMTP, ödeme/abonelik ekranı (6h), KVKK metinleri, farklı ağ testi.</div></div>
-<div class="term"><b>Windows destekliyor mu? Linux, Mac, mobil?</b><div class="d">Müşteri tarafı yalnız Windows 10/11. Teknisyen tarayıcıdan (telefon dahil, gözle deneme bekliyor). Linux, Mac ajanı ve mobil uygulama yok (bölüm 4).</div></div>
-<div class="term"><b>Sunucu Ubuntu VPS'te çalışır mı, kod değişir mi?</b><div class="d">Evet; <span class="mono">deploy/</span> paketi hazır (compose: sunucu, PostgreSQL + yedek, coturn, Caddy otomatik HTTPS, systemd, sağlık kontrolü). Kod değişmez, ayar girilir: alan adı, TURN sırrı, SMTP. Müşteri ajanı şimdilik yalnız Windows.</div></div>
-<div class="term"><b>Farklı ağ testi için VPS lazım mı?</b><div class="d">Evet. VM aynı bilgisayarın ağındadır, gerçek "farklı ağ" sayılmaz. Satışta kullanılacak sunucu aynı işi görür.</div></div>
-<div class="term"><b>VMware testini neden yapıyoruz, nasıl?</b><div class="d">Servis kipi, kilit ekranı, yeniden başlatma gibi şeyler gerçek Windows'ta denenmeden doğrulanamaz; senaryolar <span class="mono">vm-test.ps1</span> ile koşar. Bkz. <a href="#test">bölüm 7</a>.</div></div>
-<div class="term"><b>"Karşı tarafla bağlantı kurulamadı" neden olur?</b><div class="d">Doğrudan yol kapalı ve TURN yok. Canlıda kendi coturn sunucumuz çözer; testte geliştirme TURN'u eklendi (24.10.2026) ve anlık bağlantı çalıştı.</div></div>
-<div class="term"><b>Alpemix'ten ucuza tüm özelliklerle satmak mantıklı mı?</b><div class="d">Öneri: yalnız fiyatla yarışma; 4 farkı (tarayıcıdan kurulumsuz, veritabanı izolasyonu, silinemez denetim, 2FA) ve bayi markasını öne çıkar. Önce 3–5 tanıdık firmayla pilot. "Tüm özellikler" iddiası için ses, Mac, Linux gerekir. Fiyat kararı sende (#8); rakam önerilmiyor.</div></div>
-<div class="term"><b>İşlevsel / işlevsel olmayan yeterli mi?</b><div class="d">İşlevsel: Windows tarafı büyük ölçüde hazır. İşlevsel olmayan eksikler: imzalı dağıtım, canlı yedek/izleme/durum sayfası devrede değil, gerçek internette ölçüm yok, hukuk metinleri.</div></div>
-<div class="term"><b>Kodsuz bağlanma, karartma, yeniden başlatınca kopmama var mı?</b><div class="d">Var: servis kipi + cihaz parolası, <b>Ekranı karart</b>, <b>Yeniden başlat</b> (oturum devam eder). Kodu yazıldı, gözle deneme bekliyor (#13, #14, #16).</div></div>
+<div class="term"><b>Ürün ne zaman satılır?</b><div class="d">Pilot için: VPS'e kurulum + farklı ağ testi + otomatik güncelleme denemesi + açık arayüz işleri. Hesaplar hazırsa ~1–2 hafta. Önce 3–5 tanıdık firma, ödeme elle (havale/fatura). Satarken geliştirme sürer; ajanlar kendiliğinden güncellenir.</div></div>
+<div class="term"><b>Ücretsiz / Pro nasıl satılacak?</b><div class="d">Ücretsiz: 45 dk oturum, ayda 8 saat, 1 oturum, 1 izleyici (Alpemix ücretsizle aynı). Pro: sınırsız süre, 5 oturum, 8 izleyici, kendi markan, API. Müşteri öder → sunucuda <span class="mono">segnox-server admin set-plan -tenant &lt;id&gt; -plan pro</span>. Panelde "Planım" kartı ve "Pro'ya geç" iletişimi (yapılıyor). Fiyat senin kararın; ayardan değişir (K-39).</div></div>
+<div class="term"><b>Sunucu ne kadara mal olur?</b><div class="d">Tek VPS (Hetzner CX23, 4 GB): ~€5–6/ay, yedek dahil. Görüntü sunucudan geçmez; aktarma (TURN) trafiği 20 TB dahil. Ayrıntı: <span class="mono">docs/arastirma/vps-maliyet.md</span>.</div></div>
+<div class="term"><b>Çevrimiçi durumu anlık mı, sunucuyu yorar mı?</b><div class="d">Anlık. Her ajan tek açık bağlantı tutar, boşta arada küçük "yaşıyorum" mesajı gider; yük çok düşük. Kesin kapasite VPS'te yük testiyle ölçülecek.</div></div>
+<div class="term"><b>Kod imzası ve KVKK avukatı şart mı?</b><div class="d">Pilotta hayır. İmzasız programda Windows "tanınmayan uygulama" der → "Ek bilgi → Yine de çalıştır". KVKK için kısa taslak metin yazılacak (avukat onayı yok notuyla). Para kazanınca ikisine de bakılır.</div></div>
+<div class="term"><b>Kodsuz bağlanma (gözetimsiz erişim) nedir?</b><div class="d">Programı müşteri bilgisayarına bir kez kalıcı kur (Bilgisayar ekle → kurulum komutu). Kurulumda o bilgisayarda bir <b>cihaz parolası</b> belirlenir; teknisyen panelde "Gözetimsiz" etiketli cihaza Bağlan → parola ile müşteri onayı olmadan girer.</div></div>
+<div class="term"><b>Cihaz parolasını panel neden göstermiyor?</b><div class="d">Parola sunucuya hiç gitmez (güvenlik farkımız): sunucu ele geçse bile kimse bilgisayarlara giremez. Parolayı kurulumu yapan kişi bilir.</div></div>
+<div class="term"><b>Katılım kodu nedir?</b><div class="d">Kalıcı kurulum için bir kerelik anahtar. Müşterinin bilgisayarında yönetici olarak <span class="mono">segnox-agent.exe /S /TOKEN=… /SERVER=…</span>. Anlık destek (9 haneli kod) için gerekmez. Panelde "Bilgisayar ekle" adıyla sadeleşiyor.</div></div>
+<div class="term"><b>Bilgisayar açılınca uygulama öne çıkar mı?</b><div class="d">Çıkmayacak (yapılıyor): kalıcı kurulumda yalnız saatin yanında simge; pencere yalnız bağlantı isteğinde ve oturum sırasında (müşteri kimin bağlı olduğunu görmeli).</div></div>
+<div class="term"><b>Gruplar ve müşteriler ne işe yarar?</b><div class="d">Grup: teknisyen yalnız üyesi olduğu grupların cihazlarını görür (ör. "Ankara şubesi"). Müşteri: cihazı müşteriye bağlarsın; başka müşteriye bağlıysa uyarı çıkar.</div></div>
+<div class="term"><b>Destek düğmesi nedir?</b><div class="d">Kendi web sitene koyduğun "Canlı destek" düğmesi; ziyaretçi adını ve 9 haneli kodu yazar, istek panele düşer. Panelde örnek değerler ve önizleme ekleniyor.</div></div>
+<div class="term"><b>API anahtarları gerekli mi?</b><div class="d">Küçük firmaya gerekmez; muhasebe/iş takip programını bağlamak isteyenler için. Ayarlar → Gelişmiş'e taşınıyor.</div></div>
+<div class="term"><b>Oturum kaydı sistemi doldurur mu?</b><div class="d">Hayır: kayıtlar şifreli, veritabanında değil diskte; kayıt ≤ 2 GB, firma başı 20 GB, diskte 5 GB'tan az yer kalırsa yeni kayıt alınmaz, süresi dolan silinir (varsayılan 30 gün).</div></div>
+<div class="term"><b>Sunucu Ubuntu VPS'te çalışır mı?</b><div class="d">Evet; <span class="mono">deploy/</span> hazır (sunucu, PostgreSQL + yedek, coturn, Caddy HTTPS). Kod değişmez, ayar girilir. Müşteri ajanı şimdilik yalnız Windows.</div></div>
+<div class="term"><b>"Karşı tarafla bağlantı kurulamadı" neden olur?</b><div class="d">Doğrudan yol kapalı ve TURN yok. Canlıda coturn çözer; testte geliştirme TURN'u var.</div></div>
+<div class="term"><b>Alpemix'ten farkımız ne?</b><div class="d">Teknisyen kurulum yapmaz (tarayıcı), firmalar veritabanında ayrı (RLS), silinemez denetim kaydı, cihaz parolası sunucuya gitmez, 2FA. Eksiğimiz: sesli konuşma, Mac/Linux, mobil uygulama (bölüm 5).</div></div>
 </div>
 
 <!-- ============ 7 TEST ============ -->
 <h2 id="test" style="margin-top:44px">7 · Test durumu ve sıradaki testler</h2>
-<p class="sub">VM betikleri: <span class="mono">.tools\vm-test.ps1</span> (yönetici PowerShell, VM açık). İlk kez: <code class="i">-Senaryo hazirlik</code>.
-VM açıkken host'ta ağır iş (derleme, test) koşma.</p>
+<p class="sub">VM testini ben kurup koşturuyorum; sana bağlantı, giriş ve parola veriyorum, sen tarayıcıda bakıyorsun. Tam kontrol listesi: <span class="mono">docs/TEST-REHBERI.md</span>.</p>
 <div class="card">
 <table>
-<tr><th>#</th><th>Ne</th><th>Komut</th><th>Gözle bakacağın</th><th>Konu</th><th>Sonuç (24.10.2026)</th></tr>
-<tr><td>1</td><td>Servis kipi</td><td class="mono">servis</td><td>Kilit ekranı ve UAC tarayıcıda tıklanıyor mu; ui-host ölünce geri geliyor mu</td><td>#13</td><td><span class="yes2">kurulum ✔ (otomatik)</span>; kilit/UAC denenmedi</td></tr>
-<tr><td>—</td><td>Anlık destek bağlantısı</td><td class="mono">(senaryo içinde)</td><td>9 haneli kodla bağlanma</td><td>—</td><td class="yes2">✔ (TURN ile)</td></tr>
-<tr><td>2</td><td>Yeniden başlat + devam</td><td class="mono">devam</td><td>Cihaz dönünce oturum kendiliğinden sürüyor mu</td><td>#14</td><td>denenmedi</td></tr>
-<tr><td>3</td><td>Siyah ekran</td><td class="mono">siyah</td><td>Müşteri ekranı kararır, teknisyen görür; bitince geri gelir</td><td>#16</td><td>denenmedi</td></tr>
-<tr><td>4</td><td>Çoklu izleyici</td><td class="mono">izleyici</td><td>Kişi sayısı doğru, izleyici girdi gönderemiyor</td><td>#18</td><td class="no">✘ ajan ikinci oturumda hata veriyor, düzeltiliyor</td></tr>
-<tr><td>5</td><td>Otomatik güncelleme (~60 dk)</td><td class="mono">guncelleme</td><td>1.0.0 → 1.0.1, bozuk 1.0.2 geri alınır</td><td>#17</td><td>denenmedi</td></tr>
-<tr><td>6</td><td>Telefon</td><td>telefonda konsol adresi</td><td>Android Chrome + Gboard: yazma, Türkçe karakter, kaydırma, yakınlaştırma</td><td>#15</td><td>denenmedi</td></tr>
-<tr><td>7</td><td>Farklı ağ</td><td>başka evdeki / 4G'deki bilgisayar</td><td>Bağlanıyor mu; raporda P2P mi relay mi</td><td>#2</td><td>denenmedi</td></tr>
+<tr><th>#</th><th>Ne</th><th>Sonuç (25.10.2026)</th></tr>
+<tr><td>1</td><td>Servis kipi kurulumu (LocalSystem, otomatik başlangıç, ACL)</td><td class="yes2">✔</td></tr>
+<tr><td>2</td><td>Anlık destek: görüntü, fare, Türkçe karakter, sohbet</td><td class="yes2">✔</td></tr>
+<tr><td>3</td><td>Çoklu izleme (Bağlan + İzle)</td><td class="yes2">✔ (hata düzeltildi)</td></tr>
+<tr><td>4</td><td>Ekranı karart</td><td class="yes2">✔</td></tr>
+<tr><td>5</td><td>Kilit ekranında dosya listesi</td><td class="yes2">✔</td></tr>
+<tr><td>6</td><td>Yeniden başlat + devam (+ Windows girişi)</td><td class="warn2">2 hata düzeltildi (program siliniyordu, girişte kopuyordu); tekrar denenecek</td></tr>
+<tr><td>7</td><td>Kodsuz bağlanma (cihaz parolası)</td><td class="warn2">arayüz düzeltildi ("Gözetimsiz" + parola önce); denenecek</td></tr>
+<tr><td>8</td><td>Servis kipinde dosya gönder/al</td><td class="warn2">yeni; denenecek</td></tr>
+<tr><td>9</td><td>Panel: Bilgisayar ekle, Raporlar, Denetim, Destek düğmesi, Planım</td><td class="warn2">sadeleştiriliyor; denenecek</td></tr>
+<tr><td>10</td><td>Otomatik güncelleme</td><td>denenmedi</td></tr>
+<tr><td>11</td><td>Farklı ağ (VPS ile)</td><td>denenmedi</td></tr>
+<tr><td>12</td><td>Telefondan bağlanma</td><td>denenmedi</td></tr>
 </table>
 </div>
 <p style="font-size:14px;color:var(--fg2)">Bir deneme kalırsa: çıktı dosyası + gördüğün bir cümleyle; kök nedeni ben bulurum.
@@ -345,21 +348,25 @@ Atlanan otomatik test "geçti" sayılmaz.</p>
 <!-- ============ 8 YAPILANLAR ============ -->
 <h2 id="yapilanlar" style="margin-top:44px">8 · Yapılanlar / eksikler / öneriler</h2>
 <div class="card">
-  <p><b class="yes2">Yapıldı (24.10.2026)</b></p>
+  <p><b class="yes2">Yapıldı (24–25.10.2026)</b></p>
   <ul class="chk">
-    <li>ui-host servis kipinde düzeldi ve VM'de doğrulandı.</li>
-    <li>VM test betiğine TURN, doğru giriş adresi ve VM takılma düzeltmesi eklendi.</li>
+    <li>Çoklu izleme: ekran bir kez yakalanıp tüm izleyicilere dağıtılıyor.</li>
+    <li>Servis kipinde dosya aktarımı (kullanıcı adına; kilitliyken de açık).</li>
+    <li>Yeniden kurulumdan sonra ilk açılışta programın silinmesi hatası.</li>
+    <li>Windows girişinde oturumun kopması (aynı kullanıcı ya da cihaz parolası oturumu sürer).</li>
+    <li>Görüntüleyici: yan panel, Sığdır/Gerçek boyut, dosya geçmişi, adımlar, ipuçları.</li>
+    <li>Panel: sol menü, kartlar, her sayfada "Nasıl kullanılır?", Gözetimsiz rozeti, müşteri taşıma uyarısı.</li>
   </ul>
-  <p><b class="no">Eksik / bekleyen (kod)</b></p>
+  <p><b class="warn2">Yapılıyor</b></p>
   <ul class="chk">
-    <li>Çoklu izleme hatası (inceleniyor).</li>
-    <li>Sesli konuşma, Wake-on-LAN, webhook, cihaz sağlığı + alarm (adım 7).</li>
-    <li>Linux ajanı (adım 8), Mac ajanı (planda yoktu, eklenecek), mobil (adım 9–10).</li>
+    <li>Panel sadeleştirme: denetim cümleleri, Bilgisayar ekle, destek düğmesi örnek/önizleme, API Gelişmiş'e, Raporlar özet kartları.</li>
+    <li>Ücretsiz/Pro: Planım kartı, plan değiştirme komutu, sınır mesajları.</li>
+    <li>Müşteri tarafı: açılışta pencere yok (simge), tek sohbet paneli.</li>
   </ul>
-  <p><b>İyileştirme önerileri (henüz yapılmadı)</b></p>
+  <p><b class="no">Sonraya</b></p>
   <ul class="chk">
-    <li>Aynı ağda STUN'suz doğrudan bağlantı: ajanın tarayıcının mDNS adını çözmesi.</li>
-    <li>Ürünü adım adım anlatan müşteri sayfası.</li>
+    <li>Ctrl+Alt+Del düğmesi, dosya işlemlerinin denetim kaydı, sesli konuşma, Wake-on-LAN.</li>
+    <li>Linux ajanı, Mac ajanı, mobil; ödeme/abonelik entegrasyonu (müşteri artınca).</li>
   </ul>
 </div>
 
@@ -367,14 +374,12 @@ Atlanan otomatik test "geçti" sayılmaz.</p>
 <h3>Senin kararların ve hesapların</h3>
 <div class="card">
 <table>
-<tr><th>Kimde</th><th>İş</th><th>Açık konu</th></tr>
-<tr><td><b>Sen</b></td><td>Fiyat ve plan kararı</td><td>#8</td></tr>
-<tr><td><b>Sen</b></td><td>Sunucu + alan adı (Hetzner, DNS)</td><td>#4</td></tr>
-<tr><td><b>Sen</b></td><td>SMTP sağlayıcısı (SPF/DKIM/DMARC)</td><td>#5</td></tr>
-<tr><td><b>Sen</b></td><td>Kod imzalama sertifikası (imzasız EXE'de SmartScreen uyarısı)</td><td>#6, #12</td></tr>
-<tr><td><b>Sen</b></td><td>KVKK metinleri, oturum kaydı aydınlatması</td><td>#7, #19</td></tr>
-<tr><td><b>Sen</b></td><td>Farklı ağdan deneme için sunucu / ikinci bilgisayar</td><td>#2</td></tr>
-<tr><td><b>Ben</b></td><td>Bunlar gelince: 6h abonelik/ödeme, prod devreye alma (yedek, izleme, durum sayfası), imzalı dağıtım</td><td>—</td></tr>
+<tr><th>Kimde</th><th>İş</th><th>Not</th></tr>
+<tr><td><b>Sen</b></td><td>VPS (Hetzner CX23 ~€5/ay) + DNS kaydı</td><td>pilotun ön şartı</td></tr>
+<tr><td><b>Sen</b></td><td>E-posta (ücretsiz katmanlı SMTP)</td><td>davet, parola sıfırlama</td></tr>
+<tr><td><b>Sen</b></td><td>Pro fiyatı</td><td>Alpemix'in altında; ayardan değişir</td></tr>
+<tr><td><b>Ben</b></td><td>VPS kurulumu, yedek, izleme, farklı ağ ve güncelleme denemesi, KVKK kısa taslak</td><td>VPS gelince</td></tr>
+<tr><td>—</td><td>Kod imzası, avukat</td><td>pilotta gerek yok</td></tr>
 </table>
 </div>
 
@@ -494,7 +499,7 @@ Atlanan otomatik test "geçti" sayılmaz.</p>
 </div>
 
 <p style="font-size:12.5px;color:var(--fg3);margin:40px 0 0;padding-top:20px;border-top:1px solid var(--line)">
-  <b>Son güncelleme: 24.10.2026</b> &middot;
+  <b>Son güncelleme: 25.10.2026</b> &middot;
   Kaynak: <span class="mono">PLAN.md</span>, <span class="mono">docs/TEST-REHBERI.md</span>,
   <span class="mono">docs/ACIK-KONULAR.md</span> &middot; <a href="basla.html">Rehber</a>
 </p>
