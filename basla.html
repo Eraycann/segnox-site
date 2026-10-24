@@ -36,17 +36,9 @@
 <div class="card" style="border-left:3px solid var(--acc);margin-top:22px">
   <h2 style="margin-top:0"><span class="badge b-info">&#351;UAN</span> Ne oluyor</h2>
   <p style="font-size:15px">
-    Claude Code 20.10–21'de <b>6a–6g arası 7 özellik daha bitirdi</b>:
-    otomatik güncelleme, çoklu izleyici, cihaz envanteri, raporlama,
-    oturum kaydı, canlı destek düğmesi, bayi markası.
-    <b>e2e 36 geçti / 3 atlandı / 0 kaldı — CI tamamen yeşil.</b>
-    <b>Sıradaki iş: senin iki kararın (fiyat, marka onayı) + gerçek makine
-    denemeleri.</b>
-  </p>
-  <p style="font-size:14px;color:var(--fg2)">
-    <b>Senin sırada 7 iş var</b> (aşağıdaki tabloda): fiyat, KVKK, VPS + alan adı,
-    kod imzası ve VM'de dört deneme (siyah ekran, güncelleme, çoklu izleyici,
-    yeniden başlat + devam). Kod işleri Claude Code'da, denemeler benim.
+    <b>Teknik pilot, henüz satılabilir değil.</b> Kod tarafı (adım 1–6g) bitti, otomatik testler geçiyor
+    (Go kapısı 36 paket, e2e 36 geçti / 3 atlandı). Servis kipi 24.10'da Win11 VM'de doğrulandı
+    (kurulum, cihaz kaydı, ui-host ayakta). Kalan: senin gözle denemelerin ve kararların.
   </p>
 </div>
 
@@ -55,40 +47,26 @@
 
 <div class="tl">
   <div class="ev done">
-    <b>1–4b · MVP</b>
-    <small>Sinyal, ekran, fare/klavye, hesap, rol, destek kuyruğu, onay penceresi.
-      <b>Bitti.</b></small>
+    <b>1–4b · MVP <span class="badge b-ok">BİTTİ</span></b>
+    <small>Sinyal, ekran, fare/klavye, hesap, rol, destek akışı, onay penceresi, canlı sunucu paketi.</small>
   </div>
   <div class="ev done">
-    <b>5a–5f, 6a–6g · <span class="badge b-ok">BİTTİ</span></b>
-    <small>
-      Gözetimsiz erişim (servis, sessiz kurulum, yardımcı, ipc), yeniden başlat
-      + devam, H.264, <b>siyah ekran</b>, <b>otomatik güncelleme</b>,
-      <b>çoklu izleyici</b>, <b>cihaz envanteri</b>, <b>raporlama</b>,
-      <b>müşteriler rehberi</b> (5e), <b>oturum kaydı</b> (6e),
-      <b>canlı destek düğmesi</b> (6f), <b>bayi markası</b> (6g).
-      <b>Kod bitti. Gerçek makinede hiç denenmedi.</b>
-    </small>
+    <b>5a–5f, 6a–6g, 6i · <span class="badge b-ok">KOD BİTTİ</span></b>
+    <small>Servis kipi, yeniden başlat + devam, H.264, siyah ekran, otomatik güncelleme, çoklu izleyici,
+      envanter, raporlama, müşteriler, oturum kaydı, canlı destek düğmesi, bayi markası.
+      <b>Gözle deneme bekliyor:</b> UAC/kilit, devam, siyah ekran, güncelleme, çoklu izleyici (#13–#18).</small>
   </div>
   <div class="ev now">
     <b>6h · Fiyat / plan <span class="badge b-bad">SENİN KARARIN</span></b>
-    <small>
-      Plan adları ve TL fiyatlar, ödeme sağlayıcı, fatura, deneme süresi,
-      limit aşımı, relay maliyeti — altı soru, hepsi `ACIK-KONULAR #8`'de.
-      <b>Kararın olmadan satış sayfası yazılmaz.</b>
-    </small>
+    <small>Plan adları, TL fiyatlar, ödeme sağlayıcı, fatura, deneme süresi, limit aşımı, relay maliyeti — <span class="mono">ACIK-KONULAR #8</span>.</small>
   </div>
   <div class="ev now">
-    <b>6 · Prod <span class="badge b-bad">ASIL ADIM</span></b>
-    <small>Gerçek sunucu, TURN, alan adı, KVKK metinleri, fiyat, kod imzası,
-      toplu kurulum. <b>Farklı ağdan test de burada yapılacak.</b><br>
-      💰 Burada ilk para harcanır (~€10/ay).
-    </small>
+    <b>6 · Prod <span class="badge b-bad">SENDE: SUNUCU, ALAN ADI, İMZA</span></b>
+    <small>Dosyalar hazır (<span class="mono">deploy/</span>), devrede değil. Farklı ağdan test de burada.</small>
   </div>
   <div class="ev">
-    <b>7–8 · Sonra</b>
-    <small>Ses, cihaz sağlığı, webhook, Wake-on-LAN, Linux ajanı,
-      mobil ajan (izleme → kontrol).</small>
+    <b>7–10 · Sonra</b>
+    <small>Ses, cihaz sağlığı, webhook, Wake-on-LAN → Linux ajanı → mobil izleme → Android kontrol.</small>
   </div>
 </div>
 
@@ -98,25 +76,19 @@
 <div class="card">
 <table>
 <tr><th>Ne</th><th>Durum</th><th>Kimi bekliyor</th></tr>
-<tr><td><b>Farklı ağdan bağlantı</b></td>
-    <td class="no">Hiç çalışmadı</td><td>6. adım</td></tr>
-<tr><td><b>Servis kipi (SYSTEM, UAC, kilit ekranı)</b></td>
-    <td class="warn2">Kod var, denenmedi</td><td><b>Sanal makine</b></td></tr>
-<tr><td><b>İkinci cihazdan giriş (403) — düzeltildi</b></td>
-    <td class="warn2">Claude Code'da</td><td>Claude Code</td></tr>
-<tr><td><b>Fiyat, plan, ödeme (6h)</b></td>
+<tr><td><b>Farklı ağdan bağlantı (#2)</b></td>
+    <td class="no">Denenmedi</td><td><b>Sen</b> (sunucu / ikinci bilgisayar)</td></tr>
+<tr><td><b>Servis kipi: UAC, kilit ekranı (#13)</b></td>
+    <td class="warn2">Kurulum VM'de doğrulandı, gözle deneme yok</td><td><b>Sen</b> (VM)</td></tr>
+<tr><td><b>Fiyat, plan, ödeme (#8)</b></td>
     <td class="no">Belirlenmedi</td><td><b>Sen</b></td></tr>
-<tr><td><b>Marka içerik onayı (6g)</b></td>
+<tr><td><b>Marka içerik onayı (#21)</b></td>
     <td class="no">Belirlenmedi</td><td><b>Sen</b></td></tr>
-<tr><td><b>KVKK metinleri (avukat)</b></td>
-    <td class="no">Yok</td><td><b>Sen</b></td></tr>
+<tr><td><b>KVKK metinleri (#7, #19)</b></td>
+    <td class="no">Yok</td><td><b>Sen</b> (avukat)</td></tr>
+<tr><td><b>Düz HTTP kuralı (#22)</b></td>
+    <td class="no">Karar bekliyor</td><td><b>Sen</b></td></tr>
 </table>
-</div>
-
-<div class="note warn">
-  <b>En kritik engel:</b> "uzaktan destek" sözünün tek şartı, farklı ağdan
-  bağlanabilmek. Bu çalışmadan ürün satılmaz. 6. adımda, gerçek sunucuyla
-  yapılacak.
 </div>
 
 <!-- ============ YAPILACAKLAR ============ -->
@@ -125,24 +97,20 @@
 <div class="card">
 <table>
 <tr><th>#</th><th>İş</th><th>Kim</th><th>Durum</th></tr>
-<tr><td>1</td><td><b>Fiyat + plan arayüzü (6h)</b> — altı soru, `ACIK-KONULAR #8`</td>
-    <td>Sen karar + Claude Code</td><td class="no">Senin kararın</td></tr>
-<tr><td>2</td><td><b>VM'de 4 deneme</b> — siyah ekran, otomatik güncelleme,
-    çoklu izleyici, yeniden başlat + devam (betikler hazır)</td>
-    <td>Ben + sen</td><td class="warn2">Senin gözün</td></tr>
-<tr><td>3</td><td><b>Marka içerik onayı</b> (6g, `ACIK-KONULAR #21`)</td>
-    <td>Sen</td><td class="no">Senin kararın</td></tr>
-<tr><td>4</td><td><b>7. adım:</b> ses, cihaz sağlığı, webhook, Wake-on-LAN</td>
-    <td>Claude Code</td><td class="no">Bekliyor</td></tr>
-<tr><td>5</td><td><b>6g bayi markası</b> — marka kodu kapma, ücretsiz plan kuralı</td>
-    <td>Sen + Claude Code</td><td class="no">Senin kararın</td></tr>
-<tr><td>6</td><td><b>VPS + alan adı</b> → farklı ağdan test</td><td>Sen</td>
-    <td class="no">Bekliyor</td></tr>
-<tr><td>7</td><td><b>Kod imzası + KVKK</b></td><td>Sen</td><td class="no">Bekliyor</td></tr>
+<tr><td>1</td><td><b>VM'de gözle denemeler</b> — servis, devam, siyah ekran, çoklu izleyici, güncelleme
+    (<span class="mono">vm-test.ps1</span> senaryoları, <span class="mono">docs/TEST-REHBERI.md</span>)</td>
+    <td>Sen</td><td class="warn2">Senin gözün</td></tr>
+<tr><td>2</td><td><b>Telefon denemesi</b> (#15)</td><td>Sen</td><td class="warn2">Senin gözün</td></tr>
+<tr><td>3</td><td><b>Fiyat + plan</b> (#8) → sonra 6h abonelik/ödeme kodu</td>
+    <td>Sen karar + ben</td><td class="no">Senin kararın</td></tr>
+<tr><td>4</td><td><b>Sunucu + alan adı</b> (#4), SMTP (#5) → farklı ağdan test (#2)</td><td>Sen</td><td class="no">Bekliyor</td></tr>
+<tr><td>5</td><td><b>Kod imzası</b> (#6) + <b>KVKK</b> (#7, #19) + marka onayı (#21)</td><td>Sen</td><td class="no">Bekliyor</td></tr>
+<tr><td>6</td><td><b>Prod devreye alma + imzalı dağıtım</b></td><td>Ben</td><td class="no">Yukarıdakiler gelince</td></tr>
+<tr><td>7</td><td><b>7. adım</b> ve sonrası</td><td>Ben</td><td class="no">Bekliyor</td></tr>
 </table>
 <p style="font-size:13.5px;color:var(--fg2);margin-top:12px">
-  Tam liste ve Alpemix karşılaştırması:
-  <a href="bilgi.html#yapilmayanlar">El Kitabı → 8 · Yapılmayanlar</a>
+  Özellik listesi ve Alpemix karşılaştırması:
+  <a href="bilgi.html#ozellik">El Kitabı → 3 · Özellikler</a>
 </p>
 </div>
 
@@ -152,36 +120,16 @@
 <div class="card">
 <table>
 <tr><th>Tarih</th><th>Ne oldu</th></tr>
+<tr><td><b>24.10</b></td>
+    <td>Servis kipinde ui-host VM'de doğrulandı (kök neden: boru sahibi denetimi) · test rehberi ve yol haritası yazıldı · el kitabı sadeleştirildi</td></tr>
 <tr><td><b>21.10</b></td>
-    <td><b>6f ve 6g bitti</b> — canlı destek düğmesi (K-36) · bayi markası (K-37) ·
-        <b>3 kırık CI testi düzeltildi → CI artık tamamen yeşil</b> ·
-        e2e <b>36 geçti / 3 atlandı / 0 kaldı</b> ·
-        <b>6h fiyat listesi yazıldı</b> (senin kararın, `ACIK #8`) ·
-        <b>marka onay kararı</b> (`ACIK #21`) ·
-        <b>VM test betikleri hazır</b> (6 senaryo, benim işim)</td></tr>
-<tr><td><b>20.10 akşam</b></td>
-    <td><b>6a–6e bitti</b> — otomatik güncelleme · çoklu izleyici ·
-        cihaz envanteri · raporlama · <b>oturum kaydı</b> ·
-        <b>yeni kararlar: K-32…K-35</b></td></tr>
-<tr><td><b>19–20.10</b></td>
-    <td><b>Claude Code gece boyunca 6 adım özellik bitirdi</b> (59 commit) —
-        müşteriler rehberi (5e) · siyah ekran (5f) · otomatik güncelleme (6a) ·
-        çoklu izleyici (6b) · cihaz envanteri (6c) · raporlama (6d) ·
-        oturum kaydı (6e) başladı ·
-        <b>yeni kararlar: K-32…K-35</b> · <b>yeni açık konular: #16–#19</b></td></tr>
+    <td>6f ve 6g bitti (canlı destek düğmesi, bayi markası) · CI tamamen yeşil · VM test betikleri hazır · 6i VM hataları düzeltildi</td></tr>
 <tr><td><b>20.10</b></td>
-    <td>Uzaktan girdi çalışıyor (aynı bilgisayardan doğrulandı;
-        <b>ikinci cihazdan henüz denenmedi</b>) ·
-        yakınlaştırma/kaydırma eklendi · boşlukta çift yazım düzeltildi ·
-        <b>DESKTOP_JOURNALPLAYBACK</b> hatası bulundu (girdi hiç çalışmıyordu) ·
-        <b>plan denetimi</b>: 12 özellik sadece planda → hedef dosyası yazıldı</td></tr>
+    <td>6a–6e bitti: otomatik güncelleme, çoklu izleyici, envanter, raporlama, oturum kaydı · siyah ekran (5f)</td></tr>
 <tr><td><b>19.10</b></td>
-    <td>CI'daki iki testin kök nedeni bulundu (test düzeneği) ·
-        <code class="mono">SEGNOX_ORIGINS</code> API'ye uygulandı ·
-        H.264 gerçek masaüstünde 21 fps</td></tr>
+    <td>Uzaktan girdi gerçek masaüstünde düzeltildi · CI kök nedenleri · H.264 gerçek masaüstünde</td></tr>
 <tr><td><b>18.10</b></td>
-    <td>5a–5d dalgası: servis, sessiz kurulum, yeniden başlat+devam, H.264 ·
-        güvenlik denetimi 4 tur</td></tr>
+    <td>5a–5d dalgası: servis, sessiz kurulum, yeniden başlat + devam, H.264 · güvenlik denetimi</td></tr>
 </table>
 </div>
 
@@ -242,10 +190,8 @@
 
 <div class="card">
   <div class="note ok" style="margin-top:12px">
-    <b>Son yapılan testler:</b> uzaktan fare + klavye + yazı (aynı bilgisayardan
-    doğrulandı) ✅ · H.264 sentetik ekranda 24,6 fps, %53 daha az bant ✅ ·
-    sohbet, ortak pano, dosya transferi ✅ · e2e 14 geçti 1 atlandı (sentetik
-    tek monitör) ✅
+    <b>Son otomatik sonuç:</b> Go kapısı 36 paket temiz · e2e 36 geçti / 3 atlandı / 0 kaldı ·
+    servis kipi kurulumu VM'de geçti (24.10).
   </div>
 </div>
 
@@ -295,11 +241,11 @@
 
 <div class="wrap" style="margin-top:44px;padding-top:18px;border-top:1px solid var(--line)">
   <p style="font-size:12.5px;color:var(--fg3);margin:0">
-    <b>Son güncelleme: 20 Ekim 2026</b> &middot;
+    <b>Son güncelleme: 24 Ekim 2026</b> &middot;
     Kaynak: <span class="mono">Eraycann/segnox-uzaktan-erisim</span> @ <span class="mono">5f89c7d</span>
     &middot; Bu sayfadaki sayıların kaynağı: <span class="mono">PLAN.md</span>,
     <span class="mono">docs/</span>, <span class="mono">docs/taslak/olcumler-*.md</span>
-    &middot; <a href="bilgi.html#yapilmayanlar">Yapılmayanlar</a>
+    &middot; <a href="bilgi.html#ozellik">Özellikler</a>
   </p>
 </div>
 </body>

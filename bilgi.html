@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Segnox — El Kitabı</title>
-<meta name="description" content="Segnox: durum, sözlük, ağ, test matrisi, riskler, pazar, kayıtlar.">
+<meta name="description" content="Segnox: durum, desteklenenler, özellikler, satışa kalanlar, test, çalışma şekli, riskler, pazar.">
 <link rel="stylesheet" href="assets/style.css">
 <style>
   .toc { position:sticky; top:64px; z-index:5; background:var(--bg); padding:14px 0 12px;
@@ -18,9 +18,6 @@
   .term .d { color:var(--fg2); font-size:14px; margin-top:3px }
   code.i { background:var(--bg3); border:1px solid var(--line2); border-radius:5px;
            padding:1px 6px; font-family:var(--mono); font-size:13px; color:var(--acc) }
-  .q { border-left:2px solid var(--line2); padding:2px 0 2px 14px; margin:14px 0 }
-  .q .qq { font-weight:600; margin-bottom:4px }
-  .q .qa { color:var(--fg2); font-size:14px }
   .no { color:var(--bad) } .yes2 { color:var(--ok) } .warn2 { color:var(--warn) }
 </style>
 </head>
@@ -41,950 +38,248 @@
 <div class="toc">
   <div class="wrap">
     <a href="#durum">1 · Durum</a>
-    <a href="#akis">2 · Nasıl çalışır</a>
-    <a href="#ag">3 · Ağ (STUN/TURN)</a>
-    <a href="#teknoloji">4 · Teknolojiler</a>
-    <a href="#sozluk">5 · Sözlük</a>
-    <a href="#test">6 · Test matrisi</a>
+    <a href="#destek">2 · Desteklenenler</a>
+    <a href="#ozellik">3 · Özellikler</a>
+    <a href="#satis">4 · Satışa kalanlar</a>
+    <a href="#test">5 · Nasıl test edilir</a>
+    <a href="#akis">6 · Nasıl çalışır</a>
     <a href="#risk">7 · Riskler</a>
     <a href="#pazar">8 · Pazar</a>
-    <a href="#kayit">9 · Kayıtlar</a>
-    <a href="#yapilmayanlar">10 · Yapılmayanlar</a>
   </div>
 </div>
 
 <div class="wrap">
 
 <h1 style="margin-top:0">El Kitabı</h1>
-<p class="sub">Aranabilir bilgi. Sıradaki iş için <a href="basla.html">Rehber</a>'e bak.</p>
+<p class="sub">Net ve güncel bilgi. Sıradaki iş için <a href="basla.html">Rehber</a>'e bak. Geçmiş git'te.</p>
 
 <!-- ============ 1 DURUM ============ -->
 <h2 id="durum">1 · Durum</h2>
-<p class="sub">Son güncelleme: 20 Ekim 2026. Her satır gerçek koddan ve gerçek testten.</p>
+<p class="sub">Son güncelleme: 24 Ekim 2026. Kaynak: <span class="mono">PLAN.md</span>, <span class="mono">docs/TEST-REHBERI.md</span>, <span class="mono">docs/ACIK-KONULAR.md</span>.</p>
 
-<div class="card">
-<table>
-<tr><th>Durum</th><th>Ne</th></tr>
-<tr><td><span class="badge b-ok">&#199;ALI&#350;IYOR</span></td>
-    <td>Ekran aktarımı · <b>uzaktan fare + klavye + yazı</b> (aynı bilgisayardan
-        doğrulandı; <b>ikinci cihazdan henüz denenmedi</b>) · 9 haneli kod ·
-        hesap + 2FA + kurtarma kodları ·
-        cihaz parolası · onay penceresi · kapatılamayan bilgi çubuğu ·
-        destek kuyruğu · sohbet, ortak pano, dosya transferi ·
-        <b>müşteriler rehberi</b> · <b>çoklu izleyici</b> ·
-        <b>cihaz envanteri</b> · <b>raporlama (P2P/relay oranı, CSV)</b> ·
-        <b>oturum kaydı (video)</b> ·
-        firma izolasyonu (RLS) · ICE restart · değiştirilemez işlem kaydı ·
-        REST API + kota · yönetim paneli · Docker sunucu paketi ·
-        yedekleme + geri yükleme</td></tr>
-<tr><td><span class="badge b-warn">YAZILDI</span></td>
-    <td><b>H.264 video</b> (bant %53 azaldı; gerçek masaüstünde 21 fps ölçüldü,
-        sentetik ekranda 24,6 fps) ·
-        <b>yeniden başlat + devam</b> · <b>Windows servisi</b> ·
-        <b>siyah ekran (gizlilik)</b> · <b>otomatik güncelleme</b> ·
-        <b>canlı destek düğmesi</b> · <b>bayi markası</b> ·
-        sessiz kurulum · süreç ipc · UAC/kilit masaüstü takibi ·
-        güvenlik denetimi (4 tur, 19 bulgu kapandı)</td></tr>
-<tr><td><span class="badge b-bad">EKS&#304;K</span></td>
-    <td><b>farklı ağdan bağlantı</b> (hiç test edilmedi) · <b>ses</b> ·
-        <b>kod imzası</b> · MSI/GPO/Intune ·
-        <b>abonelik / faturalama</b> (6h) ·
-        <b>cihaz sağlığı + alarm</b> · <b>webhook (ERP/PSA)</b> · <b>Wake-on-LAN</b> · <b>duyarlı izleme</b> ·
-        ekranın belli bir bölümünü paylaşma · IP ile bağlantı · mobil ajan · Linux ajan</td></tr>
-</table>
-</div>
-
-<div class="note warn">
-  <b>"Yazıldı" neden "çalışıyor" değil:</b> Servis kipi bir ajanı SYSTEM
-  yetkisiyle başka bir kullanıcının oturumunda çalıştırıyor. Bu sadece
-  <b>gerçek makinede yönetici yetkisiyle</b> denenebilir. Hata olursa
-  bilgisayar açılmaz. Bu yüzden sanal makinede deneniyor.
-</div>
-
-<h3>Uzaktan girdi — 19.10.2026'da doğrulandı</h3>
-<div class="card">
-  <p style="font-size:14.5px">
-    <b>Aynı bilgisayardan</b> (yerel ağ üzerinden, sanal makine olmadan)
-    bağlanıp imleç hareketi, tıklama ve yazma gerçek masaüstünde çalıştı.
-    Ajan logu:
-  </p>
-  <pre style="margin:12px 0"><code>"session_role":"control", "candidate_type":"prflx",
-"duration_s":114.4, "fps_avg":15.8, "mbps_avg":0.83, "input_failures":<span class="c-ok">0</span></code></pre>
-  <div class="note warn">
-    <b>⚠️ Hâlâ doğrulanmamış:</b> <b>ikinci cihazdan</b> (telefon) test
-    yapılmadı. Düzeltme sonrası telefondan denenmedi. <code class="i">prflx</code>
-    (peer-reflexive) yerel ağ bağlantısını gösterir — <b>farklı ağ</b> anlamına
-    gelmez.
-  </div>
-  <div class="note bad">
-    <b>Bu iş iki gün sürdü ve bir denetim hatasından çıktı.</b> Güvenlik
-    denetiminde masaüstü hakları daraltılırken
-    <code class="i">DESKTOP_JOURNALPLAYBACK</code> kaldırılmıştı — "SendInput
-    için gerekmez" sanılmıştı. Injection iş parçacığı o kısıtlı hakla
-    bağlandığı için <b>her</b> SendInput "Access is denied" alıyordu.
-    <br><br>
-    <b>Hata neden görünmüyordu:</b> enjeksiyon hatası <code class="i">Debug</code>
-    seviyesinde yazılıp <code class="i">return nil</code> ile yutuluyordu.
-    Artık <b>Warn</b> seviyesinde, seyreltilerek yazılıyor ve oturum sonunda
-    <code class="i">input_failures</code> sayacı var.
-    <br><br>
-    <b>Ders:</b> Otomatik testler "atlanan" testleri "geçti" sayıyordu.
-    Gerçek girdi testleri SendInput hata verince Skip ediyordu.
-  </div>
-</div>
-
-<h3>H.264 ölçümü — sentetik ekran</h3>
-<div class="card">
-<table>
-<tr><th>Kip</th><th>FPS</th><th>Bant</th><th>İlk kare</th></tr>
-<tr><td class="yes2"><b>H.264</b></td><td>24,6</td><td class="yes2"><b>1518 kbit/s</b></td><td>804 ms</td></tr>
-<tr><td>JPEG karo</td><td>25,0</td><td>3225 kbit/s</td><td>665 ms</td></tr>
-</table>
-<p style="font-size:14px;color:var(--fg2);margin-top:10px">
-  <b>%53 daha az bant.</b> Relay ücreti çıkış trafiğine göre ödendiği için bu
-  doğrudan sunucu maliyetini belirler: 1 saat relay ≈ 1,45 GB yerine ≈ 0,68 GB.
-  <br>
-  <span style="color:var(--fg3)"><b>Sentetik 1920×1080 desen</b>, yalnız 127.0.0.1.
-  Gerçek masaüstünde sonuç farklı olur. Kaynak:
-  <span class="mono">docs/taslak/olcumler-adim5d.md</span></span>
-</p>
 <div class="note bad">
-  <b>Açık sorun:</b> 1 piksel genişliğinde <b>renkli çizgiler bulanıklaşıyor</b>
-  (siyah-beyaz yazı sorunsuz). Anahtar kareler ~510 KB.
-</div>
+  <b>Teknik pilot — henüz satılabilir değil.</b>
 </div>
 
-<!-- ============ 2 AG ============ -->
-<h2 id="akis" style="margin-top:44px">2 · Nasıl çalışır (şemalar)</h2>
-<p class="sub">Ürünün 6 ana akışı. Bunlar bilgide tek yerde toplandı.</p>
-
-<h3>2.1 · Sistemde ne var</h3>
 <div class="card">
-<pre><code>  MÜŞTERİNİN BİLGİSAYARI                SUNUCU (VPS)              TEKNİSYENİN CİHAZI
-  ┌──────────────────────┐                ┌──────────────┐          ┌──────────────┐
-  │ segnox-agent (.exe)  │                │ segnox-server│          │  Tarayıcı    │
-  │  ├ DXGI ekran yakala │                │  ├ sinyal WS │          │  (WebRTC)    │
-  │  ├ H.264 kodla (MF)  │                │  ├ REST API  │          │              │
-  │  ├ SendInput (fare)  │                │  └ konsol    │          │  kurulum yok │
-  │  └ onay penceresi    │                │              │          │              │
-  └──────────┬───────────┘                │  PostgreSQL  │          └──────┬───────┘
-             │ ① WebSocket (sinyal)        │  (RLS ile    │                 │ ③ WebRTC
-             │   "oturum aç, şifre gönder"  │   izole)     │                 │   (veri)
-             └────────────────────────────►│              │◄────────────────┘
-                                            │  coturn (TURN)│
-                                            │  Caddy (TLS)  │
-                                            └──────────────┘
-                                                 ② TURN relay
-                                              (doğrudan yol kurulamazsa)</code></pre>
+<ul class="chk">
+  <li><span class="yes2"><b>Çalışıyor (otomatik testle):</b></span> ekran aktarımı, uzaktan fare/klavye, 9 haneli kod, hesap + 2FA,
+      onay penceresi, çoklu kiracı (RLS), sohbet/pano/dosya, envanter, raporlama, oturum kaydı, canlı destek düğmesi, bayi markası.
+      Go kapısı 36 paket, e2e 36 geçti / 3 atlandı.</li>
+  <li><span class="yes2"><b>Gerçek makinede (Win11 VM) doğrulandı:</b></span> servis kipi kurulumu, cihaz kaydı, ui-host ayakta (24.10).</li>
+  <li><span class="warn2"><b>Gözle deneme bekliyor:</b></span> UAC/kilit ekranı, yeniden başlat + devam, H.264 gerçek masaüstünde,
+      siyah ekran, otomatik güncelleme, çoklu izleyici, telefon görüntüleyici (#13–#18).</li>
+  <li><span class="no"><b>Eksik:</b></span> farklı ağdan gerçek bağlantı denemesi (#2), kod imzası, abonelik/ödeme, canlı sunucu.</li>
+  <li><span class="no"><b>Kullanıma hazır değil:</b></span> servis kipi (PLAN 5a/5b notu).</li>
+</ul>
+</div>
+
+<!-- ============ 2 DESTEK ============ -->
+<h2 id="destek" style="margin-top:44px">2 · Desteklenen / desteklenmeyen</h2>
+<div class="card">
+<table>
+<tr><th>Taraf</th><th>Durum</th></tr>
+<tr><td>Müşteri: Windows 10/11 ajanı</td><td class="yes2">Var</td></tr>
+<tr><td>Teknisyen: tarayıcıdan (kurulum yok)</td><td class="yes2">Var</td></tr>
+<tr><td>Telefondan izleme/kontrol görüntüleyicisi</td><td class="warn2">Var, gözle deneme bekliyor (#15)</td></tr>
+<tr><td>Linux ajanı</td><td class="no">Yok — adım 8</td></tr>
+<tr><td>macOS</td><td class="no">Planda yok</td></tr>
+<tr><td>Mobil cihaza bağlanma (Android/iOS ajanı)</td><td class="no">Yok — adım 9–10</td></tr>
+</table>
+</div>
+
+<!-- ============ 3 OZELLIK ============ -->
+<span id="yapilmayanlar"></span>
+<h2 id="ozellik" style="margin-top:44px">3 · Özellikler — Alpemix'e göre</h2>
+<div class="card">
+<table>
+<tr><th>Özellik</th><th>Bizde</th><th>Durum</th></tr>
+<tr><td>Anlık destek kodu + "Destek İste"</td><td>9 haneli kod, müşteriden istek</td><td class="yes2">Var</td></tr>
+<tr><td>Onay penceresi + kapatılamayan çubuk</td><td>Dolandırıcılık uyarılı</td><td class="yes2">Var</td></tr>
+<tr><td>Gözetimsiz erişim (servis)</td><td>SYSTEM servis, sessiz kurulum</td><td class="warn2">Gözle deneme bekliyor (#13)</td></tr>
+<tr><td>Yeniden başlat + devam</td><td>Parola şartlı, tek kullanımlık anahtar</td><td class="warn2">Gözle deneme bekliyor (#14)</td></tr>
+<tr><td>H.264 video</td><td>JPEG karoya otomatik düşüş</td><td class="warn2">Gözle deneme bekliyor (#14)</td></tr>
+<tr><td>Siyah ekran (gizlilik)</td><td>Yakalamaya girmeyen kaplama</td><td class="warn2">Gözle deneme bekliyor (#16)</td></tr>
+<tr><td>Otomatik güncelleme</td><td>İmzalı manifest, geri alma</td><td class="warn2">Gözle deneme bekliyor (#17)</td></tr>
+<tr><td>Çoklu izleyici</td><td>"N kişi bağlı (M izliyor)"</td><td class="warn2">Gözle deneme bekliyor (#18)</td></tr>
+<tr><td>Cihaz envanteri</td><td>Durum, OS, sürüm, toplu güncelle</td><td class="yes2">Var</td></tr>
+<tr><td>Raporlama</td><td>P2P/relay oranı, CSV</td><td class="yes2">Var</td></tr>
+<tr><td>Oturum kaydı</td><td>WebM, şifreli, politika</td><td class="yes2">Var (KVKK metni #19)</td></tr>
+<tr><td>Canlı destek widget</td><td>Siteye gömülen düğme</td><td class="yes2">Var</td></tr>
+<tr><td>Bayi markası</td><td>Ad, renk, logo, karşılama</td><td class="yes2">Var (içerik onayı #21)</td></tr>
+<tr><td>Müşteri rehberi</td><td>Müşteriler sayfası</td><td class="yes2">Var</td></tr>
+<tr><td>Dosya aktarımı, sohbet, ortak pano</td><td>Servis kipinde dosya aktarımı kapalı</td><td class="yes2">Var</td></tr>
+<tr><td>Sesli konuşma</td><td>—</td><td class="no">Yok (adım 7)</td></tr>
+<tr><td>Wake-on-LAN</td><td>—</td><td class="no">Yok (adım 7)</td></tr>
+<tr><td>Webhook</td><td>—</td><td class="no">Yok (adım 7)</td></tr>
+<tr><td>Cihaz sağlığı + alarm</td><td>—</td><td class="no">Yok (adım 7)</td></tr>
+<tr><td>Abonelik / ödeme</td><td>Plan/limit tablosu kodda, satış yok</td><td class="no">Yok (6h)</td></tr>
+<tr><td>Linux / mobil ajan</td><td>—</td><td class="no">Yok (adım 8–10)</td></tr>
+</table>
+</div>
+
+<h3>Alpemix'ten farkımız</h3>
+<div class="card">
+  <ul class="chk">
+    <li><b>Teknisyen hiçbir şey kurmaz</b> — tarayıcıdan bağlanır.</li>
+    <li><b>Veri izolasyonu veritabanında</b> (RLS, FORCE) — kod hatası olsa bile firma verisi sızmaz.</li>
+    <li><b>Silinemez denetim kaydı</b> — hash zincirli.</li>
+    <li><b>Cihaz parolası sunucuya gitmez</b> — ajan kendi makinesinde doğrular.</li>
+  </ul>
+</div>
+
+<!-- ============ 4 SATIS ============ -->
+<h2 id="satis" style="margin-top:44px">4 · Satışa çıkmak için kalanlar</h2>
+<div class="card">
+<table>
+<tr><th>Kimde</th><th>İş</th><th>Açık konu</th></tr>
+<tr><td><b>Sen</b></td><td>Fiyat ve plan kararı</td><td>#8</td></tr>
+<tr><td><b>Sen</b></td><td>Sunucu + alan adı (Hetzner, DNS)</td><td>#4</td></tr>
+<tr><td><b>Sen</b></td><td>SMTP sağlayıcısı (SPF/DKIM/DMARC)</td><td>#5</td></tr>
+<tr><td><b>Sen</b></td><td>Kod imzalama sertifikası (imzasız EXE'de SmartScreen uyarısı)</td><td>#6, #12</td></tr>
+<tr><td><b>Sen</b></td><td>KVKK metinleri, oturum kaydı aydınlatması</td><td>#7, #19</td></tr>
+<tr><td><b>Sen</b></td><td>Farklı ağdan deneme için sunucu / ikinci bilgisayar</td><td>#2</td></tr>
+<tr><td><b>Ben</b></td><td>Bunlar gelince: 6h abonelik/ödeme, prod devreye alma (yedek, izleme, durum sayfası), imzalı dağıtım</td><td>—</td></tr>
+</table>
+</div>
+
+<!-- ============ 5 TEST ============ -->
+<h2 id="test" style="margin-top:44px">5 · Nasıl test edilir</h2>
+<p class="sub">VM betikleri: <span class="mono">.tools\vm-test.ps1</span> (yönetici PowerShell, VM açık). İlk kez: <code class="i">-Senaryo hazirlik</code>.
+VM açıkken host'ta ağır iş (derleme, test) koşma.</p>
+<div class="card">
+<table>
+<tr><th>#</th><th>Ne</th><th>Komut</th><th>Gözle bakacağın</th><th>Konu</th></tr>
+<tr><td>1</td><td>Servis kipi</td><td class="mono">servis</td><td>Kilit ekranı ve UAC tarayıcıda tıklanıyor mu; ui-host ölünce geri geliyor mu</td><td>#13</td></tr>
+<tr><td>2</td><td>Yeniden başlat + devam</td><td class="mono">devam</td><td>Cihaz dönünce oturum kendiliğinden sürüyor mu</td><td>#14</td></tr>
+<tr><td>3</td><td>Siyah ekran</td><td class="mono">siyah</td><td>Müşteri ekranı kararır, teknisyen görür; bitince geri gelir</td><td>#16</td></tr>
+<tr><td>4</td><td>Çoklu izleyici</td><td class="mono">izleyici</td><td>Kişi sayısı doğru, izleyici girdi gönderemiyor</td><td>#18</td></tr>
+<tr><td>5</td><td>Otomatik güncelleme (~60 dk)</td><td class="mono">guncelleme</td><td>1.0.0 → 1.0.1, bozuk 1.0.2 geri alınır</td><td>#17</td></tr>
+<tr><td>6</td><td>Telefon</td><td>telefonda konsol adresi</td><td>Android Chrome + Gboard: yazma, Türkçe karakter, kaydırma, yakınlaştırma</td><td>#15</td></tr>
+<tr><td>7</td><td>Farklı ağ</td><td>başka evdeki / 4G'deki bilgisayar</td><td>Bağlanıyor mu; raporda P2P mi relay mi</td><td>#2</td></tr>
+</table>
+</div>
+<p style="font-size:14px;color:var(--fg2)">Bir deneme kalırsa: çıktı dosyası + gördüğün bir cümleyle; kök nedeni ben bulurum.
+Atlanan otomatik test "geçti" sayılmaz.</p>
+
+<!-- ============ 6 AKIS ============ -->
+<h2 id="akis" style="margin-top:44px">6 · Nasıl çalışır</h2>
+
+<h3>6.1 · Sistemde ne var</h3>
+<div class="card">
+<pre><code>  MÜŞTERİNİN BİLGİSAYARI              SUNUCU (VPS)            TEKNİSYENİN CİHAZI
+  ┌──────────────────────┐            ┌──────────────┐        ┌──────────────┐
+  │ segnox-agent (.exe)  │            │ segnox-server│        │  Tarayıcı    │
+  │  ├ ekran yakala      │  ① sinyal  │  ├ sinyal WS │        │  (WebRTC)    │
+  │  ├ H.264 kodla       │ ─────────► │  ├ REST API  │ ◄───── │  kurulum yok │
+  │  ├ fare/klavye       │            │  └ konsol    │        └──────┬───────┘
+  │  └ onay penceresi    │            │  PostgreSQL  │               │
+  └──────────┬───────────┘            │  coturn, Caddy│               │
+             │                        └──────────────┘               │
+             └──── ③ WebRTC (veri) doğrudan; olmazsa ② TURN relay ────┘</code></pre>
   <div class="note">
-    <b>İki ayrı kanal var — bu çok önemli.</b><br>
-    <b>① Sinyal</b> (WebSocket): "şu cihaza bağlan" mesajları, onay, şifre
-    kanıtı. Sunucu üzerinden.<br>
-    <b>③ Veri</b> (WebRTC): ekran görüntüsü, fare, klavye. Mümkünse
-    doğrudan iki cihaz arasında; değilse <b>② TURN relay</b> üzerinden.
+    <b>İki kanal:</b> <b>① Sinyal</b> (WebSocket, sunucu üzerinden): "şu cihaza bağlan", onay, parola kanıtı.
+    <b>③ Veri</b> (WebRTC, DTLS ile şifreli): ekran, fare, klavye. Sunucu görüntüyü göremez.
   </div>
 </div>
 
-<h3>2.2 · Giriş akışı (9 haneli koddan bağlantıya)</h3>
+<h3>6.2 · Giriş akışı</h3>
 <div class="card">
 <pre><code>  1. Müşteri ajanı çalıştırır → cihaz sunucuya kaydolur, 9 haneli kod alır
-  2. Teknisyen tarayıcıda kodu girer
-  3. Sunucu kodu çözer, cihazı bulur, talebi müşterinin ekranına DÜŞÜRÜR
-  4. Müşteri onay penceresini görür → Kabul / Reddet
-        ├ Reddet  → oturum biter, teknisyene "reddedildi"
-        └ Kabul   → oturum açılır
-  5. Teknisyen cihaz parolasını girer (varsa) → kanıt gönderilir
-  6. ICE adayları toplanır → doğrudan yol denenir, olmazsa TURN
-  7. Görüntü akar, klavye/fare çalışır
-  8. İzleme (view) rolü seçildiyse: görüntü akar, GİRDİ GİTMEZ</code></pre>
-  <div class="note ok">
-    <b>Güvenlik:</b> Parola sunucuya hiç gitmez — ajan kendi bilgisayarında
-    doğrular. Onay penceresi açıkken uzaktan girdi <b>engellenir</b>, yoksa
-    dolandırıcı müşterinin onayına kendisi tıklardı.
-  </div>
+  2. Teknisyen tarayıcıda kodu girer → sunucu talebi müşterinin ekranına düşürür
+  3. Müşteri onay penceresi: Reddet → biter · Kabul → oturum açılır
+  4. Cihaz parolası varsa teknisyen girer (kanıt gider, parola gitmez)
+  5. ICE: doğrudan yol denenir, olmazsa TURN
+  6. Görüntü akar; izleme (view) rolünde girdi gitmez</code></pre>
+  <div class="note ok">Onay penceresi açıkken uzaktan girdi engellenir; yoksa dolandırıcı müşterinin onayına kendisi tıklardı.</div>
 </div>
 
-<h3>2.3 · Gözetimsiz erişim — servis zinciri (K-26)</h3>
+<h3>6.3 · Gözetimsiz erişim (servis kipi, K-26)</h3>
 <div class="card">
-<pre><code>  SYSTEM servisi (bilgisayar açılışında otomatik)
-        │
-        ├─► SYSTEM yardımcı süreci   ← ekranı yakalar, tuş gönderir
-        │        │  (kullanıcının oturumunda çalışır)
-        │        └─ named pipe (ACL kilitli) ─► kullanıcı arayüzü süreci
-        │                                      └─ onay penceresi (WebView2)
-
-  Böylece: kullanıcı giriş yapmasa da, ekran kilitliyken de, UAC penceresinde
-           bile müdahale edebilirsin.</code></pre>
-  <div class="note warn">
-    <b>Hiç test edilmedi.</b> Gerçek makinede yönetici yetkisiyle denenmeli —
-    hata olursa bilgisayar açılmaz. <b>Sanal makinede deneniyor.</b>
-  </div>
+<pre><code>  SYSTEM servisi (açılışta otomatik)
+     └─► oturumda SYSTEM yardımcı  ← ekranı yakalar, tuş gönderir
+            └─ named pipe (ACL kilitli) ─► kullanıcı token'lı ui-host (onay penceresi)</code></pre>
+  <p style="font-size:14px;color:var(--fg2)">Amaç: kullanıcı girmese de, ekran kilitliyken ve UAC'de de müdahale. Hata olursa kapalı kalır (fail-closed).
+  Kurulum ve ui-host VM'de doğrulandı; UAC/kilit gözle denenmedi.</p>
 </div>
 
-<h3>2.4 · Otomatik güncelleme (K-33)</h3>
+<h3>6.4 · Veri izolasyonu (RLS)</h3>
 <div class="card">
-<pre><code>  1. Sunucu imzalı manifest yayınlar (Ed25519, çevrimdışı anahtar)
-  2. Ajan sunucudan "yeni sürüm var mı?" sorar
-  3. Sunucu ikiliyi sunar (IP başına 20/dk sınır)
-  4. Ajan imzayı doğrular → GEÇERSİZSE KURULMAZ
-  5. Kurulum klasörü kullanıcı sahipliğinde olamaz (yabancı sahiplik reddi)
-  6. Güncelleme sırasında: yeni sürüm indirilir, doğrulanır, değiştirilir,
-     hata olursa 24 saat bekleme + eski sürüme dönüş (rollback)</code></pre>
+<pre><code>  platform → bayi → müşteri firma      (her tabloda tenant_id + RLS, FORCE)
+  Uygulama segnox_app rolüyle bağlanır, BYPASSRLS yok; tek kapı: store.InTenantTx</code></pre>
+  <p style="font-size:14px;color:var(--fg2)">Denetim ekibine cevap: "firma verisi başka firmaya sızar mı?" — veritabanının kendisi engeller.</p>
 </div>
 
-<h3>2.5 · Oturum kaydı (K-35)</h3>
+<h3>6.5 · Ağ (STUN / TURN / ICE)</h3>
 <div class="card">
-<pre><code>  Politika (kiracı ayarı): off │ optional │ required
-      │
-      ├─ Kayıt GÖRÜNTÜLEYİCİDE yapılır (MediaRecorder → WebM VP8/VP9, ses yok)
-      │    Sunucu görüntünün içeriğini görmez — akış uçtan uca DTLS ile
-      ├─ Parça parça yüklenir (≤ 4 MB/parça, kayıt ≤ 2 GB, kiracı kotası 20 GB)
-      ├─ Her parça AES-256-GCM ile şifrelenir (anahtar: HKDF(SEGNOX_DATA_KEY,
-      │    "record" || tenant_id); parça sırası + oturum kimliği ek veri olarak bağlanır)
-      ├─ Müşteriye bildirim: sunucu → ajan "record.notice" → kalıcı gösterge
-      │    ("Bu oturum kaydediliyor"), onay penceresi + oturum çubuğu
-      ├─ Saklama süresi 1–365 gün (varsayılan 30) → otomatik silinir
-      └─ Yeniden başlatmada yarım kalan kayıt "eksik" olarak işaretlenir;
-         diskte boş alan &lt; 5 GB ise yeni parça reddedilir</code></pre>
-  <table style="margin-top:12px">
-  <tr><th>Kim</th><th>Ne yapabilir</th></tr>
-  <tr><td>Yönetici</td><td>Tüm kayıtları görür, izler, indirir, siler</td></tr>
-  <tr><td>Teknisyen</td><td>Yalnız kendi kayıtları</td></tr>
-  <tr><td>İzleyici</td><td class="no">Hiçbir kayıta erişemez</td></tr>
-  <tr><td>API token</td><td class="no">Kayıt içeriği indirilemez (yalnız tarayıcı çerezi)</td></tr>
-  </table>
-  <div class="note warn">
-    <b>İki sınır, açıkça:</b>
-    <br>1) <b>Kayıt teknisyenin tarayıcısının dürüstlüğüne dayanır.</b> "Zorunlu"
-    kipte görüntüleyici kaydı başlatamazsa oturum kapanır (fail-closed) — ama
-    değiştirilmiş bir istemci kaydı atlayabilir. Bu <b>adli kayıt değil</b>,
-    kalite/eğitim kaydıdır.
-    <br>2) <b>Ses kaydedilmez</b> (WebM video, ses yok).
-    <br>3) <b>KVKK metni bekliyor</b> — kayıt alındığında müşteriye ne söyleneceği
-    hukuk onayı gerektiriyor. <b>Açık konu #19.</b>
-  </div>
-  <div class="note ok">
-    <b>Müşteriye bildirim güvenliği:</b> Kayıt bildirimi <b>teknisyenin
-    isteğine değil, sunucunun kararına</b> bağlı. Sunucu kaydı açınca ajana
-    <span class="mono">record.notice</span> gönderir; <b>ajan bildirimi alamazsa
-    oturum 409 ile reddedilir</b> — yani "müşteri haberdar olmadan kayıt" durumu
-    oluşamaz. Ajan tarafında kalıcı gösterge kalır; görüntüleyici kapatmaya
-    çalışsa bile bildirim kaybolmaz.
-  </div>
-</div>
-
-<h3>2.6 · Veri izolasyonu (RLS)</h3>
-<div class="card">
-<pre><code>  platform (platform)          ← en geniş kova
-    └─ bayi (reseller)
-         └─ müşteri (customer)   ← en dar kova
-
-  Her tabloda  tenant_id  +  RLS politikası (FORCE)
-  Uygulama PostgreSQL'e  segnox_app  rolüyle bağlanır — BYPASSRLS yok.
-  Yani veritabanının kendisi "bu satır başka bir firmaya ait" diyerek
-  reddeder. Kod hatası olsa bile veri sızmaz.
-
-  Sorgu yolu tek kapı:  store.InTenantTx()
-      └─ set_config('app.tenant_id', $1, true)</code></pre>
-  <div class="note ok">
-    <b>Bu bizim en gerçek farkımız.</b> Alpemix, TeamViewer, AnyDesk
-    yazılım katmanında filtreliyor — kod hatası olursa sızar. Bizim veritabanı
-    kendisi engelliyor. <b>Denetim ekibine verilecek cevap budur</b>, mühendise
-    değil.
-  </div>
-</div>
-
-<h3>2.7 · Dağıtım (VPS üzerinde)</h3>
-<div class="card">
-<pre><code>  ┌──────────────────── VPS (Almanya) ────────────────────┐
-  │                                                        │
-  │  :443  Caddy  ──►  segnox-server  (sinyal + API + konsol)│
-  │                          │                             │
-  │                     PostgreSQL (RLS)                   │
-  │                                                            │
-  │  :3478 coturn  ──►  STUN (adres öğrenme)              │
-  │                        TURN (veri taşıma, relay)        │
-  │                                                        │
-  │  1. IP: 443 sinyal + 3478 TURN                         │
-  │  2. IP: 443/TCP TURN-TLS  (SNI denemesi reddedildi)    │
-  └────────────────────────────────────────────────────────┘
-
-  docker compose up -d   →  hepsi bir komutla</code></pre>
-  <div class="note warn">
-    <b>Plan.</b> Sunucu henüz kiralanmadı. Bu şema ve port seçimi
-    <code class="inl">deploy/</code> klasöründe hazır, CI'da doğrulandı.
-  </div>
-</div>
-
-<h2 id="ag" style="margin-top:44px">3 · Ağ (STUN / TURN)</h2>
-<p class="sub">Uzaktan bağlantının en kritik parçası. Burayı anlamak ürünü anlamaktır.</p>
-
-<h3>Problem</h3>
-<div class="card">
-  <p style="font-size:14.5px">
-    Müşterinin bilgisayarı ev router'ı arkasında: <code class="i">192.168.1.50</code>.
-    Teknisyenin telefonu hücrede: <code class="i">10.0.0.7</code>.
-    <b>Bu adreslerin dünyada karşılığı yok.</b> Karşılıklı birbirlerini
-    göremiyorlar.
-  </p>
-  <p style="font-size:14.5px;margin-top:10px">
-    Router dışarıdan gelen bağlantıyı <b>"kapım kapalı"</b> diye reddeder.
-  </p>
-</div>
-
-<h3>STUN — sadece adres sorar</h3>
-<div class="card">
-<pre><code>  Mü&#351;teri ────&gt; STUN: "D&#305;&#351;ar&#305;dan IP'm ne g&#246;r&#252;n&#252;yor?"
-           &lt;──── 78.180.44.9</code></pre>
-  <table>
-  <tr><th>Ne yapar</th><td>Genel IP adresini öğretir</td></tr>
-  <tr><th>Ne taşır</th><td>Neredeyse hiçbir şey</td></tr>
-  <tr><th>Maliyet</th><td class="yes2">Sıfır — kendi sunucumuzda</td></tr>
-  <tr><th>Yeter mi</th><td>Çoğu durumda. Router'da port genelde açıktır.</td></tr>
-  </table>
-  <div class="note bad">
-    <b>Bugün yaşadığımız hata buydu:</b> <code class="i">SEGNOX_STUN</code>
-    hiç tanımlı değildi. Ajan dış IP'sini öğrenemiyor, doğrudan bağlantı hiç
-    denenemiyordu. Düzeltildi, <b>tekrar test edilmedi</b>.
-  </div>
-</div>
-
-<h3>TURN — veriyi kendisi taşır</h3>
-<div class="card">
-<pre><code>  Teknisyen ──&gt; ╔═══════════╗ ──&gt; Mü&#351;teri
-            ║   TURN     ║
-            ║  sunucusu  ║</code></pre>
-  <table>
-  <tr><th>Ne yapar</th><td>İki tarafı kendi üzerinden bağlar</td></tr>
-  <tr><th>Güvenilir mi</th><td class="yes2">Evet — %100 çalışır, her ağda</td></tr>
-  <tr><th>Hız</th><td class="warn2">En yavaş yol. +30–80 ms</td></tr>
-  <tr><th>Maliyet</th><td class="no">Sunucudan çıkan trafik = para</td></tr>
-  </table>
-</div>
-
-<h3>Karar nasıl veriliyor — ICE</h3>
-<div class="card">
-<pre><code>  1. host   192.168.1.50      Aynı Wi-Fi'da       ✓ EN HIZLI, ücretsiz
-  2. srflx  78.180.44.9       STUN ile bulundu    ✓ HIZLI,    ücretsiz
-  3. relay  TURN üzerinden    Her yerde çalışır   ✗ YAVAŞ,    PARALI</code></pre>
-  <p style="font-size:14px;color:var(--fg2)">Seçimi <b>ICE</b> otomatik yapar. Kullanıcı hiçbir şey ayarlamaz.</p>
-  <table>
-  <tr><th>Ajan logu</th><th>Anlamı</th></tr>
-  <tr><td class="mono">"candidate_type":"host"</td><td>Aynı ağ, ücretsiz</td></tr>
-  <tr><td class="mono">"candidate_type":"srflx"</td><td>Doğrudan bulundu, ücretsiz</td></tr>
-  <tr><td class="mono">"candidate_type":"relay"</td><td>TURN, <b>para</b></td></tr>
-  <tr><td class="mono">"candidate_type":""</td><td class="no"><b>Hiçbiri çalışmadı</b></td></tr>
-  </table>
-</div>
-
-<h3>Biz nasıl kullanıyoruz</h3>
-<div class="card">
-<pre><code>SEGNOX_STUN=<span class="c-ok">stun:sunucu.com:3478</span>
-SEGNOX_TURN_URLS=<span class="c-ok">turn:sunucu.com:3478?transport=udp</span>,<span class="c-ok">turn:sunucu.com:3478?transport=tcp</span></code></pre>
+  <p style="font-size:14.5px">Müşteri ve teknisyen farklı ağlarda; adresleri dışarıdan görünmez. <b>ICE</b> sırayla dener, kullanıcı ayar yapmaz:</p>
+<pre><code>  host   aynı ağ              en hızlı, ücretsiz
+  srflx  STUN ile bulunan IP   hızlı, ücretsiz
+  relay  TURN üzerinden        her yerde çalışır, yavaş, trafik = para</code></pre>
   <ul class="chk">
-    <li><b>coturn</b> tek sunucuda hem STUN hem TURN yapar (K-10)</li>
-    <li>Anahtar (HMAC) sadece bizim sunucumuz üretir — anahtarsız kimse
-        relay kullanamaz, kimin ne kadar kullandığını da ölçeriz</li>
-    <li><b>Google/Cloudflare STUN yasak</b> (K-25) — kullanıcı IP'lerini
-        onlara sızdırır, KVKK</li>
+    <li><b>STUN</b> yalnız genel IP'yi öğretir; <b>TURN</b> veriyi kendisi taşır.</li>
+    <li>İkisi de kendi <b>coturn</b> sunucumuzda; TURN kimliği HMAC ile sunucudan alınır, anahtarsız relay kullanılamaz.</li>
+    <li>Üçüncü taraf STUN (Google/Cloudflare) kullanılmaz: IP sızar, KVKK (K-25).</li>
+    <li>Ayar: <code class="i">SEGNOX_STUN</code>, <code class="i">SEGNOX_TURN_URLS</code>. Ajan logunda <code class="i">candidate_type</code> host/srflx/relay görünür.</li>
   </ul>
 </div>
 
-<div class="q">
-  <div class="qq">Neden ev bilgisayarı olmadı, VPS olacak?</div>
-  <div class="qa">
-    Ev bilgisayarı <b>bir binanın içinde</b> — adresi yok, router kapıyı açmıyor.
-    VPS <b>sokaktaki bir dükkân</b> — genel adresi var, 7/24 açık. Cloudflare
-    tüneli sadece HTTP taşıdığı için görüntüyü (UDP) getiremedi.
-  </div>
-</div>
-
-<!-- ============ 3 SOZLUK ============ -->
-<h2 id="teknoloji" style="margin-top:44px">4 · Teknolojiler &mdash; ne, neden, alternatif</h2>
-<p class="sub">Araştırmak isteyenler için. Her satır: <b>ne</b> · <b>neden bizde</b> ·
-<b>alternatifi / neden seçilmedi</b>.</p>
-
+<h3>6.6 · Teknolojiler</h3>
 <div class="card">
 <table>
-<tr><th>Teknoloji</th><th>Ne</th><th>Neden bizde</th><th>Alternatifi / neden seçilmedi</th></tr>
-
-<tr><td><b>Go</b></td><td>Programlama dili</td>
-    <td>Tek .exe çıkarır, çapraz derlenir, hızlı</td>
-    <td>Rust/C# — daha büyük ikili ya da .NET bağımlılığı</td></tr>
-
-<tr><td><b>cgo yok</b></td><td>Go'nun C kütüphane çağırma özelliği</td>
-    <td>Bağımlılık bırakmaz, antivirüs tetiklemez, tek dosya</td>
-    <td>cgo açık — Visual C++ runtime ister, "eksik DLL" hatası</td></tr>
-
-<tr><td><b>Pion</b></td><td>Go için WebRTC kütüphanesi</td>
-    <td>MIT lisanslı, saf Go, WebRTC'yi baştan yazmamıza gerek kalmaz</td>
-    <td>libwebrtc (C++) — cgo gerektirirdi</td></tr>
-
-<tr><td><b>WebRTC</b></td><td>Tarayıcıda ses/görüntü standardı</td>
-    <td>Teknisyen kurulum yapmıyor, ekran görüntüsü de aynı kanaldan</td>
-    <td>Kendi protokolümüz — tarayıcıda çalışmaz</td></tr>
-
-<tr><td><b>PostgreSQL</b></td><td>İlişkisel veritabanı</td>
-    <td>RLS ile satır izolasyonu — güvenlik veritabanının içinde</td>
-    <td>MySQL — RLS yok, izolasyon uygulamaya kalır</td></tr>
-
-<tr><td><b>RLS</b></td><td>Row Level Security — satır bazlı yetki</td>
-    <td>Veritabanı başka firmanın satırını vermeyi reddeder</td>
-    <td>Uygulama WHERE filtresi — hata olursa sızar</td></tr>
-
-<tr><td><b>coturn</b></td><td>TURN/STUN sunucusu</td>
-    <td>Kanıtlanmış, kendimiz yazmadık (güvenlik riski)</td>
-    <td>Kendi TURN'ümüz — K-01'de planlandı, K-10'da geri alındı</td></tr>
-
-<tr><td><b>TURN</b></td><td>Veriyi üçüncü taraf üzerinden taşıma</td>
-    <td>Her ağda çalışır — %100 bağlanma garantisi</td>
-    <td>P2P dene — mümkünse ücretsiz, olmazsa TURN</td></tr>
-
-<tr><td><b>STUN</b></td><td>Sadece genel IP adresini öğretme</td>
-    <td>Neredeyse hiç veri taşımaz, maliyet sıfır</td>
-    <td>Doğrudan P2P — %100 olmuyor</td></tr>
-
-<tr><td><b>ICE</b></td><td>Aday toplayıp en iyisini seçme</td>
-    <td>Otomatik: host → srflx → relay sırası dener</td>
-    <td>Elle seçim — kullanıcıyı yorar</td></tr>
-
-<tr><td><b>DTLS / SRTP</b></td><td>Uçtan uca şifreleme</td>
-    <td>Sunucu videoyu göremez — WebRTC standartı</td>
-    <td>Uygulama katmanında TLS — tarayıcıyla uyuşmaz</td></tr>
-
-<tr><td><b>DXGI</b></td><td>Windows'un hızlı ekran yakalama yolu</td>
-    <td>GPU'ya doğrudan erişim, ~15 ms</td>
-    <td>GDI — yavaş (~40 ms), yedek olarak var</td></tr>
-
-<tr><td><b>Media Foundation</b></td><td>Windows'un kendi video kodlayıcısı</td>
-    <td>Donanım H.264, cgo yok, patent sorunu yok</td>
-    <td>OpenH264/x264 — Cisco patent şartı + derleme sorunu</td></tr>
-
-<tr><td><b>H.264</b></td><td>Video sıkıştırma standardı</td>
-    <td>Bant %53 azalttı, her yerde çalışır</td>
-    <td>JPEG karo — 2,1× daha fazla bant</td></tr>
-
-<tr><td><b>NV12</b></td><td>Video piksel biçimi (yarım çözünürlük YUV)</td>
-    <td>Donanım kodlayıcıların beklediği biçim</td>
-    <td>4:4:4 — daha keskin ama 2× bant, donanım desteklemiyor</td></tr>
-
-<tr><td><b>WebView2</b></td><td>Windows'ta gömülü Chromium</td>
-    <td>Onay penceresini HTML/CSS ile yapıyoruz, ayrı arayüz dili gerekmiyor</td>
-    <td>Native Win32 pencere — marka özelleştirme zor</td></tr>
-
-<tr><td><b>Ed25519</b></td><td>Asimetrik imza</td>
-    <td>Küçük anahtar, hızlı — cihaz kimliği ve güncelleme imzası için</td>
-    <td>RSA-2048 — anahtar çok büyük, yavaş</td></tr>
-
-<tr><td><b>HMAC</b></td><td>Ortak sırla imzalama</td>
-    <td>TURN kimliği üretir, ağda parola taşınmaz</td>
-    <td>Uzun ömürlü parola — ağda dolaşırdı</td></tr>
-
-<tr><td><b>argon2id</b></td><td>Parola karma algoritması</td>
-    <td>GPU'ya karşı dirençli, güncel öneri</td>
-    <td>bcrypt/PBKDF2 — daha zayıf</td></tr>
-
-<tr><td><b>TOTP</b></td><td>Zaman tabanlı tek kullanımlık şifre</td>
-    <td>Telefonda herhangi bir kimlik doğrulama uygulamasıyla çalışır, SMS maliyeti yok</td>
-    <td>SMS kodu — ücretli, gecikmeli, SIM swap riski</td></tr>
-
-<tr><td><b>named pipe</b><br><span style="color:var(--fg3)">go-winio</span></td>
-    <td>Windows'ta iki süreç arasındaki güvenli kanal</td>
-    <td>Servis ile yardımcı program konuşuyor; ACL ile sadece aynı kullanıcı açabiliyor</td>
-    <td>TCP/127.0.0.1 portu — port çalması mümkün</td></tr>
-
-<tr><td><b>SDDL / ACL</b></td><td>Windows dosya izin dili</td>
-    <td>Veri klasörünü yalnız SYSTEM + Administrators'a açıyoruz</td>
-    <td>Unix izinleri — Windows'ta karşılığı yok</td></tr>
-
-<tr><td><b>Caddy</b></td><td>TLS sonlandıran reverse proxy</td>
-    <td>Sertifika otomatik yenilenir, tek ikili, config basit</td>
-    <td>nginx/traefik — Caddy daha az config</td></tr>
-
-<tr><td><b>Docker</b></td><td>Konteyner</td>
-    <td>Aynı compose dosyası hem senin bilgisayarında hem VPS'te çalışır</td>
-    <td>Doğrudan kurulum — 4 servisi elle kurmak gerekir</td></tr>
-
-<tr><td><b>pgBackRest</b></td><td>PostgreSQL yedekleme aracı</td>
-    <td>AES-256 şifreli, artımlı (günlük/haftalık), S3'e yazabilir</td>
-    <td>pg_dump — büyük veritabanında yavaş</td></tr>
-
-<tr><td><b>embedded-postgres</b></td><td>Go içine gömülü PostgreSQL</td>
-    <td>Testler kendi veritabanını kendi açar — Docker gerektirmez</td>
-    <td>Testcontainers — her testte Docker ayakta</td></tr>
-
-<tr><td><b>Prometheus</b></td><td>Metrik toplama</td>
-    <td>/metrics ucu hazır, ek araç gerekmez</td>
-    <td>Yok — sadece /healthz ve /readyz</td></tr>
-
-<tr><td><b>slog</b></td><td>Go'nun yapılandırılmış günlük kitaplığı</td>
-    <td>JSON çıktı, seviye kontrollü (<code class="inl">SEGNOX_LOG_LEVEL</code>)</td>
-    <td>log paketi — seviye ve alan desteği zayıf</td></tr>
-
-<tr><td><b>gomobile</b></td><td>Go → Android derleyici</td>
-    <td>Saf Go ile mobil ajan yazmayı mümkün kılabilir</td>
-    <td>Kotlin kabuk + Go çekirdek — gomobile Android NDK istiyor;
-        plan 9'da yeniden araştırılacak</td></tr>
+<tr><th>Teknoloji</th><th>Ne için</th></tr>
+<tr><td><b>Go (cgo yok)</b></td><td>Tek .exe, ek DLL/çalışma zamanı istemez</td></tr>
+<tr><td><b>Pion</b></td><td>Ajan tarafı WebRTC (MIT, saf Go); teknisyen tarafı tarayıcı</td></tr>
+<tr><td><b>PostgreSQL + RLS</b></td><td>Çoklu kiracı, satır izolasyonu</td></tr>
+<tr><td><b>coturn, Caddy, Docker</b></td><td>TURN/STUN, TLS, tek komutla sunucu paketi (<span class="mono">deploy/</span>)</td></tr>
+<tr><td><b>DXGI / Media Foundation</b></td><td>Ekran yakalama (yedek GDI) / Windows'un kendi H.264 kodlayıcısı</td></tr>
+<tr><td><b>WebView2</b></td><td>Onay penceresi ve çubuk (HTML ile, bayi markalı)</td></tr>
+<tr><td><b>Ed25519, argon2id, TOTP</b></td><td>Cihaz kimliği/güncelleme imzası, parola karması, 2FA</td></tr>
+<tr><td><b>pgBackRest</b></td><td>Şifreli artımlı yedek</td></tr>
 </table>
 </div>
 
-<h2 id="sozluk" style="margin-top:44px">5 · Sözlük</h2>
-
+<h3>6.7 · Sözlük</h3>
 <div class="card">
-<div class="term"><b>Ajan</b><div class="d">Müşterinin bilgisayarındaki program. Ekranı yakalar, tuş gönderir. Tek .exe.</div></div>
-<div class="term"><b>Teknisyen / viewer</b><div class="d">Yardım eden kişi. Program kurmaz, tarayıcıdan bağlanır.</div></div>
-<div class="term"><b>WebRTC</b><div class="d">Tarayıcıda ses/görüntü standardı. Ekran görüntüsü de bu kanaldan gidiyor.</div></div>
-<div class="term"><b>ICE</b><div class="d">"Hangi adresle ulaşabilirim?" sorusunu çözen mekanizma. Birden çok aday dener.</div></div>
-<div class="term"><b>P2P</b><div class="d">İki taraf doğrudan konuşuyor. Hızlı, ucuz, gizli. Mümkünse hep bu.</div></div>
-<div class="term"><b>NAT / CGNAT</b><div class="d">İnternet sağlayıcının ev cihazlarını bir dış IP altında paylaştırması. Evlerde doğrudan bağlantıyı imkânsız kılar.</div></div>
-<div class="term"><b>relay oranı</b><div class="d">Oturumların yüzde kaçı TURN'den geçiyor. <b>Doğrudan bağlantı %100 ise TURN maliyeti sıfır.</b></div></div>
-<div class="term"><b>DTLS / SRTP</b><div class="d">Uçtan uca şifreleme. <b>Sunucu videoyu göremez.</b></div></div>
-<div class="term"><b>coturn</b><div class="d">Açık kaynak, kanıtlanmış TURN/STUN sunucusu. Kendi sunucumuzda çalışır.</div></div>
-<div class="term"><b>ICE restart</b><div class="d">Bağlantı kopunca otomatik yeniden deneme. Kullanıcı hiçbir şey yapmaz.</div></div>
-<div class="term"><b>DXGI</b><div class="d">Windows'un hızlı ekran yakalama yolu. Yedeği GDI (yavaş).</div></div>
-<div class="term"><b>JPEG karo / H.264</b><div class="d">Eski görüntü biçimi (çalışıyor, pahalı) ve yeni biçim (H.264 — bant yarıya indi).</div></div>
-<div class="term"><b>RLS</b><div class="d">PostgreSQL'in "hangi satırı kimin görebileceğini" zorlaması. <b>Kod hatası olsa bile veri sızmaz.</b></div></div>
-<div class="term"><b>Kiracı</b><div class="d">Bir firma. Platform → bayi → müşteri sırasıyla daralan kovalar.</div></div>
-<div class="term"><b>SYSTEM</b><div class="d">Windows'un en yüksek yetkili kullanıcısı. Kullanıcı giriş yapmasa da çalışır. <b>Gözetimsiz erişimin anahtarı.</b></div></div>
-<div class="term"><b>ACL / SDDL</b><div class="d">Dosya izinlerini yazan Windows dili. "Bu klasörü yalnız sistem ve yöneticiler açabilsin."</div></div>
-<div class="term"><b>named pipe</b><div class="d">Windows'ta iki yerel süreç arasındaki güvenli kanal. Servis ile yardımcı böyle konuşuyor.</div></div>
-<div class="term"><b>HMAC</b><div class="d">Ortak sırla imzalanan istek. Anahtar olmadan TURN relay kullanılamaz.</div></div>
+<div class="term"><b>Ajan</b><div class="d">Müşterinin bilgisayarındaki program; ekranı yakalar, tuş gönderir.</div></div>
+<div class="term"><b>Teknisyen</b><div class="d">Yardım eden kişi; tarayıcıdan bağlanır.</div></div>
+<div class="term"><b>P2P / relay</b><div class="d">Doğrudan bağlantı (ucuz, hızlı) / TURN üzerinden (maliyetli). Raporlar sayfası oranı gösterir.</div></div>
+<div class="term"><b>NAT</b><div class="d">Ev ağındaki cihazların dış IP'yi paylaşması; doğrudan bağlantıyı zorlaştırır.</div></div>
+<div class="term"><b>ICE restart</b><div class="d">Kopan bağlantının kendiliğinden yeniden denenmesi.</div></div>
+<div class="term"><b>Kiracı</b><div class="d">Bir firma; platform → bayi → müşteri sırasıyla daralır.</div></div>
+<div class="term"><b>SYSTEM</b><div class="d">Windows'un en yetkili hesabı; gözetimsiz erişimin anahtarı.</div></div>
+<div class="term"><b>fail-closed</b><div class="d">Emin olunamayan durumda izin verme, kapat.</div></div>
 </div>
 
-<!-- ============ 4 TEST ============ -->
-<h2 id="test" style="margin-top:44px">6 · Test matrisi</h2>
-
-<div class="card">
-<table>
-<tr><th>#</th><th>Test</th><th>Nasıl</th><th>Sonuç</th></tr>
-<tr><td>1</td><td>Bağlan, gör, tıkla, yaz, kes</td><td>e2e + gerçek masaüstü</td><td class="yes2">Geçti</td></tr>
-<tr><td>2</td><td>Zorunlu relay</td><td>e2e</td><td class="yes2">Geçti</td></tr>
-<tr><td>3</td><td>Kopunca 10 sn içinde geri gelme</td><td>e2e</td><td class="yes2">Geçti (2 hata bulundu)</td></tr>
-<tr><td>4</td><td>Aynı cihaza iki teknisyen</td><td>e2e</td><td class="yes2">Geçti</td></tr>
-<tr><td>5</td><td>5 eşzamanlı oturum + 6. reddedilir</td><td>e2e</td><td class="yes2">Geçti</td></tr>
-<tr><td>6</td><td>Yanlış parola / süresi geçmiş / başka firma</td><td>e2e</td><td class="yes2">Geçti</td></tr>
-<tr><td>7</td><td><b>Farklı ağdan gerçek deneme</b></td>
-    <td><b>Senin ev Wi-Fi'n, arkadaşın evi, hücresel veri</b></td>
-    <td class="no">❌ Yapılamadı — gerçek sunucu lazım</td></tr>
-<tr><td>8</td><td>TURN açık relay testi</td><td>CI'da gerçek coturn'a karşı</td>
-    <td class="yes2">Geçti (gerçek hatayı yakaladı)</td></tr>
-</table>
-</div>
-
-<div class="card">
-<h3>21.10 — otomatik testlerin durumu</h3>
-<table>
-<tr><th>Kapı</th><th>Sonuç</th></tr>
-<tr><td>Go kapısı (build · vet · lint · test)</td><td class="yes2">Temiz — 36 paket</td></tr>
-<tr><td>Uçtan uca (e2e)</td><td class="yes2">36 geçti · 3 atlandı · 0 kaldı</td></tr>
-</table>
-<div class="note warn">
-  <b>Atlanan 3 test — isimleriyle:</b>
-  <br>· <span class="mono">customers.spec</span> — "K-30 watch isteği rolü view olur"
-  (bu istek mobil ajandan geliyor; sunucu tarafında Go testiyle kapsanıyor)
-  <br>· <span class="mono">demo.spec</span> — "monitör seçimi" (sentetik yakalamada
-  tek monitör var)
-  <br>· <span class="mono">real-input.spec</span> — "gerçek enjeksiyon"
-  (<span class="mono">SEGNOX_REAL_INPUT_TEST=1</span> ister)
-  <br><br>
-  <b>Atlanan test "geçti" sayılmaz.</b> Bunlar hâlâ <b>doğrulanmamış</b> demektir.
-</div>
-</div>
-
-<div class="note">
-  <b>Neden 7 numara kritik:</b> Aynı ağda çalışmak kolay — bilgisayarlar birbirini
-  doğrudan görür. Gerçek hayatta müşterinin modemi arkasındadır ve bağlantı
-  ancak TURN ile kurulur. <b>Bu geçmeden ürün satılmaz.</b>
-</div>
-
-<div class="note bad">
-  <b>Şu ana kadar ölçülenler:</b> Aynı ağda 17–22 fps. Farklı Wi-Fi'de 15,4 fps
-  bir kez. Hücresel veri <b>hiç bağlanamadı</b> — STUN tanımsızdı ve TURN
-  erişilemiyordu. İkisi de düzeltildi, <b>tekrar denenmedi</b>.
-</div>
-
-<!-- ============ 5 RISK ============ -->
+<!-- ============ 7 RISK ============ -->
 <h2 id="risk" style="margin-top:44px">7 · Riskler</h2>
-
 <div class="card">
 <table>
-<tr><th>Seviye</th><th>Risk</th></tr>
-<tr><td class="no"><b>YÜKSEK</b></td>
-    <td><b>Farklı ağdan bağlantı hiç test edilmedi.</b> Ürünün tek şartı.</td></tr>
-<tr><td class="no"><b>YÜKSEK</b></td>
-    <td><b>Servis kipi gerçek makinede denenmedi.</b> Hata olursa bilgisayar açılmaz.</td></tr>
-<tr><td class="warn2"><b>ORTA</b></td>
-    <td><b>İkinci cihazdan giriş 403 alıyordu</b> — <code class="i">SEGNOX_ORIGINS</code>
-        API'ye uygulanmıyordu. 19.10'da düzeltildi, ikinci cihazdan test
-        hâlâ yapılmadı.</td></tr>
-<tr><td class="warn2"><b>ORTA</b></td>
-    <td><b>İmzasız EXE</b> — antivirüs "tanımayan yayımcı" der. Kurumsal alıcı reddeder.</td></tr>
-<tr><td class="warn2"><b>ORTA</b></td>
-    <td><b>Kabul edilen risk:</b> aynı Windows kullanıcısındaki zararlı yazılım
-        onay penceresine tıklayabilir. O kullanıcı zaten kendi bilgisayarında.</td></tr>
-<tr><td style="color:var(--fg3)"><b>DÜŞÜK</b></td>
-    <td>H.264'te ince renkli yazı bulanıklaşıyor.</td></tr>
+<tr><th>Risk</th><th>Not</th></tr>
+<tr><td><b>Farklı ağdan gerçek bağlantı denenmedi</b></td><td>Yalnız zorunlu-relay e2e var (#2).</td></tr>
+<tr><td><b>Servis kipi kullanıma hazır değil</b></td><td>UAC/kilit ekranı gözle denenmedi (#13); Windows 10'da WebView2 yoksa davranış denenmedi (#11).</td></tr>
+<tr><td><b>İmzasız EXE</b></td><td>SmartScreen ve güvenlik duvarı uyarısı çıkar (#12); sertifika sende (#6).</td></tr>
+<tr><td><b>Kendi sunucusunu kuran müşteri</b></td><td>Loopback dışı düz HTTP reddedilir, TLS ya da kendi CA gerekir (#22, karar sende).</td></tr>
+<tr><td><b>İçerik ve hukuk</b></td><td>Bayi logosu/karşılama metni otomatik denetlenemiyor (#21); kayıt aydınlatma metni hukuk onayı bekliyor (#19).</td></tr>
 </table>
 </div>
 
-<!-- ============ 6 PAZAR ============ -->
+<!-- ============ 8 PAZAR ============ -->
 <h2 id="pazar" style="margin-top:44px">8 · Pazar</h2>
-
-<h3>Ücretsiz alternatifler</h3>
-<div class="card">
-<table>
-<tr><th>Ürün</th><th>Ticari kullanım</th></tr>
-<tr><td><b>TeamViewer Personal</b></td><td class="no"><b>Yasak.</b> Ticari kullanım tespit edilirse kesilir.</td></tr>
-<tr><td><b>AnyDesk Personal</b></td><td class="no">Aynı.</td></tr>
-<tr><td><b>RustDesk</b></td><td><b>Yasal.</b> Kendi sunucunu kurup bedava kullanırsın.</td></tr>
-</table>
-</div>
-
-<div class="note bad">
-  <b>Asıl tehdit RustDesk.</b> KOBİ'nin kendi IT'si RustDesk'i kendi sunucusuna
-  kurar ve bir daha para harcamaz. RustDesk ücretsiz, yasal, KVKK'ya uygun ve
-  <b>UAC/kilit ekranı çalışıyor</b> (bizimki test edilmedi).
-  <b>Hiçbir satış görüşmesinde yenemezsin.</b>
-</div>
-
-<h3>Rakipler</h3>
-<div class="card">
-<table>
-<tr><th>Ürün</th><th>Güçlü yanı</th><th>Zayıf yanı</th></tr>
-<tr><td><b>Alpemix</b></td><td>MEB/kamu ağında çalışıyor, yerli, Türkçe destek</td>
-    <td>1024-bit RSA. Fiyat düşmüş: reseller'larından 2.442 TL'ye alınıyor.</td></tr>
-<tr><td><b>TeamViewer</b></td><td>Tanınıyor, kurumsal altyapı sağlam</td>
-    <td class="no">Kişisel sürümü ticari kullanımda yasak. Pahalı.</td></tr>
-<tr><td><b>AnyDesk</b></td><td>Hızlı, güvenilir</td><td class="no">Aynı lisans durumu.</td></tr>
-<tr><td><b>RustDesk</b></td><td>Ücretsiz, self-hosted, çok dilli</td>
-    <td class="no">AGPL — satışa kapalı. Karmaşık kurulum.</td></tr>
-<tr><td><b>Deskqo</b></td><td>Basit</td>
-    <td class="no">Tek kişi, imzasız, şirket yok.</td></tr>
-</table>
-</div>
-
-<div class="note ok">
-  <b>Elimizde olan bir avantaj:</b> <span class="mono">segnox.com</span> zaten
-  bize ait, canlı ve çalışıyor (<b>Ankara merkezli SEGNOX — özel yazılım ve web
-  çözümleri</b>). Yani:
-  <ul style="margin:10px 0 0">
-    <li><b>Alan adı almamız gerekmiyor</b> — <span class="mono">destek.segnox.com</span> yeter</li>
-    <li><b>Türk şirketiyiz</b> — KDV'li fatura, KVKK metni, Türkçe destek var</li>
-    <li>Ürün, mevcut şirketin bir ürün hattı olarak çıkar</li>
-  </ul>
-  Bu, Alpemix'in de yaptığı bir şey — ama bizde <b>site ve altyapı hazır</b>.
-</div>
-
-<h3>Doğrulanabilir 3 farkımız</h3>
 <div class="card">
   <ul class="chk">
-    <li><b>Teknisyen hiçbir şey kurmaz</b> — Alpemix mobil uygulama istiyor,
-        diğer 3'ü de istemci kuruyor</li>
-    <li><b>Cihaz parolası sunucuya hiç gitmez</b> — Alpemix 1024-bit RSA</li>
-    <li><b>Veritabanı seviyesinde izolasyon</b> — Alpemix yazılım katmanında
-        filtreliyor</li>
+    <li><b>Hedef:</b> Alpemix kadar basit, daha güvenli, bayinin kendi markasıyla satabildiği ticari uzak destek (PLAN bağlam).</li>
+    <li><b>Ana rakip Alpemix</b> (2026-10): ücretsiz Standard (1 oturum, ayda 8 saat, bilgisayar başı 45 dk); Pro lisans başı 5 eşzamanlı. TL fiyatı sayfadan okunamadı (#8).</li>
+    <li>Alpemix sayfasında görünmeyenler: açık API, MSI/toplu kurulum, çoklu ekran, Wake-on-LAN, cihaz sağlığı/alarm.</li>
+    <li><b>Fiyat belirlenmedi</b>; "satılır mı" sorusu fiyat ve gerçek makine denemeleri olmadan cevaplanamaz.</li>
+    <li>Bugünkü haliyle "Alpemix yerine bunu alın" denemez; iç deneme ve dost müşteri pilotu içindir.</li>
   </ul>
-  <div class="note">
-    <b>Nasıl konuşmalı:</b> RLS bir "teknik üstünlük" değil, bir
-    <b>denetim cevabı</b>. Mühendise "RLS ne" diye sorulmaz; denetim ekibine
-    <i>"firma verisi başka bir firmaya sızar mı?"</i> sorusu sorulur.
-    <br><span style="color:var(--fg3)">(Tam özellik karşılaştırması →
-    <a href="#yapilmayanlar">10 · Yapılmayanlar</a>)</span>
-  </div>
 </div>
 
-<h3>En dürüst değerlendirme</h3>
-<div class="note bad">
-  B2B uzak destek pazarı dolu: 4 ticari ürün, açık kaynak RustDesk, ucuz yerli
-  Alpemix. Sıfırdan yazılmış, gerçek makinede test edilmemiş, imzasız, şirketi
-  olmayan bir ürünle girmek <b>zor</b>.
-  <br><br>
-  <b>Var olma şansı olan yer:</b> tek kişi çalışan KOBİ saha teknisyeni —
-  telefonundan/tabletinden bağlanan, lisans maliyetine duyarlı, Türkçe destek
-  isteyen. Bu segment gerçek ama <b>dar</b>: yüzlerce müşteri, on binlerce değil.
-  <br><br>
-  <b>Bu niş bir üründür, heyecanlı girişim değil.</b> Fiyat ortaya çıkmadan
-  "satılır mı" sorusunun cevabı verilemez.
-</div>
-
-<h3>Doğrulanmamış iddia uyarısı</h3>
-<div class="card">
-  <p style="font-size:14px;color:var(--fg2)">
-    18.10.2026'de dış kaynaktan gelen bir rakip tablosunda 4 iddia yanlış çıktı.
-    Kayıt:
-  </p>
-  <table>
-  <tr><th>İddia</th><th>Gerçek</th></tr>
-  <tr><td>"%75–90 P2P oranı"</td><td class="no">Hiç ölçmedik. Relay oranı bilinmiyor.</td></tr>
-  <tr><td>"~11 MB tek EXE"</td><td class="no">Gerçek: <b>19,1 MB</b>.</td></tr>
-  <tr><td>"çift IP'li 443 coturn TURN"</td><td class="no">Plan. Hiç kurulmadı.</td></tr>
-  <tr><td>"Alpemix iki tarafta masaüstü zorunlu"</td>
-      <td class="no"><b>Tersi.</b> Bizim en güçlü farkımızı rakibe attı.</td></tr>
-  </table>
-</div>
-
-<!-- ============ 7 KAYITLAR ============ -->
-<h2 id="kayit" style="margin-top:44px">9 · Kayıtlar</h2>
-
-<h3>Alpemix Linux'ta ne yapıyor</h3>
-<div class="card">
-  <p style="font-size:14px;color:var(--fg2)">
-    Kendi özellik sayfasından birebir alıntı:
-    <b>"Linux( Beta - 64 bit (x86) Pardus, Ubuntu )"</b>
-  </p>
-  <table>
-  <tr><th>Özellik</th><th>Linux</th></tr>
-  <tr><td>Platform desteği</td><td class="warn2"><b>BETA</b> — sadece Pardus/Ubuntu, x86_64</td></tr>
-  <tr><td>Ekran yakalama</td><td>X11 zorunlu (Wayland'dan X11'e geçiş şart)</td></tr>
-  <tr><td>Linux ajanı</td><td>Yalnız <b>Ekim 2025</b>'te eklendi — 1 yıllık</td></tr>
-  <tr><td>Sesli iletişim</td><td class="no">Yalnız Windows</td></tr>
-  <tr><td>UAC / kilit ekranı</td><td class="no">Yalnız Windows</td></tr>
-  <tr><td>Uzaktan yeniden başlatma</td><td class="no">Yalnız Windows (servis gerekir)</td></tr>
-  </table>
-  <div class="note ok">
-    <b>Sonuç:</b> Linux desteği zayıf ve yeni. Biz 2. adımda sıfırdan yaparsak
-    orada önde oluruz. Ama Linux zaten segment dışı — bu "ileride" notu,
-    "şimdi" değil.
-  </div>
-</div>
-
-<h3>Para</h3>
-<div class="card">
-<table>
-<tr><td>Hetzner sunucu + yedekleme</td><td class="mono">~€10/ay</td></tr>
-<tr><td><b>Şimdiye kadar harcanan</b></td><td class="mono"><b>0</b></td></tr>
-<tr><td>Müşteriye fiyat</td><td class="mono">Belirlenmedi (6. adım)</td></tr>
-</table>
-</div>
-
-<h3>Önemli kararlar</h3>
-<div class="card">
-<table>
-<tr><th>No</th><th>Karar</th></tr>
-<tr><td>K-01 → <b>K-10</b></td><td>Kendi TURN sunucumuz yazılmadı. Kanıtlanmış <b>coturn</b> kullanılacak.</td></tr>
-<tr><td>K-03</td><td>H.264 için Windows'un kendi Media Foundation'ı. Açık kaynak kod derlenmiyor (lisans/derleme).</td></tr>
-<tr><td>K-06</td><td>Kod imzası: OV sertifika. <b>EV gerekmiyor.</b></td></tr>
-<tr><td>K-07</td><td>KVKK: Almanya + standart sözleşme. <b>Avukat onayı bekliyor.</b></td></tr>
-<tr><td>K-10</td><td>Canlıda coturn, testte Go tabanlı test TURN'ü.</td></tr>
-<tr><td>K-21</td><td>Genel adres <b>https zorunlu</b> (localhost dışında).</td></tr>
-<tr><td>K-25</td><td>STUN kendi sunucumuzdan. <b>Üçüncü taraf STUN yasak</b> — KVKK.</td></tr>
-<tr><td>K-26</td><td>Gözetimsiz erişim: SYSTEM servis → SYSTEM yardımcı → kullanıcı arayüzü. Hata durumunda <b>kapalı</b> (fail-closed).</td></tr>
-<tr><td>K-27</td><td>Yeniden başlatma+devam: yalnız servis kipinde, kontrol rolünde, cihaz parolası varken. Anahtar tek kullanımlık, 20 dk, sunucudan geçmiyor.</td></tr>
-<tr><td>K-28</td><td>H.264 + JPEG karoya otomatik düşüş.</td></tr>
-</table>
-</div>
-
-<div class="q">
-  <div class="qq">Neden RustDesk/HopToDesk kopyalanmadı?</div>
-  <div class="qa">
-    <b>AGPL-3.0.</b> 13. madde network kopyleft'i: türev çalışma <b>kendi sunucunu
-    açık kaynak yapmak zorunda</b>. Ticari ürün için ölümcül. Alpemix'in kodu ise
-    kapalı ve ToS'i tersine mühendislik yasaklıyor.
-  </div>
-</div>
-
-<h3>Nerede ne var</h3>
-<div class="card">
-<table>
-<tr><th>Dosya</th><th>Ne</th></tr>
-<tr><td class="mono">docs/KARARLAR.md</td><td>35 karar (K-01…K-35). "Neden böyle?" sorusunun cevabı.</td></tr>
-<tr><td class="mono">docs/ACIK-KONULAR.md</td><td>19 açık soru. <b>Senin kararını bekleyen işler.</b></td></tr>
-<tr><td class="mono">PLAN.md</td><td>Adım tablosu, mimari, test matrisi.</td></tr>
-<tr><td class="mono">docs/DEVAM.md</td><td>Claude Code'un kaldığı yer.</td></tr>
-<tr><td class="mono">cmd/segnox-server/config.go</td>
-    <td>Sunucu ayarları (<code class="i">SEGNOX_STUN</code>, <code class="i">SEGNOX_TURN_URLS</code>).</td></tr>
-<tr><td class="mono">deploy/</td><td>Sunucu paketi: Docker, coturn, Caddy, yedekleme.</td></tr>
-</table>
-<p style="font-size:14px;color:var(--fg2);margin-top:12px">
-  Repo gizli: <span class="mono">Eraycann/segnox-uzaktan-erisim</span>. Site açık, kod kapalı.
-</p>
-</div>
-
-<h2 id="yapilmayanlar" style="margin-top:44px">10 · Yapılmayanlar</h2>
-<p class="sub">
-  <b>20.10.2026'da yapılan denetim.</b> PLAN.md'deki her madde kodda arandı.
-  <b>Plan yazılı olmak, yapılmış olmak demek değil.</b> Aşağıdaki liste
-  bu farkı gösteriyor.
-</p>
-
-<div class="note ok">
-  <b>20.10 gece boyunca 6 adım özellik bitti (94 commit, 3 günde).</b> Hedef dosyası
-  (<span class="mono">HEDEF-ALPEMIX-ESITLAMA.md</span>) işe yaradı — Claude Code
-  artık her adım sonunda "yapılmayanlar" raporu veriyor.
-</div>
-
-<div class="card">
-<h3>Bitenler</h3>
-<table>
-<tr><th>Özellik</th><th>Adım</th><th>Karar</th><th>Detay</th></tr>
-<tr><td class="yes2"><b>Müşteriler rehberi</b></td><td>5e</td><td>K-30</td>
-    <td>Konsol sayfası, cihaz bağlama, belirtçekte müşteri, istek türü rozeti.
-        Türkçe arama katmanı, RLS izolasyon testleri.</td></tr>
-<tr><td class="yes2"><b>Siyah ekran (gizlilik)</b></td><td>5f</td><td>K-32</td>
-    <td>Yakalamaya girmeyen kaplama. <b>Kullanıcı denemesi bekliyor</b> (#16).</td></tr>
-<tr><td class="yes2"><b>Otomatik güncelleme</b></td><td>6a</td><td>K-33</td>
-    <td>Çevrimdışı Ed25519 anahtarla imzalı manifest, ikili sunumu, konsoldan
-        "Güncelle / Tümünü Güncelle", e2e test. <b>Kullanıcı denemesi bekliyor</b> (#17).</td></tr>
-<tr><td class="yes2"><b>Çoklu izleyici</b></td><td>6b</td><td>K-34</td>
-    <td><span class="mono">session.peers</span> yayını, "N kişi bağlı (M izliyor)",
-        müşteri çubuğunda "2 kişi bağlı: 1 kontrol, 1 izliyor".
-        <b>Gözle kontrol bekliyor</b> (#18).</td></tr>
-<tr><td class="yes2"><b>Cihaz envanteri</b></td><td>6c</td><td>—</td>
-    <td>Konsolda durum, OS, sürüm, son görülme, "Güncel değil" uyarısı, filtreler.</td></tr>
-<tr><td class="yes2"><b>Raporlama</b></td><td>6d</td><td>K-34</td>
-    <td><b>P2P/relay oranı</b> (oturum ve bayt), günlük seri grafiği,
-        teknisyen/cihaz kırılımı, CSV (BOM + enjeksiyon kaçışı).</td></tr>
-<tr><td class="yes2"><b>Oturum kaydı (video)</b></td><td>6e</td><td>K-35</td>
-    <td>Görüntüleyicide kayıt (WebM, 5 sn parça, sıralı yükleme), kiracı
-        anahtarıyla AES-256-GCM, politika off/optional/required (oturum başında
-        sabitlenir), konsol "Kayıtlar" sayfası (izle/indir/sil), saklama süresi
-        + kısaltma, ajan tarafında kalıcı "kaydediliyor" bildirimi (gidemezse
-        oturum reddedilir). <b>Denetim: 4 orta + 4 düşük bulgu kapandı.</b>
-        <b>Adli kayıt değil</b> — kalite/eğitim kaydı. KVKK metni bekliyor (#19).</td></tr>
-<tr><td class="yes2"><b>Canlı destek düğmesi</b></td><td>6f</td><td>K-36</td>
-    <td>Siteye gömülen tek satır betik (<span class="mono">/w/v1.js</span>, Shadow
-        DOM, çerez kullanmaz), ziyaretçi kodu girer, talep konsolun "Siteden
-        gelenler" listesine düşer, teknisyen koduyla bağlanır. İzinli köken
-        listesi, bot tuzağı, istek limitleri, imzalı kurulum indirmesi.</td></tr>
-<tr><td class="yes2"><b>Bayi markası</b></td><td>6g</td><td>K-37</td>
-    <td>Kiracı kendi logosunu, rengini, karşılama mesajını, telefon ve web
-        adresini koyar; ajan markayı EXE adındaki koddan bulur, onay penceresi
-        markayla çizilir. <b>Denetim: 3 orta bulgu kapandı</b> (logo boyutu,
-        sahte marka adı, başka bayinin markasını gösterme).
-        <b>İçerik onayı senin kararın</b> (#21).</td></tr>
-</table>
-</div>
-
-<div class="card">
-<h3>Hâlâ lafta (kod yok) — bizim kendi eksiğimiz</h3>
-<table>
-<tr><th>Özellik</th><th>Plan</th><th>Durum</th></tr>
-<tr><td><b>Abonelik / faturalama</b></td><td>6h</td>
-    <td class="no"><b>Satış için kritik — karar sende (#8)</b></td></tr>
-<tr><td>Cihaz sağlığı (disk/RAM/CPU) + alarm</td><td>7</td><td class="no">Bekliyor</td></tr>
-<tr><td>Webhook (ERP/PSA)</td><td>7</td><td class="no">Bekliyor</td></tr>
-<tr><td>Wake-on-LAN</td><td>7</td><td class="no">Bekliyor</td></tr>
-<tr><td>Duyarlı izleme (K-15)</td><td>—</td><td class="no">Bekliyor</td></tr>
-</table>
-<div class="note">
-  <b>Bu tablo 20.10'da kod taramasıyla yeniden yazıldı.</b> Alpemix'in özellik
-  sayfasındaki her madde için repoda karşılığı arandı; "yok" denilenler
-  <b>gerçekten kod dışı</b> — altyapı kalıntısı yok. Alpemix'te olup bizde
-  olmayanlar aşağıdaki karşılaştırma tablosunda.
-</div>
-</div>
-
-<h3>Alpemix'le tek tek karşılaştırma — biz ne yapacağız</h3>
-<div class="card">
-<table>
-<tr><th>Özellik</th><th>Segnox</th><th>Alpemix</th><th>Bizim planımız</th></tr>
-<tr><td>Teknisyen kurulumu</td><td class="yes2">Yok</td><td>Mobil uygulama var</td>
-    <td class="yes2">Farkımız — koruyacağız</td></tr>
-<tr><td>Veri izolasyonu</td><td class="yes2">RLS, veritabanı seviyesinde</td>
-    <td>Yazılım katmanında filtre</td><td class="yes2">Farkımız</td></tr>
-<tr><td>Denetim kaydı</td><td class="yes2">Hash zinciri, silinemez</td>
-    <td>Bilinmiyor</td><td class="yes2">Farkımız</td></tr>
-<tr><td>Cihaz parolası</td><td class="yes2">Sunucuya gitmiyor</td>
-    <td>1024-bit RSA</td><td class="yes2">Farkımız</td></tr>
-<tr><td>Müşteriler rehberi</td><td class="yes2">Var</td><td>Var</td>
-    <td class="yes2">Bitti (5e)</td></tr>
-<tr><td>Çoklu izleyici</td><td class="yes2">Var</td>
-    <td class="yes2">2 ücretsiz / 8 pro</td><td class="yes2">Bitti (6b)</td></tr>
-<tr><td>Cihaz envanteri</td><td class="yes2">Var</td>
-    <td class="yes2">Var</td><td class="yes2">Bitti (6c)</td></tr>
-<tr><td>Raporlama</td><td class="yes2">Var (P2P/relay oranı, CSV)</td>
-    <td class="yes2">Var</td><td class="yes2">Bitti (6d)</td></tr>
-<tr><td>Siyah ekran modu</td><td class="warn2">Var, denenmedi</td>
-    <td class="yes2">Var</td><td class="warn2">Bitti (5f) — #16</td></tr>
-<tr><td>Otomatik güncelleme</td><td class="warn2">Var, denenmedi</td>
-    <td class="yes2">Var</td><td class="warn2">Bitti (6a) — #17</td></tr>
-<tr><td>Oturum kaydı</td><td class="yes2">Var</td>
-    <td class="yes2">Var</td><td class="yes2">Bitti (6e) — adli kayıt değil</td></tr>
-<tr><td>Sesli konuşma</td><td class="no">Yok</td><td class="yes2">Var (Windows)</td>
-    <td class="no">7. adım</td></tr>
-<tr><td>Canlı destek düğmesi</td><td class="yes2">Var</td><td class="yes2">Var</td>
-    <td class="yes2">Bitti (6f)</td></tr>
-<tr><td>Bayi markası</td><td class="yes2">Var</td><td class="yes2">CMX/CM modülleri</td>
-    <td class="yes2">Bitti (6g) — içerik onayı sende (#21)</td></tr>
-<tr><td>Ekranın belli bir bölümünü paylaşma</td><td class="no">Yok</td><td class="yes2">Var</td>
-    <td class="no">Yeni — 7. adıma eklenecek</td></tr>
-<tr><td>Çevrimdışı mesaj / duyuru mesajı</td><td class="no">Yok</td><td class="yes2">Var</td>
-    <td class="no">Yeni — 7. adıma eklenecek</td></tr>
-<tr><td>Grup sohbeti (çoklu yazışma)</td><td class="no">Yok</td><td class="yes2">Var</td>
-    <td class="no">Yeni — 7. adıma eklenecek</td></tr>
-<tr><td>Şirket dışı iletişim engeli</td><td class="no">Yok</td><td class="yes2">Var</td>
-    <td class="no">6. adım — planlı (PLAN.md:92), kod yok</td></tr>
-<tr><td>Ekran üzerine mesaj bırakma</td><td class="no">Yok</td><td class="yes2">Var</td>
-    <td class="no">Yeni — 7. adıma eklenecek</td></tr>
-<tr><td>Android telefon kontrolü</td><td class="no">Yok</td>
-    <td class="warn2">Var ama elle APK ile</td><td class="no">10. adım</td></tr>
-<tr><td>Mac / iOS ajanı</td><td class="no">Yok</td><td class="yes2">Var</td>
-    <td class="no">Planlanmadı</td></tr>
-<tr><td>Linux ajanı</td><td class="no">Yok</td><td class="warn2">Beta, X11</td>
-    <td class="no">8. adım</td></tr>
-<tr><td>Fiyat</td><td class="no">Belirlenmedi</td>
-    <td>3.500 TL (reseller 2.442)</td><td class="no">Senin kararın</td></tr>
-</table>
-<div class="note">
-  <b>Durum değişti:</b> 20.10'da "motor olarak daha iyi, ürün olarak daha az"
-  diyorduk. Bugün <b>9 özellikte eşitlendik</b> (müşteriler rehberi, çoklu
-  izleyici, cihaz envanteri, raporlama, siyah ekran, otomatik güncelleme,
-  oturum kaydı, canlı destek düğmesi, bayi markası).
-  <br><br>
-  <b>Alpemix'te var, bizde olmayan 10 madde kaldı:</b> sesli konuşma, ekranın
-  belli bir bölümünü paylaşma, çevrimdışı/duyuru mesajı, grup sohbeti, şirket
-  dışı iletişim engeli, ekran üzerine işaretleme, mobil ajan, Linux ajanı,
-  Mac/iOS ajanı, fiyat/faturalama.
-  <br><br>
-  <b>Dürüst özet:</b> <b>Motor olarak Alpemix'ten iyiyiz</b> (DTLS + Ed25519
-  güncelleme + RLS + silinemez denetim kaydı + parola sunucuya gitmiyor).
-  <b>Ürün olarak hâlâ gerideyiz</b> — eşleşen 9 özelliğin hiçbiri gerçek
-  makinede denenmedi, iki platform eksik, fiyat yok.
-  <b>Bugün satılabilir bir ürün değiliz; satılabilir olması için iki şey
-  gerekiyor: fiyatın konması (sen) ve dört özelliğin gerçek makinede
-  doğrulanması (ben + sen).</b>
-</div>
-</div>
-
-<h3>Prod'a hazır mı?</h3>
-<div class="card">
-<table>
-<tr><th>Alan</th><th>Durum</th></tr>
-<tr><td>Sunucu paketi (Docker, coturn, Caddy, pgBackRest, yedek/geri yükleme/alert, systemd timer)</td>
-    <td class="yes2">Tam</td></tr>
-<tr><td>Operasyon (<span class="mono">/healthz</span>, <span class="mono">/readyz</span>, Prometheus metrikleri, yapılandırılmış log)</td>
-    <td class="yes2">Tam</td></tr>
-<tr><td>RLS, hash zincirli denetim kaydı, hız sınırı, kota, CSRF</td>
-    <td class="yes2">Tam</td></tr>
-<tr><td>Güvenlik denetimi</td><td class="yes2">4 tur</td></tr>
-<tr><td>CI</td><td class="yes2">Yeşil — e2e 36 geçti / 3 atlandı / 0 kaldı</td></tr>
-<tr><td>Gerçek sunucu + farklı ağ testi</td><td class="no">Yok — VPS</td></tr>
-<tr><td>Kod imzası</td><td class="no">Yok — sertifika</td></tr>
-<tr><td>KVKK metinleri (avukat)</td><td class="no">Yok</td></tr>
-<tr><td>Abonelik / faturalama</td><td class="no">Yok</td></tr>
-<tr><td>E-posta gönderimi (SMTP)</td><td class="no">Yok</td></tr>
-<tr><td>Alan adı + DNS</td><td class="no">Yok</td></tr>
-</table>
-<div class="note bad">
-  <b>Sonuç: prod'a hazır değil.</b> Kod tarafı büyük ölçüde hazır — CI yeşil,
-  9 özellik Alpemix'te eşit. Kalan eksiğin çoğu <b>senin kararların</b>
-  (fiyat, sertifika, KVKK, sunucu, alan adı) ve <b>gerçek makine
-  denemeleri</b> (siyah ekran, otomatik güncelleme, çoklu izleyici, yeniden
-  başlat + devam).
-</div>
-</div>
-
-<p style="color:var(--fg3);font-size:13px;margin-top:40px;padding-top:20px;border-top:1px solid var(--line)">
-  Sıradaki iş için <a href="basla.html">Rehber</a>'e bak.
-</p>
-
-<p style="font-size:12.5px;color:var(--fg3);margin:14px 0 0">
-  <b>Son güncelleme: 21 Ekim 2026</b> &middot;
-  Kaynak: <span class="mono">Eraycann/segnox-uzaktan-erisim</span> @ <span class="mono">5f89c7d</span>
-  &middot; Bu sayfadaki sayıların kaynağı: <span class="mono">PLAN.md</span>,
-  <span class="mono">docs/KARARLAR.md</span>, <span class="mono">docs/DEVAM.md</span>,
-  <span class="mono">docs/ACIK-KONULAR.md</span>
-  &middot; <a href="bilgi.html#yapilmayanlar">Yapılmayanlar</a>
+<p style="font-size:12.5px;color:var(--fg3);margin:40px 0 0;padding-top:20px;border-top:1px solid var(--line)">
+  <b>Son güncelleme: 24 Ekim 2026</b> &middot;
+  Kaynak: <span class="mono">PLAN.md</span>, <span class="mono">docs/TEST-REHBERI.md</span>,
+  <span class="mono">docs/ACIK-KONULAR.md</span> &middot; <a href="basla.html">Rehber</a>
 </p>
 
 </div>
