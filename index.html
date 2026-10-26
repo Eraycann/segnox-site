@@ -336,7 +336,7 @@
     <div class="grid g2">
       <div class="card"><h4>1 — windows</h4><p><b>Derleme + kalite.</b> Windows'da Go derler, vet hatalar, lint güvenlik, test çalıştırır. Kod değişince önce bu geçer.</p></div>
       <div class="card"><h4>2 — linux</h4><p><b>Race kontrolü.</b> Ubuntu'da go test -race eşzamanlı hataları yakalar. Windows'da yok.</p></div>
-      <div class="card"><h4>3 — e2e (Edge)</h4><p><b>Müşteri deneyimi.</b> Tarayici 9 haneli kod girer baglan go gor fare/klavye gercek kullanici gibi.</p></div>
+      <div class="card"><h4>3 — e2e (Edge)</h4><p><b>Müşteri deneyimi.</b> Tarayıcıda 9 haneli kod girilir, bağlantı kurulur, görüntü gelir, fare/klavye çalışır — gerçek kullanıcı gibi.</p></div>
       <div class="card"><h4>4 — coturn-probe</h4><p><b>Güvenlik.</b> TURN sunucusu 10 tehlikeye relay vermez reddeder. Açık relay güvenlik hatasi.</p></div>
     </div>
   </div>
@@ -344,20 +344,9 @@
 
 <section>
   <div class="wrap">
-    <h2><span class="n">06</span>PostgreSQL — sadelik</h2>
-    <div class="note"><b>1 — İletişim yok:</b> PostgreSQL yalnız iç ağda (db ağı), sunucu sadece bu ağdan erişir; port dışarı açılmaz.</div>
-    <div class="note"><b>2 — Firma izolasyonu:</b> Her tablo tenant_id taşır + FORCE kural. Sorgular önceden filtrelenir; başka firmanin verisi görünmez.</div>
-    <div class="note"><b>3 — Parola:</b> SEGNOX_APP_DB_PASSWORD sadece postgres servisi ve migrate görür; sunucuda log/dışarı sızmaz.</div>
-    <div class="note"><b>4 — Yedek:</b> Her degisiklik pgBackRest ile Hetzner Object Storage'a (şifreli) yazilir; her ay geri yükleme testi yapılır.</div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <h2><span class="n">07</span>VPS / Test — neden bu şekilde</h2>
-    <div class="note">
-      <b>Tek cümle:</b> Ajan (segnox-agent.exe) yalnız Windows'ta çalışır, bu yüzden müşteri tarafıyla ayni ortamda test etmek zorunludur; sunucunun Linux olması ayrı bir konu, müşteri deneyimi Windows'ta test edilir. Docker'la Linux sunucusu da kurulabilir ama müşteri tarafı eksik kalmaması için Windows makine tercih edilir.
-    </div>
+    <h2><span class="n">06</span>PostgreSQL — çalışma mantığı</h2>
+    <div class="note"><b>3 — Şifre (Docker):</b> Docker imajı (<code>postgres:17.11</code> + pgBackRest kurulum) derlenirken şifre içine gömülmez. Şifre (<code>SEGNOX_APP_DB_PASSWORD</code>, <code>POSTGRES_PASSWORD</code>) yalnız <code>.env</code> dosyasından container başlatılırken (<code>docker compose up</code>) enjekte edilir. Sunucu (<code>segnox-server</code>) bu şifreyi yalnız DSN bağlantısı için kullanır; log, konsol, dışarı sızmaz. <b>Sonuç:</b> İmaj yeniden derlenmeden, sadece <code>.env</code> değiştirilerek yeni şifre kullanılabilir.</div>
+    <div class="note"><b>4 — Yedek (pgBackRest):</b> PostgreSQL içindeki <code>archive_command</code> her WAL (günlük) parçasını <code>pgBackRest</code> ile Hetzner Object Storage'a (S3 uyumlu, farklı lokasyon) gönderir. <b>AES-256</b> şifreleme (<code>PGBACKREST_REPO1_CIPHER_PASS</code>) ile yedek açılmadan okunamaz. Haftalık <code>full</code>, günlük <code>diff</code>, sürekli <code>WAL</code>. Aylık otomatik test (<code>restore-test.sh</code>) son yedeği geçici container'a yükler, veritabanı çalışıp çalışmadığını doğrular. <b>Hetzner Object Storage = Cloudflare R2 gibi bir nesne depolama hizmetidir.</b> Yedek şifresi kaybolursa yedek açılamaz.</div>
   </div>
 </section>
 
