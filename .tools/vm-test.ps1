@@ -116,6 +116,8 @@ try {
     exit 0
   }
   Y ("run id dogrulandi: " + $yani)
+  Get-ChildItem $Sonuc -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -like 'faz-*.txt' -or $_.Name -eq 'Bitti.txt' } |
+    Remove-Item -Force -ErrorAction SilentlyContinue
 } catch { Y ('run id alinamadi, devam ediliyor: ' + $_.Exception.Message) }
 
 function Kur ($kaynak, $tok, $sunucu, $ad) {
@@ -147,6 +149,16 @@ function Kur ($kaynak, $tok, $sunucu, $ad) {
   $p = Start-Process -FilePath $dst -ArgumentList @('/S', "/SERVER=$sunucu", "/NAME=$ad") -Wait -PassThru -RedirectStandardOutput $cOut -RedirectStandardError $cErr
   Remove-Item Env:\SEGNOX_ENROLL_TOKEN -ErrorAction SilentlyContinue
   Y ("kurulum cikis kodu: " + $p.ExitCode)
+  $kurulu = Join-Path $Prog 'segnox-agent.exe'
+  if (Test-Path $kurulu) {
+    $sv = [string](& $kurulu version 2>&1 | Select-Object -First 1)
+    Y ("kurulu surum: " + $sv)
+    $bekSurum = '@@SURUM@@'
+    if ($bekSurum -and (Split-Path $kaynak -Leaf) -eq 'segnox-agent.exe' -and $sv -ne $bekSurum) {
+      Y ("HATA: kurulu surum host'takiyle ayni degil (beklenen: " + $bekSurum + ")")
+      return $false
+    }
+  }
   foreach ($f in @($cOut, $cErr)) {
     if (Test-Path $f) {
       Get-Content $f -ErrorAction SilentlyContinue | Select-Object -Last 15 | ForEach-Object { Y ("  kurulum: " + $_) }
@@ -192,7 +204,36 @@ function Temizle {
   Start-Process -FilePath powershell.exe -WindowStyle Hidden -ArgumentList @('-NoProfile','-Command',
     "Start-Sleep 25; Remove-Item 'C:\segnox-test\calis.ps1' -Force -ErrorAction SilentlyContinue") | Out-Null
 }
+# Ayni kosu bir kez: konuktaki poller betigi yeniden calistirsa da (eski poller surumu,
+# kendini silen calis.ps1) kurulum tekrarlanmaz; her tekrar yeni cihaz kaydi + katilim kodu harciyordu.
+$KosuIsaret = 'C:\segnox-test\kosu-@@RUNID@@.txt'
+if (Test-Path $KosuIsaret) { exit 0 }
+New-Item -ItemType Directory 'C:\segnox-test' -Force | Out-Null
+'basladi' | Out-File $KosuIsaret -Encoding ASCII
 Y ("=== KONUK basliyor (@@SENARYO@@) kullanici: " + [Security.Principal.WindowsIdentity]::GetCurrent().Name + " ===")
+# Paket esitleme: host'taki paket.sha256 ile yerel paket karsilastirilir, farkli ya da eksik dosya
+# yeniden indirilir (eski poller dosya varsa hic indirmiyordu: konuk eski ajani kuruyordu).
+New-Item -ItemType Directory 'C:\segnox-test\paket' -Force | Out-Null
+try {
+  $ozet = (Invoke-WebRequest 'http://192.168.79.1:8081/paket.sha256' -UseBasicParsing -TimeoutSec 20).Content
+  if ($ozet -is [byte[]]) { $ozet = [Text.Encoding]::ASCII.GetString($ozet) }
+  foreach ($satir in ($ozet -split "`r?`n")) {
+    if ($satir -notmatch '^([0-9a-f]{64})\s+(\S+)$') { continue }
+    $bek = $Matches[1]; $ad = $Matches[2]
+    $hedef = Join-Path 'C:\segnox-test\paket' $ad
+    $var = if (Test-Path $hedef) { (Get-FileHash $hedef -Algorithm SHA256).Hash.ToLower() } else { '' }
+    if ($var -eq $bek) { Y ("paket guncel: " + $ad); continue }
+    $tmp = $hedef + '.indir'
+    Invoke-WebRequest ('http://192.168.79.1:8081/' + $ad) -OutFile $tmp -UseBasicParsing -TimeoutSec 300
+    if ((Get-FileHash $tmp -Algorithm SHA256).Hash.ToLower() -ne $bek) {
+      Remove-Item $tmp -Force -ErrorAction SilentlyContinue
+      Y ("HATA: indirilen " + $ad + " ozeti tutmuyor")
+      continue
+    }
+    Move-Item $tmp $hedef -Force
+    Y ("paket yenilendi: " + $ad)
+  }
+} catch { Y ('HATA: paket esitlenemedi: ' + $_.Exception.Message) }
 '@
 
 $konukGovde = @{}
@@ -216,6 +257,26 @@ New-ItemProperty -Path $au -Name AUOptions -Value 1 -PropertyType DWord -Force |
 # yeniden baslatma gorevleri (en iyi caba)
 Get-ScheduledTask -TaskPath '\Microsoft\Windows\UpdateOrchestrator\*' -ErrorAction SilentlyContinue |
   ForEach-Object { try { Disable-ScheduledTask -InputObject $_ -ErrorAction Stop | Out-Null; Y ("  gorev kapatildi: " + $_.TaskName) } catch {} }
+# Guncellemeleri 10 yil duraklat (Ayarlar > Windows Update > Duraklat ile ayni anahtarlar);
+# servis kendini geri acsa bile kurulum/yeniden baslatma yapmaz.
+$ux = 'HKLM:\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings'
+New-Item -Path $ux -Force | Out-Null
+$bas = (Get-Date).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+$son = (Get-Date).AddYears(10).ToUniversalTime().ToString('yyyy-MM-ddTHH:mm:ssZ')
+foreach ($n in 'PauseUpdatesStartTime','PauseFeatureUpdatesStartTime','PauseQualityUpdatesStartTime') { New-ItemProperty -Path $ux -Name $n -Value $bas -PropertyType String -Force | Out-Null }
+foreach ($n in 'PauseUpdatesExpiryTime','PauseFeatureUpdatesEndTime','PauseQualityUpdatesEndTime') { New-ItemProperty -Path $ux -Name $n -Value $son -PropertyType String -Force | Out-Null }
+New-ItemProperty -Path $ux -Name FlightSettingsMaxPauseDays -Value 3650 -PropertyType DWord -Force | Out-Null
+Y ("  guncellemeler duraklatildi: " + $son)
+Get-ScheduledTask -TaskPath '\Microsoft\Windows\WindowsUpdate\*' -ErrorAction SilentlyContinue |
+  ForEach-Object { try { Disable-ScheduledTask -InputObject $_ -ErrorAction Stop | Out-Null; Y ("  gorev kapatildi: " + $_.TaskName) } catch {} }
+Y '--- son yeniden baslatmalar (1074 kim/neden, 6008 beklenmeyen kapanis, 41 guc kaybi) ---'
+try {
+  Get-WinEvent -FilterHashtable @{ LogName = 'System'; Id = 1074, 6008, 41 } -MaxEvents 10 -ErrorAction Stop | ForEach-Object {
+    $m = (($_.Message -split "`r?`n") | Where-Object { $_.Trim() } | Select-Object -First 2) -join ' '
+    if ($m.Length -gt 300) { $m = $m.Substring(0, 300) }
+    Y ("  " + $_.TimeCreated.ToString('dd.MM HH:mm') + " [" + $_.Id + "] " + $m)
+  }
+} catch { Y ("  olay gunlugu okunamadi: " + $_.Exception.Message) }
 Y '--- KANIT ---'
 foreach ($s in 'wuauserv','UsoSvc','WaaSMedicSvc') {
   $v = Get-Service $s -ErrorAction SilentlyContinue
@@ -229,7 +290,26 @@ Faz 'hazirlik'
 
 $konukGovde['servis'] = @'
 $ok = Kur (Join-Path $Paket 'segnox-agent.exe') '@@TOKEN@@' '@@SUNUCU@@' 'VM-Test'
-if ($ok) { Dogrula }
+if ($ok) {
+  Dogrula
+  Y '--- ui-host teshisi icin 40 sn bekleniyor ---'
+  Start-Sleep -Seconds 40
+  LogBas 'helper: ui-host satirlari' 'helper started|ui-host' 60
+  Y '--- ui-host cikti dosyalari (ProgramData, en yeni 3) ---'
+  Get-ChildItem (Join-Path $Veri 'logs') -Filter 'ui-host-*.log' -ErrorAction SilentlyContinue |
+    Sort-Object LastWriteTime -Descending | Select-Object -First 3 | ForEach-Object {
+      Y ("  == " + $_.Name)
+      Get-Content $_.FullName -Tail 40 -ErrorAction SilentlyContinue | ForEach-Object { Y ("    " + $_) }
+    }
+  Y '--- ui-host kullanici loglari ---'
+  $ul = @(Get-ChildItem 'C:\Users\*\AppData\Local\Segnox\logs\ui-host.log' -ErrorAction SilentlyContinue)
+  if ($ul.Count -eq 0) { Y '  (yok)' }
+  $ul | ForEach-Object {
+    Y ("  == " + $_.FullName)
+    Get-Content $_.FullName -Tail 30 -ErrorAction SilentlyContinue | ForEach-Object { Y ("    " + $_) }
+  }
+  Dogrula
+}
 Y '--- ajan logu (son 20 satir) ---'
 AjanLog | Select-Object -Last 20 | ForEach-Object { Y ("  " + $_) }
 Faz 'kurulum'
@@ -347,7 +427,7 @@ Get-CimInstance Win32_Process -Filter "Name='segnox-agent.exe'" | ForEach-Object
 Y '--- ajan logu: yeniden baslatma / devam satirlari ---'
 Get-ChildItem 'C:\ProgramData\Segnox\logs' -Filter *.log -ErrorAction SilentlyContinue | ForEach-Object {
   Get-Content $_.FullName -Tail 800 -ErrorAction SilentlyContinue } |
-  Where-Object { $_ -match 'reboot|restart|resum|session|connected|enrolled' } | Select-Object -Last 25 |
+  Where-Object { $_ -match 'reboot|restart|resum|session|connected|enrolled|power|tray|window|ui-host|uiswitch' } | Select-Object -Last 60 |
   ForEach-Object { Y ("  " + $_) }
 Y '=== bitti ==='
 schtasks.exe /delete /tn SegnoxVMDevam /f 2>&1 | Out-Null
@@ -358,6 +438,7 @@ function Konuk-Betik ([string]$ad, [string]$tok, [string]$sunucu, [string]$parol
   $b = $konukOnsoz.Replace('@@SENARYO@@', $ad) + "`r`n" + $konukGovde[$ad] + "`r`n" + $konukSon
   $b = $b.Replace('@@TOKEN@@', $tok).Replace('@@SUNUCU@@', $sunucu).Replace('@@PAROLA@@', $parola)
   $b = $b.Replace('@@RUNID@@', $script:runId)
+  $b = $b.Replace('@@SURUM@@', [string]$script:ajanSurum)
   # HGFS/paylasim klasoru konukta calismiyorsa yerel yol kullan
   # (konuktaki poller-http.ps1 dosyalari HTTP ile doldurur)
   $b = $b.Replace('\\vmware-host\Shared Folders\segnox-calisma\sonuc',      'C:\segnox-test\out')
@@ -384,8 +465,19 @@ function Surec-Kapat ($p) {
   try { if ($p -and -not $p.HasExited) { & taskkill.exe /T /F /PID $p.Id 2>&1 | Out-Null } } catch {}
 }
 
+# Etkilesimsiz kosu: SEGNOX_VMTEST_BEKLE bir dosya yoluysa Enter yerine o dosyanin
+# olusmasi beklenir (orkestrator arka planda kosturur, kullanici yalniz tarayiciya bakar).
+function Kullanici-Bekle ([string]$mesaj) {
+  $f = $env:SEGNOX_VMTEST_BEKLE
+  if (-not $f) { [void](Read-Host $mesaj); return }
+  Say ("  (bekleniyor: " + $f + " olusunca devam)  " + $mesaj)
+  while (-not (Test-Path $f)) { Start-Sleep -Seconds 2 }
+  Remove-Item $f -Force -ErrorAction SilentlyContinue
+}
+
 function Temizlik {
   Surec-Kapat $script:server
+  try { if ($script:turnProc) { Surec-Kapat $script:turnProc } } catch {}
   try { if ($script:httpProc) { Surec-Kapat $script:httpProc } } catch {}
   try { if ($script:dbProc) { $script:dbProc.StandardInput.Close() } } catch {}   # devdb stdin EOF -> kendi postgres'ini kapatir
   Start-Sleep -Seconds 3
@@ -396,7 +488,7 @@ function Temizlik {
   Remove-Item (Join-Path $sonucD 'bitir.txt') -Force -ErrorAction SilentlyContinue
   Remove-Item (Join-Path $pkg 'segnox-agent-1.0.0.exe') -Force -ErrorAction SilentlyContinue
   foreach ($d in $script:gecici) { Remove-Item $d -Recurse -Force -ErrorAction SilentlyContinue }  # imza anahtari dahil
-  Remove-Item Env:\SEGNOX_UPDATE_DIR, Env:\SEGNOX_UPDATE_KEYS -ErrorAction SilentlyContinue
+  Remove-Item Env:\SEGNOX_UPDATE_DIR, Env:\SEGNOX_UPDATE_KEYS, Env:\SEGNOX_TURN_SECRET, Env:\SEGNOX_TURN_URLS, Env:\SEGNOX_RECORD_DIR -ErrorAction SilentlyContinue
   Say 'Temizlik tamam: sunucu + DB kapatildi, calis.ps1 ve gecici anahtarlar silindi.'
 }
 
@@ -442,6 +534,16 @@ function Sonuc-Guncelle {
     $gecici = Join-Path $env:TEMP ('segnox-sonuc-' + [guid]::NewGuid().ToString('N').Substring(0,6))
     New-Item -ItemType Directory $gecici -Force | Out-Null
     Expand-Archive -Path $zip -DestinationPath $gecici -Force
+    # Konuk out klasorunu her dakika yeniden gonderir: eski kosunun Bitti/faz dosyalari bu
+    # kosunun sonucu sanilmasin. Yalniz canli.log bu run id'yi dogrulamissa kabul edilir.
+    if ($script:runId) {
+      $c = Join-Path $gecici 'canli.log'
+      if (-not ((Test-Path $c) -and (Select-String -Path $c -SimpleMatch ('run id dogrulandi: ' + $script:runId) -Quiet))) {
+        Remove-Item $gecici -Recurse -Force -ErrorAction SilentlyContinue
+        Set-Content -Path $isaret -Value (Get-Date).ToString('s')
+        return
+      }
+    }
     Get-ChildItem $gecici -File | ForEach-Object { Copy-Item $_.FullName (Join-Path $sonucD $_.Name) -Force }
     # konuk "=== bitti:" yazdiysa Bitti.txt isaretini host'ta uret
     $log = Join-Path $sonucD 'calis.log'
@@ -526,6 +628,8 @@ try {
 
   # ------------------------------------------------------------ hazirlik: sunucu gerekmez
   if ($Senaryo -eq 'hazirlik') {
+    $script:runId = (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + ([guid]::NewGuid().ToString('N').Substring(0,4))
+    Set-Content -Path (Join-Path $pay 'run-id.txt') -Value $script:runId -Encoding ASCII -NoNewline
     Set-Content -Path (Join-Path $pay 'calis.ps1') -Value (Konuk-Betik 'hazirlik' '' '' '') -Encoding UTF8
     Adim "Konuk bekleniyor (en fazla $BekleDakika dk)"
     [void](Konuk-Sonuc $BekleDakika)
@@ -634,6 +738,34 @@ try {
   $env:SEGNOX_MAIL             = "file:$mailD"
   $env:SEGNOX_TRUSTED_PROXIES  = '127.0.0.1'
   $env:SEGNOX_LOG_LEVEL        = 'debug'
+  $env:SEGNOX_RECORD_DIR       = (Join-Path $arac 'kayit')   # oturum kaydi (K-35) denenebilsin
+  New-Item -ItemType Directory $env:SEGNOX_RECORD_DIR -Force | Out-Null
+  # TURN (K-10): Chrome yerel adresleri mDNS (.local) ile gizler, ajan mDNS cozmez ve
+  # konuk guvenlik duvari gelen UDP'yi keser -> STUN/TURN olmadan yol kurulamaz
+  # ("Karsi tarafla baglanti kurulamadi"). Gelistirme TURN'u (TCP) iki tarafa relay verir.
+  $turnExe = Join-Path $arac 'segnox-devturn.exe'
+  & go build -o $turnExe ./cmd/segnox-devturn
+  if ($LASTEXITCODE -ne 0) { Say 'HATA: devturn derlenemedi'; exit 1 }
+  $env:SEGNOX_TURN_SECRET = -join (1..40 | ForEach-Object { [char](Get-Random -Minimum 97 -Maximum 123) })
+  # devturn stdin kapaninca durur: stdin acik tutulur (Temizlik sureci kapatir).
+  $tpsi = New-Object System.Diagnostics.ProcessStartInfo
+  $tpsi.FileName = $turnExe
+  $tpsi.Arguments = "-allow-loopback-peers -tcp ${natIp}:3478 -tcp-any"
+  $tpsi.UseShellExecute = $false
+  $tpsi.RedirectStandardInput = $true
+  $tpsi.RedirectStandardOutput = $true
+  $tpsi.RedirectStandardError = $true
+  $script:turnProc = [System.Diagnostics.Process]::Start($tpsi)
+  [void]$script:turnProc.StandardOutput.BaseStream.CopyToAsync([System.IO.Stream]::Null)
+  [void]$script:turnProc.StandardError.BaseStream.CopyToAsync([System.IO.Stream]::Null)
+  $turnUp = $false
+  for ($i = 0; $i -lt 20 -and -not $turnUp; $i++) {
+    Start-Sleep -Milliseconds 500
+    $turnUp = [bool](Get-NetTCPConnection -LocalAddress $natIp -LocalPort 3478 -State Listen -ErrorAction SilentlyContinue)
+  }
+  if (-not $turnUp) { Say 'HATA: devturn ayakta degil'; exit 1 }
+  $env:SEGNOX_TURN_URLS = "turn:${natIp}:3478?transport=tcp"
+  Say "  TURN (gelistirme, TCP): ${natIp}:3478"
   $logOut = Join-Path $env:TEMP 'segnox-vmserver.out'
   $logErr = Join-Path $env:TEMP 'segnox-vmserver.err'
   Remove-Item $logOut,$logErr -ErrorAction SilentlyContinue
@@ -707,6 +839,7 @@ try {
     -Body (@{ name = "VM testi ($Senaryo)"; uses = 3; ttlHours = 2 } | ConvertTo-Json) `
     -ContentType 'application/json' -WebSession $session -Headers @{ 'X-Segnox-CSRF' = $me.csrf }
   Say ("  kod: " + (Kisa $tok.token) + " (kisaltildi; 2 saat / 3 kullanim)")
+  Say "  Konsol: https://${natIp}:8080   e-posta: $ownerMail   parola: $ownerPw"
 
   function Cihaz-Bekle ([int]$dk) {
     for ($i = 0; $i -lt ($dk * 12); $i++) {
@@ -715,9 +848,14 @@ try {
         $liste = if ($r.devices) { @($r.devices) } elseif ($r.items) { @($r.items) } else { @($r) }
         $d = $liste | Where-Object { $_.online } | Select-Object -First 1
         if ($d) { return $d }
-      } catch {}
+        $sonHata = 'cihaz listesi: ' + (@($liste | ForEach-Object { [string]$_.name + ' online=' + [string]$_.online }) -join ', ')
+      } catch {
+        $sonHata = [string]$_
+        try { [void](Invoke-RestMethod -Uri "$api/auth/login" -Method Post -Body (@{ email = $ownerMail; password = $ownerPw } | ConvertTo-Json) -ContentType 'application/json' -WebSession $session) } catch {}
+      }
       Start-Sleep -Seconds 5
     }
+    Say ("  cihaz bekleme son durum: " + $sonHata)
     return $null
   }
   function Guncelle-Yolla ([string]$id) {
@@ -730,7 +868,7 @@ try {
     Say "  Sunucu (NAT): $serverUrl   Wi-Fi: http://${lanIp}:8080"
     Say "  Konsol: $serverUrl   e-posta: $ownerMail   parola: $ownerPw"
     Say "  Konukta: `$env:SEGNOX_ENROLL_TOKEN='<kod>'; segnox-agent.exe /S /SERVER=$serverUrl /NAME=VM   (kod konsoldan yeni uretilir)"
-    [void](Read-Host 'Kapatmak icin Enter')
+    Kullanici-Bekle ('Kapatmak icin Enter')
     return
   }
 
@@ -747,10 +885,21 @@ Copy-Item (Join-Path $pkg 'segnox-agent.exe') (Join-Path $pay 'segnox-agent.exe'
   $parola = ''
   if ($Senaryo -eq 'devam') {
     $parola = 'Vm-' + [Convert]::ToBase64String([byte[]](1..12 | ForEach-Object { Get-Random -Maximum 256 })).Replace('+','x').Replace('/','y').Replace('=','')
-    Set-Content -Path (Join-Path $pay 'devam-sonrasi.ps1') -Value $devamSonrasi -Encoding UTF8
+    Set-Content -Path (Join-Path $pay 'devam-sonrasi.ps1') -Value ($devamSonrasi.Replace('\\vmware-host\Shared Folders\segnox-calisma\sonuc', 'C:\segnox-test\out')) -Encoding UTF8
   }
   # ------------------------------------------------------------ konuk betigi hazirlaniyor
   $script:runId = (Get-Date -Format 'yyyyMMdd-HHmmss') + '-' + ([guid]::NewGuid().ToString('N').Substring(0,4))
+  # Konuk paketi bu ozetle esitler; kurulu ajanin surumu bununla karsilastirilir.
+  $ozet = foreach ($f in 'segnox-agent.exe', 'segnox-agent-1.0.0.exe', 'ca.der') {
+    $fp = Join-Path $pay $f
+    if (Test-Path $fp) { (Get-FileHash $fp -Algorithm SHA256).Hash.ToLower() + '  ' + $f }
+  }
+  Set-Content -Path (Join-Path $pay 'paket.sha256') -Value $ozet -Encoding ASCII
+  $script:ajanSurum = ''
+  if ($Senaryo -ne 'guncelleme') {
+    $script:ajanSurum = [string](& (Join-Path $pay 'segnox-agent.exe') version 2>&1 | Select-Object -First 1)
+    Say "  konuga gidecek ajan: $($script:ajanSurum)"
+  }
   Set-Content -Path (Join-Path $pay 'run-id.txt') -Value $script:runId -Encoding ASCII -NoNewline
   Set-Content -Path (Join-Path $pay 'calis.ps1') -Value (Konuk-Betik $Senaryo $tok.token $serverUrl $parola) -Encoding UTF8
   Say "  betik yazildi: $pay\calis.ps1 (sonda silinir; kod/parola yalniz orada)"
@@ -769,16 +918,16 @@ Copy-Item (Join-Path $pkg 'segnox-agent.exe') (Join-Path $pay 'segnox-agent.exe'
     'servis' { }
     { $_ -in 'siyah','izleyici' } {
       if ($dev) {
-        $b = "http://127.0.0.1:8080/v/?device=$($dev.id)"
+        $b = "https://${natIp}:8080/v/?device=$($dev.id)"
         Say ''
-        Say "Konsole once giris yap:  http://127.0.0.1:8080  ($ownerMail / $ownerPw)"
+        Say "Konsole once giris yap:  https://${natIp}:8080  ($ownerMail / $ownerPw)"
         Say "  BAGLAN (kontrol):  $b"
         Say "  IZLE   (salt gorme): $b&role=view"
         Say 'Konukta cihaz parolasi tanimli degil: baglantiyi konuk kullanicisi cubuktan onaylar.'
         Say 'Gozle kontrol listesi konuk logunda (sonda) da basilacak.'
       }
       Say ''
-      [void](Read-Host 'Deneme bitince Enter (konuk loglari toplanir, sunucu kapanir)')
+      Kullanici-Bekle ('Deneme bitince Enter (konuk loglari toplanir, sunucu kapanir)')
       'bitir' | Out-File (Join-Path $sonucD 'bitir.txt') -Encoding ASCII
     }
     'guncelleme' {
@@ -799,11 +948,11 @@ Copy-Item (Join-Path $pkg 'segnox-agent.exe') (Join-Path $pay 'segnox-agent.exe'
       Say ''
       Say 'K-27 DEVAM DENEMESI (cihaz parolasi tanimli; parola yalniz burada gosterilir):'
       Say "  parola: $parola"
-      if ($dev) { Say "  Baglan: http://127.0.0.1:8080/v/?device=$($dev.id)   (once konsola giris: $ownerMail / $ownerPw)" }
+      if ($dev) { Say "  Baglan: https://${natIp}:8080/v/?device=$($dev.id)   (once konsola giris: $ownerMail / $ownerPw)" }
       Say '  1) Parolayla baglan, "Yeniden baslat" -> onay -> VM 10 sn Turkce uyariyla yeniden baslar'
       Say '  2) Tarayici "Cihaz yeniden baslatiliyor" gosterir; acilinca onaysiz devam eder'
       Say '  3) Yeniden baslatma sonrasi konuk kaniti: sonuc\devam-sonrasi.log (otomatik toplanir)'
-      [void](Read-Host 'VM yeniden basladiktan sonra (ya da vazgectiysen) Enter')
+      Kullanici-Bekle ('VM yeniden basladiktan sonra (ya da vazgectiysen) Enter')
       $dl = Join-Path $sonucD 'devam-sonrasi.log'
       Say '  yeniden baslatma sonrasi kanit bekleniyor (en cok 10 dk)...'
       for ($i = 0; $i -lt 300; $i++) {

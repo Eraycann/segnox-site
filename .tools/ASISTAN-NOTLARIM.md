@@ -257,3 +257,11 @@ sunucusuna düz HTTP ile bağlanamamak sorun. Seçenek: açık/opt-in bir bayrak
 
 **4) Test notu:** e2e testleri bu 3 noktayı yakalayamıyor — sunucuları
 127.0.0.1'de (loopback) çalıştırıyorlar ve ui-host yok.
+
+## 24.10 — Devir (asistan durdu; VM + CI artik Claude Code'da)
+
+- **VM eski ajani kuruyordu:** `poller-http.ps1` `segnox-agent.exe`'yi yalniz `C:\segnox-test\paket`'te yoksa indiriyordu -> 21.10'daki 6i oncesi ikili her senaryoda yeniden kuruldu (H1 "duzelmedi" sanildi).
+  Duzeltme (`vm-test.ps1`): host `paket.sha256` yazar; konuk betigi baslarken ozetle esitler (farkli/eksik dosyayi indirir, ozeti dogrular); kurulumdan sonra `segnox-agent.exe version` host'takiyle ayni degilse HATA.
+- `servis` senaryosu artik 40 sn bekleyip helper ui-host satirlarini, `ProgramData\Segnox\logs\ui-host-<pid>.log` (en yeni 3) ve kullanici `ui-host.log`'unu topluyor.
+- Push: arac izni Claude Code'un push'unu engelliyor -> kullanici `! git push origin main`.
+- VM yine kendiliginden yeniden basliyor (24.10) -> `servis`ten once `-Senaryo hazirlik`.
